@@ -24,7 +24,7 @@
             android:id="@+id/maintext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="testtest"
+            android:text="사고 속 목격자 찾기"
             android:textColor="#FFFFFF"
             android:textSize="24dp"
             android:layout_centerHorizontal="true"
