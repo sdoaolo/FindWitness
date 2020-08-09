@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-android:width="180dp"
-android:height="180dp"
-android:viewportWidth="180"
-android:viewportHeight="180">
-<path
-    android:fillColor="#8894A5"
-    android:pathData="M0.662048 0.440972H180.662V180.441H0.662048V0.440972Z" />
-
-</vector>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="45"
+        android:type="linear"
+        android:startColor="#BBE1FB"
+        android:endColor="#91B7EA"/>
+    <corners
+        android:radius="20dp"/>
+</shape>
