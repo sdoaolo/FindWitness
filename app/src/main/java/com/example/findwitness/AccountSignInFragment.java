@@ -45,7 +45,6 @@ public class AccountSignInFragment  extends Fragment {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("RRRRRRRRR","Clicked");
                 ((AccountActivity) getActivity()).txt.setText("SIGN UP");
                 ((AccountActivity) getActivity()).signUpFragment = new AccountSignUpFragment();
                 ((AccountActivity)getActivity()).fm.beginTransaction().replace(R.id.LayoutFragment,(((AccountActivity) getActivity()).signUpFragment)).commit();/*프래그먼트 매니저가 프래그먼트를 담당한다!*/
