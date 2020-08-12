@@ -1,47 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/activity_background"
     tools:context=".MainActivity"
-    android:background="@drawable/activity_background">
-    <RelativeLayout
+    >
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp">
-        <ImageButton
-            android:id="@+id/mainlogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/logo"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="200dp"
-            android:onClick="onClick"/>
-        <TextView
-            android:id="@+id/maintext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="사고 속 목격자 찾기 test test"
-            android:textColor="#FFFFFF"
-            android:textSize="24dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp"
-            android:layout_below="@id/mainlogo"
-
-            />
-        <TextView
-            android:id="@+id/mainTeamName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="목격차"
-            android:textColor="#5D82C9"
-            android:textSize="18dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="15dp"
-            android:textStyle="bold"
-            />
-    </RelativeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginBottom="60dp"
+        android:id="@+id/main_frame">
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+            android:weightSum="3"
+            >
+            <ImageButton
+                android:id="@+id/main_btn_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/main_selected_search"
+                android:onClick="onClick"
+                />
+            <ImageButton
+                android:id="@+id/main_btn_chat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/main_chat"
+                android:onClick="onClick"/>
+            <Button
+                android:id="@+id/main_btn_gps"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="GPS"
+                android:textSize="24dp"
+                android:textColor="#78A2DB"
+                android:background="@drawable/main_white_back"
+                android:onClick="onClick"/>
+        </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activity_background">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="GPS"
+        android:textSize="36dp"
+        android:textColor="#FFFFFF"
+        android:id="@+id/gps_text"
+        android:layout_above="@+id/btn_start"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_start"
+        android:text="Start"
+        android:textSize="20dp"
+        android:background="@drawable/main_white_back"
+        android:layout_above="@+id/btn_finish"
+        android:onClick="onClick"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_finish"
+        android:text="Finish"
+        android:textSize="20dp"
+        android:background="@drawable/main_blue_back"
+        android:layout_above="@+id/btn_list"
+        android:onClick="onClick"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_list"
+        android:text="나의 리스트 보기"
+        android:textSize="20dp"
+        android:background="@drawable/main_white_back"
+        android:layout_centerVertical="true"
+        android:onClick="onClick"/>
+</RelativeLayout>

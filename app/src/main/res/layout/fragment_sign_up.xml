@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center">
+        <EditText
+            android:id="@+id/signup_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:background="@android:color/transparent"
+            android:hint="아이디"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true"
+            />
+        <ImageView
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/white_line"
+            android:layout_below="@id/signup_email"
+            android:layout_marginBottom="7dp"
+            />
+        <EditText
+            android:id="@+id/signup_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:background="@android:color/transparent"
+            android:hint="비밀번호"
+            android:textSize="16dp"
+            android:gravity="left"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:layout_below="@id/line1" />
+
+        <ImageView
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/white_line"
+            android:layout_below="@id/signup_password"
+            android:layout_marginBottom="7dp"
+            />
+
+        <EditText
+            android:id="@+id/signup_check_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:background="@android:color/transparent"
+            android:hint="비밀번호 확인"
+            android:textSize="16dp"
+            android:gravity="left"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:layout_below="@id/line2" />
+        <ImageView
+            android:id="@+id/line3"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/white_line"
+            android:layout_below="@id/signup_check_password"
+            android:layout_marginBottom="7dp"
+            />
+
+        <EditText
+            android:id="@+id/signup_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:background="@android:color/transparent"
+            android:hint="닉네임"
+            android:textSize="16dp"
+            android:gravity="left"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:imeOptions="actionUnspecified"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:layout_below="@id/line3" />
+
+        <ImageView
+            android:id="@+id/line4"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/white_line"
+            android:layout_below="@id/signup_nickname"
+            android:layout_marginBottom="7dp"
+            />
+
+        <Button
+            android:id="@+id/signup_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:text="회원가입"
+            android:textColor="#91B7EA"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_below="@id/line4"
+            android:background="@drawable/white_line"
+            android:onClick="onClick"
+            />
+    </RelativeLayout>
+</LinearLayout>
