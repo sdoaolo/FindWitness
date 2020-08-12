@@ -66,7 +66,7 @@ public class MainGPSFragment extends Fragment {
             //Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
         }
 
-        this.InitializeMovieData();
+        this.InitializeData();
         ListView listView = view.findViewById(R.id.gps_list);
         final GPSListViewAdapter adapter;
         adapter = new GPSListViewAdapter(getActivity(),gpsList);
@@ -151,7 +151,7 @@ public class MainGPSFragment extends Fragment {
         return exist;
     }
     // init data
-    public void InitializeMovieData()
+    public void InitializeData()
     {
         Cursor c1 = db.rawQuery("select * from " + "gps", null);
         gpsList = new ArrayList<GPSListViewItem>();

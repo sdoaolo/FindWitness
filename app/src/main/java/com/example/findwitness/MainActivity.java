@@ -7,8 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,10 +23,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     ImageButton btn_search;
@@ -51,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
         btn_search = findViewById(R.id.main_btn_search);
         btn_chat = findViewById(R.id.main_btn_chat);
@@ -76,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.main_btn_search:
-                btn_search.setBackgroundResource(R.drawable.main_selected_chat);
+                btn_search.setBackgroundResource(R.drawable.main_selected_search);
                 btn_chat.setBackgroundResource(R.drawable.main_chat);
                 btn_gps.setBackgroundResource(R.drawable.main_white_back);
                 btn_gps.setTextColor(Color.parseColor(strBlue));
