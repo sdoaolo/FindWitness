@@ -12,48 +12,66 @@
         android:textSize="36dp"
         android:textColor="#FFFFFF"
         android:id="@+id/gps_text"
-        android:layout_above="@+id/btn_start"/>
+        android:layout_above="@+id/btn_start"
+        android:layout_marginBottom="20dp"/>
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_start"
         android:text="Start"
         android:textSize="20dp"
-        android:background="@drawable/main_white_back"
+        android:textColor="#FFFFFF"
+
+        android:background="@drawable/main_list"
         android:layout_above="@+id/btn_finish"
         android:onClick="onClick"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
         />
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_finish"
         android:text="Finish"
         android:textSize="20dp"
-        android:background="@drawable/main_blue_back"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/main_list"
         android:layout_above="@+id/btn_list"
         android:onClick="onClick"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
         />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:id="@+id/btn_list"
-        android:text="나의 리스트 보기"
+        android:text="Update List"
         android:textSize="20dp"
+        android:textColor="#78A2DB"
         android:background="@drawable/main_white_back"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+
         android:onClick="onClick"/>
     <FrameLayout
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="match_parent"
         android:id="@+id/myList"
+        android:layout_centerHorizontal="true"
         android:background="#FFFFFF"
         android:visibility="visible"
-        android:layout_below="@+id/btn_list">
+        android:layout_below="@+id/btn_list"
+        android:layout_marginBottom="20dp">
+
         <ListView
+            android:id="@+id/gps_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/gps_list"/>
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 </RelativeLayout>
