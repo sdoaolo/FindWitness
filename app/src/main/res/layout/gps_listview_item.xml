@@ -50,7 +50,7 @@
             />
     </LinearLayout>
     <TextView
-        android:id="@+id/gps_string"
+        android:id="@+id/gps_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=" 서울시 노원구 석게로 12345 99-21"
