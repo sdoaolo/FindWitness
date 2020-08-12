@@ -1,7 +1,6 @@
 package com.example.findwitness;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,69 +10,47 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class GPSListViewAdapter  extends BaseAdapter {
-    LayoutInflater inflater = null;
-    private ArrayList<GPSListViewItem> m_oData = null;
-    private int nListCnt = 0;
+    Context mContext = null;
+    LayoutInflater mLayoutInflater = null;
+    ArrayList<GPSListViewItem> sample;
 
-    public GPSListViewAdapter(ArrayList<GPSListViewItem> _oData)
-    {
-        m_oData = _oData;
-        nListCnt = m_oData.size();
+    public GPSListViewAdapter(Context context, ArrayList<GPSListViewItem> data) {
+        mContext = context;
+        sample = data;
+        mLayoutInflater = LayoutInflater.from(mContext);
     }
 
     @Override
-    public int getCount()
-    {
-        Log.i("TAG", "getCount");
-        return nListCnt;
+    public int getCount() {
+        return sample.size();
     }
 
     @Override
-    public Object getItem(int position)
-    {
-        return null;
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
-    public long getItemId(int position)
-    {
-        return 0;
+    public GPSListViewItem getItem(int position) {
+        return sample.get(position);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        if (convertView == null)
-        {
-            final Context context = parent.getContext();
-            if (inflater == null)
-            {
-                inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            }
-            convertView = inflater.inflate(R.layout.gps_listview_item, parent, false);
-        }
+    public View getView(int position, View converView, ViewGroup parent) {
+        View view = mLayoutInflater.inflate(R.layout.gps_listview_item, null);
 
-        TextView date = (TextView) convertView.findViewById(R.id.gps_date);
-        TextView time = (TextView) convertView.findViewById(R.id.gps_time);
-        TextView latitude = (TextView) convertView.findViewById(R.id.gps_latitude);
-        TextView longitude = (TextView) convertView.findViewById(R.id.gps_longitude);
-/*
-        date.setText(m_oData.get(position).strTitle);
-        time.setText(m_oData.get(position).strDate);
-        latitude.setText(m_oData.get(position).strTitle);
-        longitude.setText(m_oData.get(position).strDate);*/
-        return convertView;
-    }
+        TextView gps_date = (TextView)view.findViewById(R.id.gps_date);
+        TextView gps_time = (TextView)view.findViewById(R.id.gps_time);
+        TextView gps_latitude = (TextView)view.findViewById(R.id.gps_latitude);
+        TextView gps_longitude = (TextView)view.findViewById(R.id.gps_longitude);
+        TextView gps_address = (TextView)view.findViewById(R.id.gps_address);
 
-    public void addItem(String text1, String text2) {
-   /*     ListViewItem item = new ListViewItem();
-        item.setRowtext1(text1);
-        item.setRowtext2(text2);
+        gps_date.setText(sample.get(position).getDate());
+        gps_time.setText(sample.get(position).getTime());
+        gps_latitude.setText(sample.get(position).getLatitude());
+        gps_longitude.setText(sample.get(position).getLongitude());
+        gps_address.setText(sample.get(position).getAddress());
 
-        listViewItemList.add(item);*/
-    }
-
-    public void clearItem(){
-     //   listViewItemList.clear();
+        return view;
     }
 }
