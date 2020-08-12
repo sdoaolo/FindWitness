@@ -1,7 +1,10 @@
 package com.example.findwitness;
 
 import android.Manifest;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,9 +19,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class MainGPSFragment extends Fragment {
     Button btn_start;
@@ -87,6 +93,7 @@ public class MainGPSFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","showlist");
+                boolean existdata = exist_database_data();   // 데이터가 존재하면 true, 존재하지 않으면 false
 
             }
         });
@@ -136,16 +143,60 @@ public class MainGPSFragment extends Fragment {
             }
         }
     }
-
+    public boolean exist_database_data(){
+        boolean exist = true;
+        Cursor c1 = db.rawQuery("select * from " + "gps", null);
+        int size = c1.getCount();
+        if(c1.getCount() == 0) exist = false;
+        return exist;
+    }
     // init data
     public void InitializeMovieData()
     {
+        Cursor c1 = db.rawQuery("select * from " + "gps", null);
         gpsList = new ArrayList<GPSListViewItem>();
-        gpsList.add(new GPSListViewItem("a","b","c","d","e"));
-        gpsList.add(new GPSListViewItem("1","2","3","4","5"));
-        gpsList.add(new GPSListViewItem("q","w","e","r","t"));
-    }
 
+        int text = c1.getCount();
+        String now = "성공 " + text;
+        //Toast.makeText(getApplicationContext(), now , Toast.LENGTH_LONG).show();
+
+        for(int i=0; i< text; i++){
+            c1.moveToNext();
+
+            String latitude = c1.getString(1);
+            String longitude = c1.getString(2);
+            String date = c1.getString(3);
+            String time = c1.getString(4);
+
+            double latitude_d = Double.parseDouble(latitude);
+            double longitude_d = Double.parseDouble(longitude);
+            String address = getCurrentAddress(latitude_d, longitude_d);
+
+            date = date_makeup(date);
+            time = time_makeup(time);
+
+            gpsList.add(new GPSListViewItem(date,time,latitude,longitude,address));
+            //Toast.makeText(getApplicationContext(),latitude + ", " + longitude + "," + date + ",//" + time, Toast.LENGTH_SHORT).show();
+        }
+        c1.close();
+        //gpsList.add(new GPSListViewItem("a","b","c","d","e"));
+    }
+    public String date_makeup(String date){
+        String date_make;
+        date_make = date.substring(0,4) + "-" + date.substring(4,6) + "-" + date.substring(6,8);
+        return date_make;
+    }
+    public String time_makeup(String time){
+        int size = time.length();
+        String time_make;
+        if(size == 6){
+            time_make = time.substring(0,2) + ":" + time.substring(2,4) + ":" + time.substring(4,6);
+        }
+        else{
+            time_make = time.substring(0,1) + ":" + time.substring(1,3) + ":" + time.substring(3,5);
+        }
+        return time_make;
+    }
     //데이터 베이스
     private boolean openDatabase(){
         dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
@@ -156,7 +207,33 @@ public class MainGPSFragment extends Fragment {
         db.execSQL("insert into gps(latitude, longitude, data, time) values(" +
                 latitude + "," + longitude + "," + data + "," + time + ");");
     }
+    //주소 찾기
+    public String getCurrentAddress( double latitude, double longitude) {
 
+        //지오코더... GPS를 주소로 변환
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+
+        List<Address> addresses;
+
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 7);
+        } catch (IOException ioException) {
+            //네트워크 문제
+            //Toast.makeText(this, "지오코더 서비스 사용불가", Toast.LENGTH_LONG).show();
+            return "지오코더 서비스 사용불가";
+        } catch (IllegalArgumentException illegalArgumentException) {
+            //Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
+            return "잘못된 GPS 좌표";
+
+        }
+        if (addresses == null || addresses.size() == 0) {
+            //Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
+            return "주소 미발견";
+        }
+
+        Address address = addresses.get(0);
+        return address.getAddressLine(0).toString();
+    }
     @Override
     public void onDestroy() {
         running = false;
