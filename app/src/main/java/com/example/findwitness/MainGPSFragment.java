@@ -1,26 +1,8 @@
 package com.example.findwitness;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.location.Address;
-
-import android.nfc.Tag;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -28,15 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TimePicker;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MainGPSFragment extends Fragment {
     Button btn_start;
@@ -47,6 +29,8 @@ public class MainGPSFragment extends Fragment {
     //데이터 베이스 만들기
     private SQLiteDatabase db;
     private GPSdatabaseHelper dbHelper;
+
+    ArrayList<GPSListViewItem> gpsList;
 
     //private GpsTracker gpsTracker;
     boolean running;
@@ -76,6 +60,12 @@ public class MainGPSFragment extends Fragment {
             //Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
         }
 
+        this.InitializeMovieData();
+        ListView listView = view.findViewById(R.id.gps_list);
+        final GPSListViewAdapter adapter;
+        adapter = new GPSListViewAdapter(getActivity(),gpsList);
+        listView.setAdapter(adapter);
+
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +87,7 @@ public class MainGPSFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","showlist");
+
             }
         });
     }
@@ -144,6 +135,15 @@ public class MainGPSFragment extends Fragment {
                 insertRecord(latitude, longitude, dat, time);
             }
         }
+    }
+
+    // init data
+    public void InitializeMovieData()
+    {
+        gpsList = new ArrayList<GPSListViewItem>();
+        gpsList.add(new GPSListViewItem("a","b","c","d","e"));
+        gpsList.add(new GPSListViewItem("1","2","3","4","5"));
+        gpsList.add(new GPSListViewItem("q","w","e","r","t"));
     }
 
     //데이터 베이스

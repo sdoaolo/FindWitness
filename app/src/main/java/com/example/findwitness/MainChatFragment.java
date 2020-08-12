@@ -20,6 +20,11 @@ public class MainChatFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+       /* RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        ChatRecyclerAdapter adapter = new ChatRecyclerAdapter();
+        recyclerView.setAdapter(adapter);*/
     }
 }
