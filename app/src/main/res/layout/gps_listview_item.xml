@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/gps_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2020-08-12"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:paddingLeft="10dp"
+            android:textColor="#78A2DB"
+            />
+        <TextView
+            android:id="@+id/gps_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:34:20"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textColor="#78A2DB"
+            />
+        <TextView
+            android:id="@+id/gps_latitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="37.623115"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textColor="#78A2DB"
+            />
+        <TextView
+            android:id="@+id/gps_longitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 127.060721"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textColor="#78A2DB"
+            />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/gps_string"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" 서울시 노원구 석게로 12345 99-21"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:textColor="#78A2DB"
+        android:gravity="center"
+        />
+</LinearLayout>
