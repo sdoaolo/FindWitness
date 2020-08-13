@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
+
 public class MainChatFragment extends Fragment {
     ArrayList<ChatListViewItem> chatList;
     public MainChatFragment() {
