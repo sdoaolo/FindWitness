@@ -5,32 +5,22 @@
     android:padding="8dp"
     android:gravity="center_vertical"
     android:layout_marginBottom="8dp"
-    android:background="@android:color/white">
+    android:background="@drawable/chat_round_background">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:text="NickName"
-            android:textSize="15sp"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/chat_context"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:text="content"
-            android:textSize="13sp"
-            android:textColor="@android:color/darker_gray"/>
+            android:textSize="14sp"
+            android:textColor="#78A2DB"/>
     </LinearLayout>
 </LinearLayout>

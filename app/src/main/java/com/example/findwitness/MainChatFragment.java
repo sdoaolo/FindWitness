@@ -52,7 +52,6 @@ public class MainChatFragment extends Fragment {
     public void InitializeMovieData()
     {
         chatList = new ArrayList<ChatListViewItem>();
-
         chatList.add(new ChatListViewItem("test 1"));
         chatList.add(new ChatListViewItem("test 2"));
     }
