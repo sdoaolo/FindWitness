@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
         //권한 체크
         if (!checkLocationServicesStatus()) {
-
             showDialogForLocationServiceSetting();
         }else {
             checkRunTimePermission();
