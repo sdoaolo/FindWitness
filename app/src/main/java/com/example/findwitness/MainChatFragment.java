@@ -1,5 +1,6 @@
 package com.example.findwitness;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +46,8 @@ public class MainChatFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id){
                 Log.d("cccccccccccccc","item clicked: "+myAdapter.getItem(position).getUserName()); //
-
+                Intent intent = new Intent(getActivity(),ChatActivity.class);
+                startActivity(intent);
             }
         });
     }
