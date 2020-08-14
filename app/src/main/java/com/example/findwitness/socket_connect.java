@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class socket_connect extends AppCompatActivity {
 
 
-    static String response;
+    static String response="";
+    static InetSocketAddress sockAdr = null;
     static Socket socket = null;
     static int i;
 
@@ -24,6 +26,67 @@ public class socket_connect extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    /*public static void connectSocket(String data) {
+        OutputStream os = null;
+        OutputStreamWriter osw = null;
+        BufferedWriter bw = null;
+
+        InputStream is = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+
+        try {
+            socket = new Socket("192.168.0.8", 9999);
+            os = socket.getOutputStream();
+            osw = new OutputStreamWriter(os);
+            bw = new BufferedWriter(osw);            //서버로 전송을 위한 OutputStream
+
+            is = socket.getInputStream();
+            isr = new InputStreamReader(is);
+            br = new BufferedReader(isr);        // 서버로부터 Data를 받음
+
+            bw.write(data);
+            bw.newLine();
+            bw.flush();
+
+            String receiveData = "";
+            receiveData = br.readLine();        // 서버로부터 데이터 한줄 읽음
+            System.out.println("서버로부터 받은 데이터 : " + receiveData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bw.close();
+                osw.close();
+                os.close();
+                br.close();
+                isr.close();
+                is.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
+
+    /*public static void connectSocket(String addr, int port, int timeout){
+        sockAdr = new InetSocketAddress(addr, port);
+        socket = new Socket();
+
+        try {
+            socket.connect(sockAdr, timeout);
+        } catch (SocketTimeoutException e){
+            if(socket.isConnected()){
+                try {
+                    socket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            connectSocket(addr, port, timeout);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
     /*public static void sendMessage(String message){
 
         OutputStream outStream;
@@ -46,12 +109,18 @@ public class socket_connect extends AppCompatActivity {
     }*/
 
     public static void sendMessage(String message){
+        response = "";
         OutputStream out;
         ByteArrayOutputStream byteArrayOutputStream;
         InputStream inputStream;
         int bytesRead = 0;
         try {
             //송신
+
+            //if(!socket.isConnected()){
+            connectSocket("192.168.0.8", 9999);
+            //}
+
             out = socket.getOutputStream();
             out.write(message.getBytes());
             while(true) {
@@ -78,10 +147,15 @@ public class socket_connect extends AppCompatActivity {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }finally{
+
         }
     }
 
     public static String getMessage(){
+        //String response_two = response;
+        //response = "";
+        //return response_two;
         return response;
     }
 
