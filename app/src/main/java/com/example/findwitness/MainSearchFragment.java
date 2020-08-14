@@ -1,13 +1,20 @@
 package com.example.findwitness;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 public class MainSearchFragment extends Fragment {
+    //데이터베이스 생성
+    private SQLiteDatabase db;
+    private GPSdatabaseHelper dbHelper;
+
     public MainSearchFragment() {
         // Required empty public constructor
     }
