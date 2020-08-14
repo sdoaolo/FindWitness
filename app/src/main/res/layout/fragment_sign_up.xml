@@ -10,7 +10,6 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center">
 
-
         <LinearLayout
             android:id="@+id/singup_email_layout"
             android:layout_width="match_parent"
@@ -95,7 +94,6 @@
             android:layout_below="@id/singup_pw_layout"
             android:layout_marginBottom="7dp"
             />-->
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signup_check_password_layout"
