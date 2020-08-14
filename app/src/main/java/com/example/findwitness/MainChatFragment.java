@@ -48,6 +48,9 @@ public class MainChatFragment extends Fragment {
             public void onItemClick(AdapterView parent, View v, int position, long id){
                 Log.d("cccccccccccccc","item clicked: "+myAdapter.getItem(position).getUserName()); //
                 Intent intent = new Intent(getActivity(),ChatActivity.class);
+                //putExtra의 첫 값은 식별 태그, 뒤에는 다음 화면에 넘길 값(user nickname을 넘겨 줌)
+                intent.putExtra("nickname",chatList.get(position).getUserName());
+
                 startActivity(intent);
             }
         });

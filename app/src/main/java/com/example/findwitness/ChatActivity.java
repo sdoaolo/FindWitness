@@ -103,7 +103,7 @@ public class ChatActivity<data> extends AppCompatActivity {
         public void run() {
             try {
                 // 접속한다.
-                final Socket socket = new Socket("192.168.219.100", 30000); //host: 서버ip
+                final Socket socket = new Socket("192.168.10.104", 30000); //host: 서버ip
                 member_socket=socket;
                 // 미리 입력했던 닉네임을 서버로 전달한다.
                 String nickName = edit1.getText().toString();
@@ -160,10 +160,10 @@ public class ChatActivity<data> extends AppCompatActivity {
                     final String msg=dis.readUTF();
                     int idx = msg.indexOf(":");
                     final String message_nickname = msg.substring(0, idx-1); //누가 보낸건지 파악
-                    System.out.println(message_nickname);
+                    //System.out.println(message_nickname);
                     final String real_message = msg.substring(idx+2); // 메시지 내용
-                    System.out.println(real_message);
-                    System.out.println("내이름 : "+user_nickname);
+                    //System.out.println(real_message);
+                    //System.out.println("내이름 : "+user_nickname);
 
                     // 화면에 출력
                     runOnUiThread(new Runnable() {
