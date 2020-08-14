@@ -28,10 +28,12 @@ public class MainActivity extends AppCompatActivity {
     ImageButton btn_search;
     ImageButton btn_chat;
     Button btn_gps;
+    Button btn_list;
     FragmentManager fragmentManager = getSupportFragmentManager();
     MainSearchFragment mainSearchFragment;
     MainChatFragment mainChatFragment;
     MainGPSFragment mainGPSFragment;
+    MainChattingFragment mainChattingFragment;
     String strWhite = "#FFFFFF";
     String strBlue = "#78A2DB";
 
@@ -50,10 +52,12 @@ public class MainActivity extends AppCompatActivity {
         btn_search = findViewById(R.id.main_btn_search);
         btn_chat = findViewById(R.id.main_btn_chat);
         btn_gps = findViewById(R.id.main_btn_gps);
+        btn_list = findViewById(R.id.main_btn_list);
 
         mainSearchFragment = new MainSearchFragment();
         mainChatFragment = new MainChatFragment();
         mainGPSFragment = new MainGPSFragment();
+        mainChattingFragment = new MainChattingFragment();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_frame, mainSearchFragment); //초기화면 설정
@@ -74,20 +78,35 @@ public class MainActivity extends AppCompatActivity {
                 btn_chat.setBackgroundResource(R.drawable.main_chat);
                 btn_gps.setBackgroundResource(R.drawable.main_white_back);
                 btn_gps.setTextColor(Color.parseColor(strBlue));
+                btn_list.setBackgroundResource(R.drawable.main_white_back);
+                btn_list.setTextColor(Color.parseColor(strBlue));
                 replaceFragment(mainSearchFragment);
                 break;
-            case R.id.main_btn_chat:
+            case R.id.main_btn_list: //list
+                btn_search.setBackgroundResource(R.drawable.main_search);
+                btn_chat.setBackgroundResource(R.drawable.main_chat);
+                btn_gps.setBackgroundResource(R.drawable.main_white_back);
+                btn_gps.setTextColor(Color.parseColor(strBlue));
+                btn_list.setBackgroundResource(R.drawable.main_blue_back);
+                btn_list.setTextColor(Color.parseColor(strWhite));
+                replaceFragment(mainChatFragment);
+                break;
+            case R.id.main_btn_chat: //chatting
                 btn_search.setBackgroundResource(R.drawable.main_search);
                 btn_chat.setBackgroundResource(R.drawable.main_selected_chat);
                 btn_gps.setBackgroundResource(R.drawable.main_white_back);
                 btn_gps.setTextColor(Color.parseColor(strBlue));
-                replaceFragment(mainChatFragment);
+                btn_list.setBackgroundResource(R.drawable.main_white_back);
+                btn_list.setTextColor(Color.parseColor(strBlue));
+                replaceFragment(mainChattingFragment);
                 break;
             case R.id.main_btn_gps:
                 btn_search.setBackgroundResource(R.drawable.main_search);
                 btn_chat.setBackgroundResource(R.drawable.main_chat);
                 btn_gps.setBackgroundResource(R.drawable.main_blue_back);
                 btn_gps.setTextColor(Color.parseColor(strWhite));
+                btn_list.setBackgroundResource(R.drawable.main_white_back);
+                btn_list.setTextColor(Color.parseColor(strBlue));
                 replaceFragment(mainGPSFragment);
                 break;
         }
