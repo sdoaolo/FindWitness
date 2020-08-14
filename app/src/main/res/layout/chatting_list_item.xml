@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:background="@drawable/chat_round_background">
+        <TextView
+            android:layout_marginTop="5dp"
+            android:gravity="left"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/chatting_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="USER 1"
+            android:textSize="18sp"
+            android:textColor="#78A2DB"/>
+        <TextView
+            android:gravity="left"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/chatting_user_name"
+            android:id="@+id/chatting_context_last"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="마지막 채팅 내용"
+            android:textSize="13sp"
+            android:textColor="#78A2DB"/>
+        <TextView
+            android:gravity="center"
+            android:id="@+id/chatting_last_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:layout_alignTop="@id/chatting_context_last"
+
+            android:text="마지막 채팅 시간"
+            android:textSize="13sp"
+            android:textColor="#78A2DB"/>
+        <FrameLayout
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:background="@drawable/chatting_round"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:id="@+id/chatting_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+    </RelativeLayout>
+</LinearLayout>

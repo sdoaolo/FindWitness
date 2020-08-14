@@ -3,36 +3,48 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <RelativeLayout
-        android:layout_width="250dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center">
-        <EditText
-            android:id="@+id/signup_email"
+        <LinearLayout
+            android:id="@+id/idLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
+            android:padding="7dp">
+        <EditText
+            android:id="@+id/signup_email"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:hint="아이디"
+            android:textSize="16dp"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
             android:inputType="textEmailAddress"
             android:maxLines="1"
-            android:singleLine="true"
-            />
+            android:singleLine="true" />
+            <Button
+                android:id="@+id/check_overlap"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="중복 체크"
+                android:textColor="#FFFFFF"
+                android:background="#CC78A2DB"/>
+        </LinearLayout>
         <ImageView
             android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:background="@drawable/white_line"
-            android:layout_below="@id/signup_email"
-            android:layout_marginBottom="7dp"
+            android:layout_below="@id/idLayout"
+
             />
         <EditText
+            android:padding="7dp"
             android:id="@+id/signup_password"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
             android:background="@android:color/transparent"
             android:hint="비밀번호"
             android:textSize="16dp"
@@ -51,14 +63,13 @@
             android:layout_height="4dp"
             android:background="@drawable/white_line"
             android:layout_below="@id/signup_password"
-            android:layout_marginBottom="7dp"
             />
 
         <EditText
+            android:padding="7dp"
             android:id="@+id/signup_check_password"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
             android:background="@android:color/transparent"
             android:hint="비밀번호 확인"
             android:textSize="16dp"
@@ -70,20 +81,20 @@
             android:maxLines="1"
             android:singleLine="true"
             android:layout_below="@id/line2" />
+
         <ImageView
             android:id="@+id/line3"
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:background="@drawable/white_line"
             android:layout_below="@id/signup_check_password"
-            android:layout_marginBottom="7dp"
             />
 
         <EditText
+            android:padding="7dp"
             android:id="@+id/signup_nickname"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
             android:background="@android:color/transparent"
             android:hint="닉네임"
             android:textSize="16dp"
@@ -102,7 +113,6 @@
             android:layout_height="4dp"
             android:background="@drawable/white_line"
             android:layout_below="@id/signup_nickname"
-            android:layout_marginBottom="7dp"
             />
 
         <Button

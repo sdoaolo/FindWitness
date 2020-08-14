@@ -1,16 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/activity_background"
     tools:context=".MainActivity"
-    android:background="@drawable/activity_background">
-    <RelativeLayout
+    >
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        android:id="@+id/main_frame">
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="4">
 
-
-
-    </RelativeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/main_btn_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/main_selected_search"
+            android:onClick="onClick" />
+        <Button
+            android:id="@+id/main_btn_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="LIST"
+            android:textSize="24dp"
+            android:textColor="#78A2DB"
+            android:background="@drawable/main_white_back"
+            android:onClick="onClick"/>
+        <ImageButton
+            android:id="@+id/main_btn_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/main_chat"
+            android:onClick="onClick"/>
+        <Button
+            android:id="@+id/main_btn_gps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="GPS"
+            android:textSize="24dp"
+            android:textColor="#78A2DB"
+            android:background="@drawable/main_white_back"
+            android:onClick="onClick"/>
+    </LinearLayout>
+</RelativeLayout>

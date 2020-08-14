@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_icon_search"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/search_icon"
+        android:layout_marginBottom="30dp"
+        android:layout_above="@+id/search_date"
+       />
+    <Button
+        android:id="@+id/search_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_list"
+        android:textColor="#FFFFFF"
+        android:textSize="18dp"
+        android:text="날짜"
+        android:gravity="center"
+        android:layout_centerInParent ="true"
+        android:layout_marginBottom="15dp"/>
+    <Button
+        android:id="@+id/search_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_list"
+        android:textColor="#FFFFFF"
+        android:textSize="18dp"
+        android:text="시간"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/search_date"/>
+
+</RelativeLayout>
