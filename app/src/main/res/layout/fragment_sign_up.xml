@@ -1,118 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center">
+
         <LinearLayout
-            android:id="@+id/idLayout"
+            android:id="@+id/singup_email_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="7dp">
-        <EditText
-            android:id="@+id/signup_email"
-            android:layout_width="250dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:hint="아이디"
-            android:textSize="16dp"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true" />
-            <Button
-                android:id="@+id/check_overlap"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:text="중복 체크"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/signup_email"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:background="@android:color/transparent"
+                android:hint="아이디"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="#FFFFFF"
-                android:background="#CC78A2DB"/>
+                android:textColorHint="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btn_same_email_check"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:textSize="10sp"
+                android:text="중복확인" />
+
         </LinearLayout>
+
         <ImageView
             android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:background="@drawable/white_line"
-            android:layout_below="@id/idLayout"
-
+            android:layout_below="@id/singup_email_layout"
+            android:layout_marginBottom="10dp"
             />
-        <EditText
-            android:padding="7dp"
-            android:id="@+id/signup_password"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="비밀번호"
-            android:textSize="16dp"
-            android:gravity="left"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_below="@id/line1" />
 
-        <ImageView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_password_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            app:counterEnabled="true"
+            android:layout_marginBottom="7dp"
+            android:background="@android:color/transparent"
+            android:layout_below="@id/line1"
+            app:counterMaxLength="16">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+                android:ems="10"
+                android:hint="비밀번호"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLength="16"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:gravity="left"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="비밀번호는 영문자, 숫자만 입력 가능합니다."
+            android:layout_marginBottom="7dp"
+            android:layout_below="@id/signup_password_layout"
+            android:textSize="8sp"/>
+
+
+        <!--   <ImageView
             android:id="@+id/line2"
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:background="@drawable/white_line"
-            android:layout_below="@id/signup_password"
-            />
+            android:layout_below="@id/singup_pw_layout"
+            android:layout_marginBottom="7dp"
+            />-->
 
-        <EditText
-            android:padding="7dp"
-            android:id="@+id/signup_check_password"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="비밀번호 확인"
-            android:textSize="16dp"
-            android:gravity="left"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_below="@id/line2" />
-
-        <ImageView
-            android:id="@+id/line3"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_check_password_layout"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/white_line"
-            android:layout_below="@id/signup_check_password"
-            />
-
-        <EditText
-            android:padding="7dp"
-            android:id="@+id/signup_nickname"
-            android:layout_width="250dp"
             android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            app:counterEnabled="true"
+            android:layout_marginBottom="7dp"
             android:background="@android:color/transparent"
-            android:hint="닉네임"
-            android:textSize="16dp"
-            android:gravity="left"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:imeOptions="actionUnspecified"
-            android:inputType="text"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_below="@id/line3" />
+            android:layout_below="@id/textView3"
+            app:counterMaxLength="16">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_check_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+                android:ems="10"
+                android:hint="비밀번호 확인"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLength="16"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:gravity="left"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--       <ImageView
+                   android:id="@+id/line3"
+                   android:layout_width="match_parent"
+                   android:layout_height="4dp"
+                   android:background="@drawable/white_line"
+
+                   android:layout_below="@id/singup_pw_check_layout"
+                   android:layout_marginBottom="7dp"
+                   /> -->
+
+        <TextView
+            android:id="@+id/TextView_password_check_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/signup_check_password_layout"
+            android:text="" />
+
+        <LinearLayout
+            android:id="@+id/singup_nickname_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/TextView_password_check_result"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/signup_nickname"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:background="@android:color/transparent"
+                android:hint="닉네임"
+                android:textSize="16dp"
+                android:gravity="left"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:imeOptions="actionUnspecified"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <Button
+                android:id="@+id/btn_same_nickname_check"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:textSize="10sp"
+                android:text="중복확인" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/line4"
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:background="@drawable/white_line"
-            android:layout_below="@id/signup_nickname"
+            android:layout_below="@id/singup_nickname_layout"
+            android:layout_marginBottom="10dp"
             />
 
         <Button
