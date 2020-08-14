@@ -4,8 +4,11 @@ package com.example.findwitness;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -28,6 +31,14 @@ import java.util.Calendar;
 public class ChatActivity<data> extends AppCompatActivity {
 
 
+    //데이터 베이스
+    SQLiteDatabase database;
+    ChatSQLiteControl sqlite;
+    private ChatSQLiteHelper dbHelper;
+    String dbName = "chat.db";
+    String tag = "SQLite"; // Log 에 사용할 tag (DB용)
+    String tag2 = "SOCKEt"; // Log 에 사용할 tag (소켓용)
+
     // 서버 접속 여부를 판별하기 위한 변수
     boolean isConnect = false;
 
@@ -42,7 +53,7 @@ public class ChatActivity<data> extends AppCompatActivity {
     Socket member_socket;
     // 사용자 닉네임( 내 닉넴과 일치하면 내가보낸 말풍선으로 설정 아니면 반대설정)
     String user_nickname;
-    String your_nickname;
+    //String your_nickname;
 
     SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat format2 = new SimpleDateFormat("HH:mm:ss");
@@ -53,16 +64,55 @@ public class ChatActivity<data> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        //DB
+        dbHelper = new ChatSQLiteHelper(this,dbName,null,1);
+        sqlite = new ChatSQLiteControl(dbHelper);
+        database = dbHelper.getReadableDatabase();
+
         Intent intent = getIntent();
         //목격자닉네임 클릭시 채팅창에 목격자닉네임이 뜸
         TextView you_nickname = (TextView)findViewById(R.id.tv_User_Nickname);
         you_nickname.setText(intent.getStringExtra("nickname"));
-        //String your_nickname = you_nickname.getText().toString();
+        String your_nickname = you_nickname.getText().toString();
 
         edit1 = findViewById(R.id.editText);
         btn1 = findViewById(R.id.button);
         container=findViewById(R.id.container);
         scroll=findViewById(R.id.scroll);
+
+        //과거에 대화했던 내용 있다면 불러오기
+        String sql = "select * from chat where sender="+"\'"+your_nickname+"\'";
+        Cursor cursor = database.rawQuery(sql,null);
+        if(cursor.moveToFirst()!=false){
+            while (cursor.moveToNext()){
+                int rcv = cursor.getInt(2);//rcv값 뽑기
+                int send = cursor.getInt(3);//send값 뽑기
+                String message = cursor.getString(4); //메시지 내용 뽑기
+                // 텍스트뷰의 객체를 생성
+                TextView tv=new TextView(ChatActivity.this);
+                tv.setTextColor(Color.BLACK);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,22);
+                //상대방에게 받은 메시지
+                if (rcv==1){
+                    tv.setBackgroundResource(R.drawable.activity_background);
+                    String content = message;
+                    tv.setText(content);
+
+                //내가 쓴 메시지
+                } else if(send==1){
+                    tv.setBackgroundResource(R.drawable.activity_background);
+                    String content =message;
+                    tv.setText(content);
+                }
+                container.addView(tv);
+                // 제일 하단으로 스크롤 한다
+                scroll.fullScroll(View.FOCUS_DOWN);
+
+
+            }
+        }
+
+
     }
 
     // 버튼과 연결된 메소드
@@ -103,7 +153,7 @@ public class ChatActivity<data> extends AppCompatActivity {
         public void run() {
             try {
                 // 접속한다.
-                final Socket socket = new Socket("192.168.10.104", 30000); //host: 서버ip
+                final Socket socket = new Socket("192.168.219.100", 30000); //host: 서버ip
                 member_socket=socket;
                 // 미리 입력했던 닉네임을 서버로 전달한다.
                 String nickName = edit1.getText().toString();
@@ -159,7 +209,7 @@ public class ChatActivity<data> extends AppCompatActivity {
                     //if(dis.readUTF() != null)
                     final String msg=dis.readUTF();
                     int idx = msg.indexOf(":");
-                    final String message_nickname = msg.substring(0, idx-1); //누가 보낸건지 파악
+                    final String real_nickname = msg.substring(0, idx-1); //누가 보낸건지 파악
                     //System.out.println(message_nickname);
                     final String real_message = msg.substring(idx+2); // 메시지 내용
                     //System.out.println(real_message);
@@ -175,39 +225,34 @@ public class ChatActivity<data> extends AppCompatActivity {
                             String your_nickname = tv2.getText().toString();
 
                             int align;
-                            //String content;
                             tv.setTextColor(Color.BLACK);
                             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,22);
                             String date = format1.format(calendar.getTime());
                             String time = format2.format(calendar.getTime());
 
-                            System.out.println("내이름2 :"+user_nickname+",");
-                            System.out.println("내이름3 :"+message_nickname+",");
-                            // 메세지의 시작 이름이 내 닉네임과 일치한다면
+                            //System.out.println("내이름2 :"+user_nickname+",");
+                            //System.out.println("내이름3 :"+real_nickname+",");
+                            // 메세지의 시작 이름이 내 닉네임과 일치한다면(나의 말)
                             if(msg.startsWith(user_nickname)){
                                 tv.setBackgroundResource(R.drawable.activity_background);
                                 align = Gravity.RIGHT;
                                 container.setGravity(align);
-                                String content = message_nickname+" : "+real_message;
+                                String content = real_message;
                                 tv.setText(content);
+                                sqlite.insert(user_nickname,0,1,real_message,date,time);
+                                Log.d(tag, "insert 성공~!");
 
-                                //insertRecord(message_nickname,0,1,real_message,date,time); //앞이 true면 send
-
-                            }
-                            else if (msg.startsWith("서버 ")){
-                                tv.setBackgroundResource(R.drawable.activity_background);
-                                align = Gravity.LEFT;
-                                container.setGravity(align);
-                                tv.setText(msg);// 둘다 아니면 관리자 말임.
-                                //insertRecord("서버",1,0,real_message,date,time); //RCV
 
                             } else{ // 메시지의 네임이 앞에서 message_nickname이라면 >> 목격자의 이름(your_nickname)으로 바꿈
+                                //(상대 방 말 or 서버 말)
                                 tv.setBackgroundResource(R.drawable.activity_background);
                                 align = Gravity.LEFT;
                                 container.setGravity(align);
-                                String content2 = your_nickname+" : "+real_message;
+                                String content2 = real_message;
                                 tv.setText(content2);
-                                //insertRecord(your_nickname,1,0,real_message,date,time); //RCV
+                                sqlite.insert(your_nickname,1,0,real_message,date,time);
+                                Log.d(tag, "insert 성공~!");
+
                             }
 
                             container.addView(tv);
@@ -263,9 +308,20 @@ public class ChatActivity<data> extends AppCompatActivity {
         super.onDestroy();
         try{
             member_socket.close();
-            isRunning=false;
+            //isRunning=false;
 
         }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            member_socket.close();
+            isRunning=false;
+        } catch (Exception e){
+            Log.d(tag2,"error");
             e.printStackTrace();
         }
     }
