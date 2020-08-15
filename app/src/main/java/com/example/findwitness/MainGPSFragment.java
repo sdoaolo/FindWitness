@@ -133,7 +133,6 @@ public class MainGPSFragment extends Fragment {
         }
         @Override
         public void run() {
-
             try {
                 String[] data = parameter.split("\\|");
                 URL url = new URL("http://192.168.0.7:8080/servelet/login");
@@ -149,7 +148,7 @@ public class MainGPSFragment extends Fragment {
                     conn.setDoOutput(true);
                     conn.setDoInput(true);
 
-                    String sendMsg = "time=" + data[0] + "&date=" + data[1] + "&lati=" + data[2] + "&long=" + data[3];
+                    String sendMsg = "time=" + data[0] + "&date=" + data[1] + "&lati=" + data[2] + "&long=" + data[3] + "&save=true&id=" + data[4];
 
                     OutputStream os = conn.getOutputStream();
                     os.write(sendMsg.getBytes("utf-8"));
@@ -209,11 +208,11 @@ public class MainGPSFragment extends Fragment {
                 dat = getTime.substring(0,4) + getTime.substring(5,7) + getTime.substring(8,10);
                 time = getTime.substring(11,13) + getTime.substring(14,16) + getTime.substring(17,19);
                 //Toast.makeText(getApplicationContext(), time,Toast.LENGTH_SHORT).show();
-                Log.d("데이터 : ", "시간 : " + time);
+                Log.d("데이터 : ", "시간 : " + time + "위도 : " + lati + "경도 : " + longi);
 
                 insertRecord(lati, longi, dat, time);
                 //시간 날짜 lati, longi
-                String temp = time + "|" + dat + "|" + lati + "|" + longi;
+                String temp = time + "|" + dat + "|" + lati + "|" + longi + "|10";
                 Thread thread2 = new Network_Thread(temp);
                 thread2.start();
             }
