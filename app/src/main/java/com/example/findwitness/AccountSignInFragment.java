@@ -49,6 +49,14 @@ public class AccountSignInFragment  extends Fragment {
         Edt_login = view.findViewById(R.id.login_email);
         Edt_pw = view.findViewById(R.id.login_password);
 
+
+        ////////////////////////////////////////////////////////
+        Intent intent=new Intent(((AccountActivity)getActivity()),MainActivity.class);
+        startActivity(intent);
+        ////////////////////////////////////////////////////////
+
+
+
         /*new Thread(new Runnable() {
             @Override
             public void run() {
@@ -58,7 +66,7 @@ public class AccountSignInFragment  extends Fragment {
         }).start();*/
 
 
-        signInBtn.setOnClickListener(new View.OnClickListener() {
+/*        signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // 로그인 버튼 클릭
                 Log.d("RRRRRRRRR","GoToMain");
@@ -131,7 +139,7 @@ public class AccountSignInFragment  extends Fragment {
                 ((AccountActivity) getActivity()).txt.setText("SIGN UP");
                 ((AccountActivity) getActivity()).signUpFragment = new AccountSignUpFragment();
                 ((AccountActivity)getActivity()).fm.beginTransaction().replace(R.id.LayoutFragment,(((AccountActivity) getActivity()).signUpFragment)).commit();/*프래그먼트 매니저가 프래그먼트를 담당한다!*/
-            }
-        });
+/*            }
+        });*/
     }
 }
