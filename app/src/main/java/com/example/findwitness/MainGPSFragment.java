@@ -1,6 +1,7 @@
 package com.example.findwitness;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
@@ -83,11 +84,11 @@ public class MainGPSFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","start");
                 running = true;
-                //Thread thread1 = new GPS_Thread();
-                //thread1.start();
-                String temp = "20200814|122055|27.3425465|111.223456";
-                Thread thread2 = new Network_Thread(temp);
-                thread2.start();
+                Thread thread1 = new GPS_Thread();
+                thread1.start();
+                //String temp = "20200814|122055|27.3425465|111.223456";
+                //Thread thread2 = new Network_Thread(temp);
+                //thread2.start();
             }
         });
         btn_finish.setOnClickListener(new View.OnClickListener() {
@@ -132,77 +133,57 @@ public class MainGPSFragment extends Fragment {
         }
         @Override
         public void run() {
-            while(running){
-                try{
-                    // message = NET_handler.obtainMessage();
-                    //Bundle bundle = new Bundle();
-                    //bundle.putBoolean("ok", true);
-                    //message.setData(bundle);
-                    //NET_handler.sendMessage(message);
-                    Thread.sleep(1000);
 
-                    try {
-                        String[] data = parameter.split("\\|");
-                        URL url = new URL("http://192.168.0.7:8080/servelet/login");
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            try {
+                String[] data = parameter.split("\\|");
+                URL url = new URL("http://192.168.0.7:8080/servelet/login");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                        Log.i("쓰레드", "접속시도");
-                        if (conn != null) {
-                            Log.i("쓰레드", "접속성공");
-                            conn.setConnectTimeout(10000);
-                            conn.setRequestMethod("POST");
+                Log.i("쓰레드", "접속시도");
+                if (conn != null) {
+                    Log.i("쓰레드", "접속성공");
+                    conn.setConnectTimeout(10000);
+                    conn.setRequestMethod("POST");
 
-                            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
 
-                            conn.setDoOutput(true);
-                            conn.setDoInput(true);
+                    String sendMsg = "time=" + data[0] + "&date=" + data[1] + "&lati=" + data[2] + "&long=" + data[3];
 
-                            String sendMsg = "time=" + data[1] + "&date=" + data[0] + "&lati=" +
-                                    data[2] + "&long=" + data[3];
+                    OutputStream os = conn.getOutputStream();
+                    os.write(sendMsg.getBytes("utf-8"));
+                    //os.write(sendMsg2.getBytes("utf-8"));
 
-                            OutputStream os = conn.getOutputStream();
-                            os.write(sendMsg.getBytes("utf-8"));
-                            //os.write(sendMsg2.getBytes("utf-8"));
-
-                            os.flush();
-                            os.close();
-                            int resCode = conn.getResponseCode();
-                            Log.i("응답코드", ""+resCode);
-                            if (resCode == HttpURLConnection.HTTP_OK) {
-                                Log.i("쓰레드", "응답수신");
-                                InputStream is = conn.getInputStream();
-                                InputStreamReader isr = new InputStreamReader(is);
-                                BufferedReader br = new BufferedReader(isr);
-                                StringBuilder strBuilder = new StringBuilder();String line = null;
-                                while ((line = br.readLine()) != null) {
-                                    strBuilder.append(line + "\n");
-                                }
-
-                                //jsonStr = strBuilder.toString();
-                                br.close();
-                                conn.disconnect();
-                            }
-                            Log.i("쓰레드", "응답처리완료");
+                    os.flush();
+                    os.close();
+                    int resCode = conn.getResponseCode();
+                    Log.i("응답코드", ""+resCode);
+                    if (resCode == HttpURLConnection.HTTP_OK) {
+                        Log.i("쓰레드", "응답수신");
+                        InputStream is = conn.getInputStream();
+                        InputStreamReader isr = new InputStreamReader(is);
+                        BufferedReader br = new BufferedReader(isr);
+                        StringBuilder strBuilder = new StringBuilder();String line = null;
+                        while ((line = br.readLine()) != null) {
+                            strBuilder.append(line + "\n");
                         }
-                    }catch (Exception ex){
-                        Log.e("접속요류", ""+ex);
+
+                        //jsonStr = strBuilder.toString();
+                        br.close();
+                        conn.disconnect();
                     }
-
-
-                } catch (InterruptedException ex){
-                    Log.e("GPS_Thread running","Exception in thread",ex);
+                    Log.i("쓰레드", "응답처리완료");
                 }
+            }catch (Exception ex) {
+                Log.e("접속요류", "" + ex);
             }
         }
     }
     class Network_handler extends Handler{
         @Override
         public void handleMessage(@NonNull Message msg) {
-            Bundle bundle = msg.getData();
-            boolean run = bundle.getBoolean("ok");
-            if(run){
-                Log.d("net","성공!");
-            }
+
         }
     }
     class GPS_handler extends Handler {
@@ -222,13 +203,19 @@ public class MainGPSFragment extends Fragment {
                 Date date = new Date(now);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss");
 
-                String getTime = sdf.format(date), dat, time;
+                String getTime = sdf.format(date), dat, time, lati, longi;
+                lati = Double.toString(latitude);
+                longi = Double.toString(longitude);
                 dat = getTime.substring(0,4) + getTime.substring(5,7) + getTime.substring(8,10);
                 time = getTime.substring(11,13) + getTime.substring(14,16) + getTime.substring(17,19);
                 //Toast.makeText(getApplicationContext(), time,Toast.LENGTH_SHORT).show();
                 Log.d("데이터 : ", "시간 : " + time);
 
-                insertRecord(latitude, longitude, dat, time);
+                insertRecord(lati, longi, dat, time);
+                //시간 날짜 lati, longi
+                String temp = time + "|" + dat + "|" + lati + "|" + longi;
+                Thread thread2 = new Network_Thread(temp);
+                thread2.start();
             }
         }
     }
@@ -292,9 +279,13 @@ public class MainGPSFragment extends Fragment {
         db = dbHelper.getWritableDatabase();
         return true;
     }
-    public void insertRecord(double latitude, double longitude, String data, String time){
-        db.execSQL("insert into gps(latitude, longitude, data, time) values(" +
-                latitude + "," + longitude + "," + data + "," + time + ");");
+    public void insertRecord(String latitude, String longitude, String data, String time) {
+        ContentValues value = new ContentValues();
+        value.put("LATITUDE", latitude);
+        value.put("LONGITUDE", longitude);
+        value.put("_DATE", data);
+        value.put("_TIME", time);
+        db.insert("gps", null, value);
     }
     //주소 찾기
     public String getCurrentAddress( double latitude, double longitude) {
