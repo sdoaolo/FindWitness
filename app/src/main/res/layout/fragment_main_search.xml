@@ -36,6 +36,30 @@
             android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/search_date"/>
+        <TextView
+            android:id="@+id/appliedDateText"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:text="Aplied Date : "
+            android:textColor="#FFFFFF"
+            android:textSize="18dp"
+            android:layout_below="@+id/search_time"
+            android:gravity="left"
+            android:layout_alignLeft="@+id/search_time"
+            android:layout_marginTop="15dp"
+            />
+        <TextView
+            android:id="@+id/appliedTimeText"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:text="Aplied Time :"
+            android:textColor="#FFFFFF"
+            android:textSize="18dp"
+            android:layout_below="@+id/appliedDateText"
+            android:gravity="left"
+            android:layout_alignLeft="@+id/search_time"
+            android:layout_marginTop="15dp"
+            />
     </RelativeLayout>
     <LinearLayout
         android:layout_width="270dp"
@@ -50,7 +74,9 @@
             android:layout_height="match_parent"
             android:id="@+id/PickerText"
             android:text="날짜 검색"
-            android:textColor="#000000"
+            android:textColor="#78A2DB"
+            android:textSize="18dp"
+            android:textStyle="bold"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:layout_marginTop="10dp"
@@ -73,5 +99,20 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:visibility="gone"/>
+        <Button
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:id="@+id/search_apply_btn"
+            android:text="apply"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#78A2DB"
+            android:onClick="onClick"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"/>
+
     </LinearLayout>
 </FrameLayout>
