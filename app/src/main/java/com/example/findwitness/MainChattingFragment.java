@@ -11,22 +11,25 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.findwitness.Chat.ChatActivity;
+
 import java.util.ArrayList;
 
 public class MainChattingFragment extends Fragment {
-    ArrayList<com.example.findwitness.ChattingListViewItem> chattingList;
+    ArrayList<ChattingListViewItem> chattingList;
     public MainChattingFragment() {
         // Required empty public constructor
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_chatting, container, false);
+        Log.d("LLLLLLLLLL","Im in Chatting Fragment : onCreate View");
         return inflater.inflate(R.layout.fragment_main_chatting, container, false);
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d("LLLLLLLLLL","Im in Chatting Fragment : on View Created");
         //listview
         this.InitializeMovieData();
 
@@ -38,18 +41,20 @@ public class MainChattingFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id){
-                Log.d("cccccccccccccc","item clicked: ");//+myAdapter.getItem(position).getUserName()); //
+                Log.d("LLLLLLLLLL","item clicked: ");
                 ChatActivity chatActivity = new ChatActivity();
                 Intent intent = new Intent(getActivity(),chatActivity.getClass());
+                Log.d("LLLLLLLLLL","activity Start ");
                 startActivity(intent);
-            }
-        });
+
+    }
+});
     }
     public void InitializeMovieData()
     {
-        chattingList = new ArrayList<com.example.findwitness.ChattingListViewItem>();
-        chattingList.add(new com.example.findwitness.ChattingListViewItem("USER_1","마지막 텍스트","12:06","4"));
-        chattingList.add(new com.example.findwitness.ChattingListViewItem("USER_2","안녕하세요!","08:23","1"));
+        chattingList = new ArrayList<ChattingListViewItem>();
+        chattingList.add(new ChattingListViewItem("USER_1","마지막 텍스트","12:06","4"));
+        chattingList.add(new ChattingListViewItem("USER_2","안녕하세요!","08:23","1"));
     }
 }
 

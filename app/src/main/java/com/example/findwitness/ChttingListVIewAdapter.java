@@ -12,9 +12,9 @@ import java.util.ArrayList;
 public class ChttingListVIewAdapter  extends BaseAdapter {
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
-    ArrayList<com.example.findwitness.ChattingListViewItem> sample;
+    ArrayList<ChattingListViewItem> sample;
 
-    public ChttingListVIewAdapter(Context context, ArrayList<com.example.findwitness.ChattingListViewItem> data) {
+    public ChttingListVIewAdapter(Context context, ArrayList<ChattingListViewItem> data) {
         mContext = context;
         sample = data;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -31,7 +31,7 @@ public class ChttingListVIewAdapter  extends BaseAdapter {
     }
 
     @Override
-    public com.example.findwitness.ChattingListViewItem getItem(int position) {
+    public ChattingListViewItem getItem(int position) {
         return sample.get(position);
     }
 

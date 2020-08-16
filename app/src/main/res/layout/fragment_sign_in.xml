@@ -88,5 +88,20 @@
             android:background="@drawable/white_line"
             android:onClick="onClick"
             />
+        <Button
+            android:id="@+id/guest_login"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="guest login"
+            android:textColor="#FFFFFF"
+            android:textSize="13dp"
+            android:gravity="center"
+            android:layout_below="@id/login_signup_button"
+            android:background="#00000000"
+            android:onClick="onClick"
+            />
     </RelativeLayout>
 </LinearLayout>
