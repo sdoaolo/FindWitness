@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.findwitness.Chat.ChatActivity;
+
 import java.util.ArrayList;
 
 
