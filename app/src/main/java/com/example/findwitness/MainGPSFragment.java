@@ -135,7 +135,8 @@ public class MainGPSFragment extends Fragment {
         public void run() {
             try {
                 String[] data = parameter.split("\\|");
-                URL url = new URL("http://192.168.0.7:8080/servelet/login");
+                //URL url = new URL("http://192.168.0.7:8080/servelet/login");
+                URL url = new URL("http://192.168.0.8:8080/servelet_test/Login");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                 Log.i("쓰레드", "접속시도");

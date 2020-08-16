@@ -148,12 +148,12 @@ public class ChatActivity<data> extends AppCompatActivity {
     // 서버접속 처리하는 스레드 클래스 - 안드로이드에서 네트워크 관련 동작은 항상
     // 메인스레드가 아닌 스레드에서 처리해야 한다.
     class ConnectionThread extends Thread {
-
         @Override
         public void run() {
             try {
                 // 접속한다.
-                final Socket socket = new Socket("192.168.219.100", 30000); //host: 서버ip
+                //final Socket socket = new Socket("192.168.219.100", 30000); //host: 서버ip
+                final Socket socket = new Socket("192.168.0.8", 30000); //host: 서버ip
                 member_socket=socket;
                 // 미리 입력했던 닉네임을 서버로 전달한다.
                 String nickName = edit1.getText().toString();

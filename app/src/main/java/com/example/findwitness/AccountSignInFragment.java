@@ -27,6 +27,7 @@ public class AccountSignInFragment  extends Fragment {
     String input_id, input_password;
     static String message = "", response = "";
     int pri_num = 0;
+    String nickname = "";
 //    String address = "192.168.0.88";
 //    int port = Integer.parseInt("8888");
 
@@ -104,15 +105,21 @@ public class AccountSignInFragment  extends Fragment {
                     String[] res = response.split(",");
                     Log.d("RRRRRRRRR","res[0] : "+res[0]);
                     Log.d("RRRRRRRRR","res[1] : "+res[1]);
+                    Log.d("RRRRRRRRR","res[2] : "+res[2]);
 
                     try {
                         if (res[0].equals("Login_success")) {
                             pri_num = Integer.parseInt(res[1]);
+                            nickname = res[2];
+
                             //Toast.makeText(AccountSignInFragment.this, "로그인 성공", Toast.LENGTH_LONG).show();
-                            Log.d("RRRRRRRRR","로그인 성공"+pri_num);
+                            Log.d("RRRRRRRRR","로그인 성공"+pri_num+","+nickname);
                             Intent intent=new Intent(((AccountActivity)getActivity()),MainActivity.class);
+                            intent.putExtra("pri_num", pri_num);
+                            intent.putExtra("nickname", nickname);
                             startActivity(intent);
                             //finish();
+
                         } else if (res[0].equals("Login_fail")) {
                             //Toast.makeText(getApplicationContext(), "로그인에 실패했습니다.\n아이디와 비밀번호를 확인해주세요.", Toast.LENGTH_LONG).show();
                             Log.d("RRRRRRRRR","로그인 실패");

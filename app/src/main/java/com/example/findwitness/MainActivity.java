@@ -63,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.main_frame, mainSearchFragment); //초기화면 설정
         fragmentTransaction.commit();
 
+        /////////////////////
+        Intent intent = getIntent();
+        int prinum_main = intent.getIntExtra("pri_num", 0);
+        String nickname = intent.getStringExtra("nickname");
+
+        ///////////////////
+
         //권한 체크
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
