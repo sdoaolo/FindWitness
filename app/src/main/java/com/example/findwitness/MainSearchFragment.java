@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.fragment.app.Fragment;
 
@@ -15,7 +18,12 @@ public class MainSearchFragment extends Fragment {
     private SQLiteDatabase db;
     private GPSdatabaseHelper dbHelper;
     Button btnDate, btnTime;
-    FrameLayout pickerLayout;
+    LinearLayout pickerLayout;
+    DatePicker datePicker;
+    TimePicker timePicker;
+    TextView PickerText;
+    int nHourDay, nMinute;
+
     public MainSearchFragment() {
         // Required empty public constructor
     }
@@ -29,14 +37,19 @@ public class MainSearchFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         pickerLayout = view.findViewById(R.id.pickerLayout);
-
-
+        datePicker = view.findViewById(R.id.datePicker);
+        timePicker = view.findViewById(R.id.timePicker);
+        PickerText = view.findViewById(R.id.PickerText);
         //날짜 시간 조회 기능 넣기 !
         btnDate = view.findViewById(R.id.search_date);
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickerLayout.setVisibility(View.VISIBLE);
+                datePicker.setVisibility(View.VISIBLE);
+                timePicker.setVisibility(View.GONE);
+                PickerText.setVisibility(View.VISIBLE);
+                PickerText.setText("날짜 검색");
             }
         });
 
@@ -45,11 +58,24 @@ public class MainSearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 pickerLayout.setVisibility(View.VISIBLE);
+                datePicker.setVisibility(View.GONE);
+                timePicker.setVisibility(View.VISIBLE);
+                PickerText.setVisibility(View.VISIBLE);
+                PickerText.setText("시간 검색");
+                timePicker.setIs24HourView(false);
+                //timePicker.setOnTimeChangedListener(this);
             }
         });
-
-
-
-
     }
+
+
+    /*
+
+    @Override
+    public void onTimeChanged(TimePicker timePicker, int hourOfDay, int minute){
+        nHourDay = hourOfDay;
+        nMinute = minute;
+    }
+
+    */
 }

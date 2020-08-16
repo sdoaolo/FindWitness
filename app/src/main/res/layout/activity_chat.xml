@@ -3,26 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/activity_background">
 
-    <FrameLayout
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/main_blue_back"
+        android:background="#CC78A2DB"
         >
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
-                android:id="@+id/app_name"
-                android:layout_width="wrap_content"
+                android:id="@+id/chatting_opponent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textSize="22dp"
+                android:text="OPPONENT"
+                android:textSize="20dp"
                 android:textStyle="bold"
-                android:layout_marginBottom="1dp"/>
-
+                android:textColor="#FFFFFF"
+                android:layout_centerVertical="true"
+                android:gravity="left"
+                />
             <TextView
                 android:id="@+id/typing"
                 android:layout_width="wrap_content"
@@ -31,7 +34,7 @@
                 android:layout_below="@+id/app_name"
                 />
         </RelativeLayout>
-    </FrameLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
