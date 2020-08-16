@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,12 +53,19 @@ public class ChatActivity<data> extends AppCompatActivity {
     private static final int TIMER=500;
     private static final int REQUEST_CODE=0;
     private Handler typingHandler=new Handler();
+    Toolbar toolbar;
+    TextView chatting_opponent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         //toolbar 선언 및 어쩌구 저쩌구 3줄 없앰.
+        toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
         isConnected=false;
+        chatting_opponent = (TextView)findViewById(R.id.chatting_opponent);
+        chatting_opponent.setText("INPUT STRING"); //INPUT USER NICKNAME STRING
         mTyping=false;
         app=new ChatApp();
         Log.d("LLLLLLLLLL","Hello");
@@ -313,8 +322,13 @@ public class ChatActivity<data> extends AppCompatActivity {
         mAdapter.notifyItemInserted(messageList.size()-1);
         scrollUp();
     }
+
     private void addParticipantsLog(int numUsers) {
-        addLog("There are "+numUsers+" users in the chat room");
+        SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
+        String format_time2 = format2.format (System.currentTimeMillis());
+        String currentDate = format_time2.substring(0,12);
+        addLog(currentDate);
+        //addLog("There are "+numUsers+" users in the chat room");
         scrollUp();
     }
 

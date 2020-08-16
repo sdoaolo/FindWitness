@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_marginTop="8dp"
-    android:background="#EEEEEE"
+    android:background="#CCFFFFFF"
     android:gravity="center">
 
     <TextView
@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="haha" />
+        android:text="haha"
+        android:textColor="#78A2DB"/>
 
 </LinearLayout>
