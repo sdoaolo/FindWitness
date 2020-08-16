@@ -24,9 +24,7 @@ public class GPSdatabaseHelper extends SQLiteOpenHelper {
         } catch(Exception ex){
             Log.e(TAG, "Exception in DROP_SQL", ex);
         }
-        String Create_SQL = "create table " + "gps" + "("
-                + "_id integer PRIMARY KEY autoincrement,"
-                + "latitude double, " + "longitude double, " + "data text, " + "time text" + ");";
+        String Create_SQL = "create table gps (_ID INTEGER PRIMARY KEY AUTOINCREMENT, LATITUDE TEXT, LONGITUDE TEXT, _DATE TEXT, _TIME TEXT);";
         try{
             db.execSQL(Create_SQL);
         }catch (Exception ex){
