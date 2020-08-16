@@ -7,7 +7,8 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 
 public class ChatApp extends Application {
-    private final String CHAT_URL="http://172.20.10.2:8005/";
+    //private final String CHAT_URL="http://172.20.10.2:8005/"; //지은
+    private final String CHAT_URL="http://192.168.219.100:8005/"; //지혜
     private Socket mSocket;
     {
         try {

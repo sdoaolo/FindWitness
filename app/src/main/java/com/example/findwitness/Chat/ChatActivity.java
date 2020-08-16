@@ -1,15 +1,32 @@
 package com.example.findwitness.Chat;
 
+/*
+        과거에 대화던 내용 불러오기 위해서는 상대방 닉네임과 제 닉네임이 필요합니다.
+        임시로 제가 이름을 지정했습니다.
+        혹시 테스트하실 분은 이름 변경해서 사용하면 됩니다!~!
+        >>>>
+        String real_my_nickname = "지혜";
+        tring your_nickname = "수헌";
+
+
+        <간단 설명>
+        서버-클라이언트의 connection에 성공하면
+        내가 보낸 메시지를 서버가 받고 나를 제외한 상대방에게 뿌려준다.
+* */
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +40,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.findwitness.ChatSQLiteControl;
+import com.example.findwitness.ChatSQLiteHelper;
 import com.example.findwitness.R;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -31,14 +50,15 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class ChatActivity<data> extends AppCompatActivity {
-    private EditText editMessage;
 
+    private EditText editMessage;
     private Button sendButton;
     public static Socket mSocket;
     private ChatApp app;
@@ -52,14 +72,37 @@ public class ChatActivity<data> extends AppCompatActivity {
     private List<Message> messageList;
     private static final int TIMER=500;
     private static final int REQUEST_CODE=0;
-    private Handler typingHandler=new Handler();
+    private Handler typingHandler=new Handler(); // //유저가 치고 있는지 여부를 통해 메시지 내용뷰에서 충돌이 안 생김ㅇㅇ
+
     Toolbar toolbar;
     TextView chatting_opponent;
+
+    /* DATABASE */
+    //데이터 베이스
+    SQLiteDatabase database;
+    ChatSQLiteControl sqlite;
+    private ChatSQLiteHelper dbHelper;
+    String dbName = "chat.db";
+    String tag = "SQLite"; // Log 에 사용할 tag (DB용)
+
+
+    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd"); //날짜
+    SimpleDateFormat format2 = new SimpleDateFormat("HH:mm:ss"); //시간
+    Calendar calendar = Calendar.getInstance();
+    String date = format1.format(calendar.getTime());
+    String time = format2.format(calendar.getTime());
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        dbHelper = new ChatSQLiteHelper(this,dbName,null,1);
+        sqlite = new ChatSQLiteControl(dbHelper);
+        database = dbHelper.getReadableDatabase();
+
+
         //toolbar 선언 및 어쩌구 저쩌구 3줄 없앰.
         toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -72,10 +115,54 @@ public class ChatActivity<data> extends AppCompatActivity {
         initializeSocket();
         Log.d("LLLLLLLLLL","ByeBye");
         signIn();
+        pastContentPickUP thread = new pastContentPickUP();
+        thread.start();
         setUpUI();
     }
 
+    class pastContentPickUP extends Thread{
+        @Override
+        public void run(){
+            try {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String real_my_nickname = "지혜";
+                        // 로그인화면에서 이름입력받은 값으로 real_my_nickname하면 에러남 :  NullPointerException
+                        String your_nickname = "수헌"; // 나중에 이름 받아오면 변경하자
+                        //TextView my_nickname = (EditText) findViewById(R.id.username_editText);
+                        //String real_my_nickname = my_nickname.getText().toString();
+                        String sql = "select * from chat where sender=" + "\'" + your_nickname + "\'";
+                        Cursor cursor = database.rawQuery(sql, null);
+                        if (cursor.moveToFirst() != false) {
+                            while (cursor.moveToNext()) {
+                                int rcv = cursor.getInt(2);//rcv값 뽑기
+                                int send = cursor.getInt(3);//send값 뽑기
+                                String message = cursor.getString(4); //메시지 내용 뽑기
+
+                                //상대방에게 받은 메시지
+                                if (rcv == 1) {
+                                    addMessage(your_nickname, message, Message.TYPE_MESSAGE_RECEIVED);
+                                } else if (send == 1) { //내가 쓴 메시지
+                                    addMessage(real_my_nickname, message, Message.TYPE_MESSAGE_SENT);
+                                }
+
+                            }
+                        }
+                    }
+                });
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+}
+
+
     public void initializeSocket(){
+
+        // mSocket.on 서버에게 받은 이벤트 (Emitter.Listener 로 받은 내용 처리함)
+
+
         mSocket=app.getSocket();
         Log.d("LLLLLLLLL","get socket"+mSocket);
         mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
@@ -89,7 +176,7 @@ public class ChatActivity<data> extends AppCompatActivity {
     private void signIn(){
         mUsername=null;
         Intent i=new Intent(this,LoginActivity.class); //login activity에서
-        startActivityForResult(i,REQUEST_CODE);
+        startActivityForResult(i,REQUEST_CODE);  // >>onActivityResult
     }
 
     @Override
@@ -134,7 +221,8 @@ public class ChatActivity<data> extends AppCompatActivity {
                     return;
                 if(mTyping==false) {
                     mTyping = true;
-                    mSocket.emit("typing");
+                    mSocket.emit("typing"); //나 치고 있딴다^^라고 서버에게 보내기
+
                 }
                 typingHandler.removeCallbacks(onTypingTimeout);
                 typingHandler.postDelayed(onTypingTimeout,TIMER);
@@ -177,7 +265,7 @@ public class ChatActivity<data> extends AppCompatActivity {
 
     private Emitter.Listener onDisconnect=new Emitter.Listener() {
         @Override
-        public void call(Object... args) {
+        public void call(Object... args) { //EVENT_DISCONNECT 이벤트 받음
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -190,7 +278,7 @@ public class ChatActivity<data> extends AppCompatActivity {
 
     private Emitter.Listener onConnectError=new Emitter.Listener() {
         @Override
-        public void call(Object... args) {
+        public void call(Object... args) { //EVENT_CONNECT_ERROR 이벤트 받음
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -203,26 +291,30 @@ public class ChatActivity<data> extends AppCompatActivity {
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
+
             Log.w(TAG,"onNewMesage");
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    JSONObject data= (JSONObject)args[0];
+                    JSONObject data= (JSONObject)args[0]; //상대방 채팅창 참가
                     String username=null;
                     String message=null;
                     try {
-                        username=data.getString("username");
-                        message=data.getString("message");
+                        username=data.getString("username"); //메시지 보낸 사람(나이거나 상대방이다.)
+                        message=data.getString("message"); //메시지 내용
                     } catch (JSONException e) {
                         Log.e(TAG,e.getMessage());
                         e.printStackTrace();
                     }
 
-                    addMessage(username,message,Message.TYPE_MESSAGE_RECEIVED);
+                    addMessage(username,message,Message.TYPE_MESSAGE_RECEIVED);//받은 메시지
+                    sqlite.insert(username,1,0,message,date,time);
+                    Log.d(tag, "insert 성공~!");
                 }
             });
         }
     };
+
 
     private Emitter.Listener onUserJoined = new Emitter.Listener() {
         @Override
@@ -243,8 +335,8 @@ public class ChatActivity<data> extends AppCompatActivity {
                         return;
                     }
 
-                    addLog(username+" has joined");
-                    addParticipantsLog(numUsers);
+                    addLog(username+" has joined");  //누가 참가했다 알리기
+                    addParticipantsLog(numUsers); //총 몇명인지 알리기
                 }
             });
         }
@@ -252,7 +344,8 @@ public class ChatActivity<data> extends AppCompatActivity {
 
     private Emitter.Listener onUserLeft = new Emitter.Listener() {
         @Override
-        public void call(final Object... args) {
+        public void call(final Object... args) { //user left 이벤트 받음
+
             Log.w(TAG,"onUserLeft");
             runOnUiThread(new Runnable() {
                 @SuppressLint("StringFormatInvalid")
@@ -269,8 +362,9 @@ public class ChatActivity<data> extends AppCompatActivity {
                         return;
                     }
 
-                    addLog(username+" left");
-                    addParticipantsLog(numUsers);
+                    addLog(username+" left"); //누가 떠났는지 말해줌
+                    addParticipantsLog(numUsers); //남은 사람들 몇명인지 알랴줌
+
                     removeTyping();
                 }
             });
@@ -279,7 +373,8 @@ public class ChatActivity<data> extends AppCompatActivity {
 
     private Emitter.Listener onTyping = new Emitter.Listener() {
         @Override
-        public void call(final Object... args) {
+        public void call(final Object... args) { //typing 이벤트 받음
+
             Log.w(TAG,"onTyping");
             runOnUiThread(new Runnable() {
                 @Override
@@ -292,7 +387,8 @@ public class ChatActivity<data> extends AppCompatActivity {
                         Log.e(TAG, e.getMessage());
                         return;
                     }
-                    addTyping(username);
+                    addTyping(username); //누가 메시지 입력했는지 알랴줌
+
                 }
             });
         }
@@ -323,7 +419,7 @@ public class ChatActivity<data> extends AppCompatActivity {
         scrollUp();
     }
 
-    private void addParticipantsLog(int numUsers) {
+    private void addParticipantsLog(int numUsers) { //몇명있는지 알랴줌
         SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
         String format_time2 = format2.format (System.currentTimeMillis());
         String currentDate = format_time2.substring(0,12);
@@ -340,37 +436,44 @@ public class ChatActivity<data> extends AppCompatActivity {
         typingView.setText(null);
     }
 
-    private void attemptSend() {
+    private void attemptSend() { //메시지 쓰고 보냅니다.
         if (mUsername==null) return;
         if (!mSocket.connected()) return;
-        if(mTyping) {
+        if(mTyping) { //true를 false로 고침
             mTyping = false;
-            mSocket.emit("stop typing");
+            mSocket.emit("stop typing"); //이벤트 보내기
         }
-        String message = editMessage.getText().toString().trim();
-        if (TextUtils.isEmpty(message)) {
+        String message = editMessage.getText().toString().trim(); //trim: 문자열 공백 제거
+
+        if (TextUtils.isEmpty(message)) { //메시지가 비어있지 않으면 editMessage로 focuss
+
             editMessage.requestFocus();
             return;
         }
 
         editMessage.setText("");
-        addMessage(mUsername, message, Message.TYPE_MESSAGE_SENT);
+        addMessage(mUsername, message, Message.TYPE_MESSAGE_SENT); // 내가 보낸 메시지
+        sqlite.insert(mUsername,0,1,message,date,time);
+        Log.d(tag, "insert 성공~!");
+
 
         // perform the sending message attempt.
-        mSocket.emit("new message", message);
+        mSocket.emit("new message", message); //새로운 메시지 이벤트 보내기 (서버에게 >>서버가 그 메시지 뿌려줌)
+
     }
 
     private Runnable onTypingTimeout=new Runnable() {
         @Override
         public void run() {
-            if(mTyping==false)
+            if(mTyping==false) //치고 있지 않음.
+
                 return;
 
             mTyping=false;
-            mSocket.emit("stop typing");
+            mSocket.emit("stop typing"); //stop typing 이벤트 전송
         }
     };
-    private void scrollUp(){
+    private void scrollUp(){ //리스트의 가장 마지막을 보여주도록 스크롤을 이동
         recyclerView.scrollToPosition(mAdapter.getItemCount()-1);
     }
 
@@ -379,6 +482,8 @@ public class ChatActivity<data> extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.test_menu,menu);
         return true;
     }
+
+    //로그아웃 (( 나중에 없애쟈..^^))
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
