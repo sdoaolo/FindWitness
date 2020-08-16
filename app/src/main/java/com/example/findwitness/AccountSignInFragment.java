@@ -2,17 +2,13 @@ package com.example.findwitness;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-
-import static java.lang.Thread.sleep;
 
 public class AccountSignInFragment  extends Fragment {
     /*EditText e_id, e_pw;
@@ -21,8 +17,7 @@ public class AccountSignInFragment  extends Fragment {
     e_pw = (EditText) findViewById(R.id.login_password);
     s_id = e_id.getText().toString();
     s_pw = e_id.getText().toString();*/
-
-    Button signInBtn, signUpBtn;
+    Button signInBtn, signUpBtn, guestLoginBtn;
     EditText Edt_login, Edt_pw;
     String input_id, input_password;
     static String message = "", response = "";
@@ -57,7 +52,14 @@ public class AccountSignInFragment  extends Fragment {
         ////////////////////////////////////////////////////////
 
 
-
+        guestLoginBtn = view.findViewById(R.id.guest_login);
+        guestLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { // 회원가입 버튼 클릭
+                Intent intent=new Intent(((AccountActivity)getActivity()),MainActivity.class);
+                startActivity(intent);
+            }
+        });
         /*new Thread(new Runnable() {
             @Override
             public void run() {
