@@ -53,9 +53,15 @@ import io.socket.emitter.Emitter;
 
 public class ChatActivity<data> extends AppCompatActivity {
 
-    private String SENDER_NICKNAME = "수헌"; //나중에 입력값받아야함
+    //닉네임
+    //나중에 입력값받아야함
     private String MY_NICKNAME = "지혜";
+    private String YOU_NICKNAME = "수헌";
 
+    //고유번호 >> 채팅방이름에 이용할거임.
+    private int MY_NUM = 1;
+    private int YOU_NUM = 2;
+    private String CHAT_ROOM_NAME;
 
     private EditText editMessage;
     private Button sendButton;
@@ -94,7 +100,7 @@ public class ChatActivity<data> extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         Intent intent = getIntent();
-        MY_NICKNAME = intent.getStringExtra("UserName");
+        //MY_NICKNAME = intent.getStringExtra("UserName");
         Log.d("hhhhhhhhhhhhhh","userNickName: "+MY_NICKNAME);
 
 
@@ -110,6 +116,12 @@ public class ChatActivity<data> extends AppCompatActivity {
         chatting_opponent = (TextView) findViewById(R.id.chatting_opponent);
         chatting_opponent.setText("INPUT STRING"); //INPUT USER NICKNAME STRING
 
+        if(MY_NUM>YOU_NUM){
+            CHAT_ROOM_NAME = YOU_NUM+"&"+MY_NUM ;
+        }else {
+            CHAT_ROOM_NAME = MY_NUM + "&"+YOU_NUM;
+        }
+
 
 
         //DB용
@@ -123,14 +135,18 @@ public class ChatActivity<data> extends AppCompatActivity {
         initializeSocket();
         mSocket.connect();
 
-        mSocket.on(Socket.EVENT_CONNECT, onConnect); //이름 전달함.
+        mSocket.on(Socket.EVENT_CONNECT, onConnect); //MY_NICKNAME 이름 전달함.
         Log.d("LLLLLLLLL", "mSocket.connect");
-        mSocket.on("login", onLogin);
+        mSocket.emit("chat room name", CHAT_ROOM_NAME); //서버DB에서 못받은 메시지 받기 위해
+        mSocket.on("login", onLogin); //환영 인사 + 날짜 표시(흠..옮겨야 할 것 같긴헌디큐큐..)
 
 
-        //DB용
+
+        //사용자 로컬 DB용
         pastContentPickUP thread = new pastContentPickUP();
         thread.start();
+
+        //못받은 메시지 주기.
 
 
         setUpUI();
@@ -147,7 +163,7 @@ public class ChatActivity<data> extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String sql = "select * from chat where sender=" + "\'" + SENDER_NICKNAME + "\'";
+                        String sql = "select * from chat where sender=" + "\'" + YOU_NICKNAME + "\'";
                         Cursor cursor = database.rawQuery(sql, null);
                         int size=cursor.getCount();
                         if (cursor.moveToFirst() != false) {
@@ -159,7 +175,7 @@ public class ChatActivity<data> extends AppCompatActivity {
 
                                 //상대방에게 받은 메시지
                                 if (rcv == 1) {
-                                    addMessage(SENDER_NICKNAME, message, Message.TYPE_MESSAGE_RECEIVED);
+                                    addMessage(YOU_NICKNAME, message, Message.TYPE_MESSAGE_RECEIVED);
                                 } else if (send == 1) { //내가 쓴 메시지
                                     addMessage(MY_NICKNAME, message, Message.TYPE_MESSAGE_SENT);
                                 }
@@ -298,7 +314,7 @@ public class ChatActivity<data> extends AppCompatActivity {
     };
 
 
-    //추가한 부분
+
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
@@ -321,7 +337,7 @@ public class ChatActivity<data> extends AppCompatActivity {
             String format_time2 = format2.format(System.currentTimeMillis());
             String currentDate = format_time2.substring(0, 12);
             addLog(currentDate);
-            //scrollUp();
+            scrollUp();
         }
     };
 
@@ -333,17 +349,9 @@ public class ChatActivity<data> extends AppCompatActivity {
 
     private void addMessage(String username, String message, int messageType) {
         messageList.add(new Message(messageType, username, message));
-        mAdapter.notifyItemInserted(messageList.size() );
+        mAdapter.notifyItemInserted(messageList.size());
         scrollUp();
     }
-
-
-
-
-
-
-
-
 
     private void attemptSend() { //메시지 쓰고 보냅니다.
         if (MY_NICKNAME == null) return;
@@ -358,24 +366,18 @@ public class ChatActivity<data> extends AppCompatActivity {
 
         editMessage.setText("");
         addMessage(MY_NICKNAME, message, Message.TYPE_MESSAGE_SENT); // 내가 보낸 메시지
-        sqlite.insert(SENDER_NICKNAME, 0, 1, message, date, time);
+        sqlite.insert(YOU_NICKNAME, 0, 1, message, date, time);
         Log.d(tag, "insert 성공~!");
 
 
         // perform the sending message attempt.
-        mSocket.emit("new message", message, SENDER_NICKNAME, MY_NICKNAME); //새로운 메시지 이벤트 보내기 (서버에게 >>서버가 그 메시지 뿌려줌)
+        mSocket.emit("new message", message, YOU_NICKNAME, MY_NICKNAME,CHAT_ROOM_NAME); //새로운 메시지 이벤트 보내기 (서버에게 >>서버가 그 메시지 뿌려줌)
 
     }
 
 
     private void scrollUp() { //리스트의 가장 마지막을 보여주도록 스크롤을 이동
         recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.test_menu, menu);
-        return true;
     }
 
 }
