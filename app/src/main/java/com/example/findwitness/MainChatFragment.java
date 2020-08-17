@@ -52,6 +52,7 @@ public class MainChatFragment extends Fragment {
                 ChatActivity chatActivity = new ChatActivity();
                 Intent intent = new Intent(getActivity(),chatActivity.getClass());
                 //putExtra의 첫 값은 식별 태그, 뒤에는 다음 화면에 넘길 값(user nickname을 넘겨 줌)
+                Log.d("lllllllllllllll","클릭에러발생");
                 intent.putExtra("nickname",chatList.get(position).getUserName());
 
                 startActivity(intent);

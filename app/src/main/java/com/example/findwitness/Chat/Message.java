@@ -1,9 +1,5 @@
 package com.example.findwitness.Chat;
 
-/**
- * Created by Nitish Kumar on 14-12-2017.
- */
-
 public class Message {
     public static final int TYPE_MESSAGE_RECEIVED=0;
     //new user is a log

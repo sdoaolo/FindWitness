@@ -1,6 +1,7 @@
 package com.example.findwitness.Chat;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MessageAdapter.MyViewHolder holder, int position) {
         Message currentMessage=mMessageList.get(position);
+        Log.d("llllllllllllllllllllllllllllllllllll", "mesage : "+position);
         if(currentMessage.getmUsername()!=null) {
-            if (currentMessage.getmUsername().equals(mMessageList.get(position - 1).getmUsername())) {
+
+            if (currentMessage.getmUsername().equals(mMessageList.get(position).getmUsername())) {
+
                 LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textParams.setMargins(0, 4, 0, 0);
                 holder.mView.setLayoutParams(textParams);
