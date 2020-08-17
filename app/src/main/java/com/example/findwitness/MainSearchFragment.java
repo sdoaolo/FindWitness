@@ -27,6 +27,9 @@ public class MainSearchFragment extends Fragment {
     Boolean isSearchDate = true,isAppliedDate=false,isAppliedTime = false;
 
     String timeResult, dateResult;
+
+    //ArrayList<String> SearchResultList;
+
     public MainSearchFragment() {
         // Required empty public constructor
     }
@@ -45,6 +48,8 @@ public class MainSearchFragment extends Fragment {
         appliedText = view.findViewById(R.id.PickerText);
         btnApply = view.findViewById(R.id.search_apply_btn);
         btnSearch = view.findViewById(R.id.btn_search);
+        //SearchResultList = new ArrayList<String>(2);
+        //SearchResultList[0]=dateResult;
 
         appliedDateText = view.findViewById(R.id.appliedDateText);
         appliedTimeText = view.findViewById(R.id.appliedTimeText);
@@ -129,7 +134,14 @@ public class MainSearchFragment extends Fragment {
             public void onClick(View view) {
                 //fragment chat로 화면 전환 ㅇㅇ
                 Log.d("hhhhhhhhhhhhhh","fragment chat로 화면 전환");
+               /*
+                Bundle bundle = new Bundle();
+                bundle.putString("SearchDate",dateResult);
+                bundle.putString()
+               ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
+            */
             }
+
         });
     }
     public void checkApplied(){
