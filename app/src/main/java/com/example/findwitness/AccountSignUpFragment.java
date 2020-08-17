@@ -29,7 +29,6 @@ public class AccountSignUpFragment extends Fragment {
     String address = "192.168.0.88";
     int port = Integer.parseInt("9999");
 
-
     public AccountSignUpFragment() {
         // Required empty public constructor
     }
