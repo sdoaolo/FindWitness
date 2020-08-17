@@ -1,6 +1,7 @@
 package com.example.findwitness;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 
 public class MainChatFragment extends Fragment {
+    String SearchResultDate , SearchResultTime;
     ArrayList<ChatListViewItem> chatList;
     public MainChatFragment() {
         // Required empty public constructor
@@ -31,9 +33,20 @@ public class MainChatFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         TextView recent_list_date = view.findViewById(R.id.recent_list_date);
         TextView recent_list_time = view.findViewById(R.id.recent_list_time);
+
+        Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
+        if(bundle != null){
+            SearchResultDate = bundle.getString("SearchDate"); //Name 받기.
+            SearchResultTime = bundle.getString("SearchTime"); //Name 받기.
+            ((MainActivity)getActivity()).btn_search.setBackgroundResource(R.drawable.main_search);
+            ((MainActivity)getActivity()).btn_list.setBackgroundResource(R.drawable.main_blue_back);
+            ((MainActivity)getActivity()).btn_list.setTextColor(Color.parseColor(((MainActivity)getActivity()).strWhite));
+            recent_list_date.setText(SearchResultDate);
+            recent_list_time.setText(SearchResultTime);
+        }
+
 
         //please set Text View of Recent List Info (date, time)
 
