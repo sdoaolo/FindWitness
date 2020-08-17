@@ -197,15 +197,16 @@ public class MainGPSFragment extends Fragment {
                         num = c1.getCount();
                         Log.d("데이터", "num : " + num);
 
-                        if (num > 0) {  // 위도 경도, 날짜, 시간
+                        if (num > 0) {  // 위도(latitude) 경도, 날짜, 시간
                             String temp[] = {"0", "0", "0", "0"};
                             for (int i = 0; i < num; i++) {
                                 c1.moveToNext();
-                                String tt = c1.getString(4);
-                                temp[0] += "," + c1.getString(1);
-                                temp[1] += "," + c1.getString(2);
+                                String latitude_temp = String_to_seven(c1.getString(1));
+                                String longitude_temp = String_to_seven(c1.getString(2));
+                                temp[0] += "," + latitude_temp;
+                                temp[1] += "," + longitude_temp;
                                 temp[2] += "," + c1.getString(3);
-                                temp[3] += "," + tt;
+                                temp[3] += "," + c1.getString(4);;
                                 //Toast.makeText(getApplicationContext(), temp[3], Toast.LENGTH_LONG).show();
                             }
 
@@ -328,12 +329,22 @@ public class MainGPSFragment extends Fragment {
         return true;
     }
     public void insertRecord(String latitude, String longitude, String data, String time) {
+        //latitude = String_to_seven(latitude);
+        //longitude = String_to_seven(longitude);
         ContentValues value = new ContentValues();
         value.put("LATITUDE", latitude);
         value.put("LONGITUDE", longitude);
         value.put("_DATE", data);
         value.put("_TIME", time);
         db.insert("gps", null, value);
+    }
+    public String String_to_seven(String str){
+        String temp[] = str.split("."), zero = "0000000", ans;
+        int num = temp[1].length();
+        if(num > 7) temp[1] = temp[1].substring(0,7);
+        else if(num < 7) temp[1] += zero.substring(0,7-num);
+        ans = temp[0] + "." + temp[1];
+        return ans;
     }
     //주소 찾기
     public String getCurrentAddress( double latitude, double longitude) {
