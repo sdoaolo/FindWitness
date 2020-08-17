@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Locale;
 
@@ -70,6 +71,7 @@ public class MainSearchFragment extends Fragment {
                         // TODO Auto-generated method stub
                         //monthOfYear는 0값이 1월을 뜻하므로 1을 더해줌 나머지는 같다.
                         appliedDateText.setText(String.format("Aplied Date : %d-%d-%d", year,monthOfYear + 1, dayOfMonth));
+                        Log.d("eeee", appliedDateText.toString());
                     }
                 });
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
@@ -77,6 +79,7 @@ public class MainSearchFragment extends Fragment {
             public void onTimeChanged(TimePicker timePicker, int hour, int min) {
                 appliedTimeText.setText(String.format("Aplied Time : %d : %d ", hour,min));
                 timeResult = String.format("%d : %d", hour,min);
+                Log.d("eee", appliedTimeText.toString());
             }
         });
 
