@@ -19,7 +19,6 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.util.List;
 import java.util.Locale;
 
@@ -153,12 +152,14 @@ public class MainSearchFragment extends Fragment {
                 search_gps();
                 //fragment chat로 화면 전환 ㅇㅇ
                 Log.d("hhhhhhhhhhhhhh","fragment chat로 화면 전환");
-               /*
+
                 Bundle bundle = new Bundle();
+                Log.d("ssssssssssssdateresult: ",dateResult);
+                Log.d("sssssssssssstimeresult: ",timeResult);
                 bundle.putString("SearchDate",dateResult);
-                bundle.putString()
-               ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
-            */
+                bundle.putString("SearchTime",timeResult);
+                ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
+                ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
             }
 
         });
