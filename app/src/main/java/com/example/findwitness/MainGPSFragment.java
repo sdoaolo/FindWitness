@@ -78,7 +78,6 @@ public class MainGPSFragment extends Fragment {
         if(!isOpen) {
             //Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
         }
-        NET_handler = new Network_handler();
 
         this.InitializeData();
         ListView listView = view.findViewById(R.id.gps_list);
