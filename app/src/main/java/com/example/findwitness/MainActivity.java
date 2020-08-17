@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
     MainChattingFragment mainChattingFragment;
     String strWhite = "#FFFFFF";
     String strBlue = "#78A2DB";
-
+    int priNum;
+    String userNickName;
     //private GpsTracker gpsTracker;
     boolean running;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -68,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
         int prinum_main = intent.getIntExtra("pri_num", 0);
         String nickname = intent.getStringExtra("nickname");
 
+        priNum = prinum_main;
+        userNickName = nickname;
+
+        Log.d("hhhhhhhhhhhhhh","priNum: "+priNum);
+        Log.d("hhhhhhhhhhhhhh","userNickName: "+userNickName);
         ///////////////////
 
         //권한 체크

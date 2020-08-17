@@ -42,9 +42,13 @@ public class MainChattingFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id){
                 Log.d("LLLLLLLLLL","item clicked: ");
+                //
+                //((MainActivity)getActivity()).userNickName
                 ChatActivity chatActivity = new ChatActivity();
                 Intent intent = new Intent(getActivity(),chatActivity.getClass());
+                intent.putExtra("UserName", ((MainActivity)getActivity()).userNickName);
                 Log.d("LLLLLLLLLL","activity Start ");
+
                 startActivity(intent);
 
     }

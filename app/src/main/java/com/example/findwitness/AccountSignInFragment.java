@@ -55,8 +55,12 @@ public class AccountSignInFragment  extends Fragment {
         guestLoginBtn = view.findViewById(R.id.guest_login);
         guestLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { // 회원가입 버튼 클릭
+            public void onClick(View v) {
+                pri_num = 88888;
+                nickname = "GUEST";
                 Intent intent=new Intent(((AccountActivity)getActivity()),MainActivity.class);
+                intent.putExtra("pri_num", pri_num);
+                intent.putExtra("nickname", nickname);
                 startActivity(intent);
             }
         });
