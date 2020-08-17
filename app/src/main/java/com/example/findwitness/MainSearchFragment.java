@@ -1,6 +1,9 @@
 package com.example.findwitness;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,10 +18,16 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class MainSearchFragment extends Fragment {
     //데이터베이스 생성
     private SQLiteDatabase db;
     private GPSdatabaseHelper dbHelper;
+    String date, time, Search = "";
+
     Button btnDate, btnTime,btnApply,btnSearch ;
     LinearLayout pickerLayout;
     DatePicker datePicker;
@@ -48,6 +57,10 @@ public class MainSearchFragment extends Fragment {
 
         appliedDateText = view.findViewById(R.id.appliedDateText);
         appliedTimeText = view.findViewById(R.id.appliedTimeText);
+
+        //데이터베이스 열기
+        dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
+        db = dbHelper.getWritableDatabase();
 
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
                 new DatePicker.OnDateChangedListener() {
@@ -103,6 +116,7 @@ public class MainSearchFragment extends Fragment {
                 if(isSearchDate){
                     dateResult = String.format("%d년 %d월 %d일", datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
                     Toast.makeText(getActivity(), dateResult, Toast.LENGTH_SHORT).show();
+                    date = dateResult;
                     pickerLayout.setVisibility(View.GONE);
                     datePicker.setVisibility(View.GONE);
                     timePicker.setVisibility(View.GONE);
@@ -113,6 +127,7 @@ public class MainSearchFragment extends Fragment {
                     checkApplied();
                 }else{
                     Toast.makeText(getActivity(), timeResult, Toast.LENGTH_SHORT).show();
+                    time = timeResult;
                     pickerLayout.setVisibility(View.GONE);
                     datePicker.setVisibility(View.GONE);
                     timePicker.setVisibility(View.GONE);
@@ -127,6 +142,7 @@ public class MainSearchFragment extends Fragment {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                search_gps();
                 //fragment chat로 화면 전환 ㅇㅇ
                 Log.d("hhhhhhhhhhhhhh","fragment chat로 화면 전환");
             }
@@ -138,5 +154,64 @@ public class MainSearchFragment extends Fragment {
         }else{
             btnSearch.setVisibility((View.GONE));
         }
+    }
+    public void search_gps(){
+        String date_temp[] = date.split(" ");
+        String time_temp[] = time.split(" : ");
+        date = date_temp[0].substring(0,4);
+        if(date_temp[1].length() > 2) date += date_temp[1].substring(0,2);
+        else date += "0" + date_temp[1].substring(0,1);
+        if(date_temp[2].length() > 2) date += date_temp[2].substring(0,2);
+        else date += "0" + date_temp[2].substring(0,1);
+
+        if(time_temp[0].length() == 1) time = "0" + time_temp[0];
+        else time = time_temp[0];
+        if(time_temp[1].length() == 1) time += "0" + time_temp[1];
+        else time += time_temp[1];
+
+        Log.d("변환","date : " + date + " time  :" + time);
+
+        //데이터베이스 조회
+        Cursor c1 = db.rawQuery("select LATITUDE,LONGITUDE from gps where _DATE = '" +
+                date + "' AND _TIME LIKE '" + time + "%';", null);
+        int number = c1.getCount();
+        for(int i=0; i< number; i++){
+            c1.moveToNext();
+            String latitude = c1.getString(0);
+            String longitude = c1.getString(1);
+            String address = getCurrentAddress(Double.parseDouble(latitude),Double.parseDouble(longitude));
+            //Log.d("데이터 : ","latitude : " + latitude + "longitude : " + longitude);
+            Search += "|" + latitude + "," + longitude + "," + address;
+        }
+        if(number != 0) Search = Search.substring(1,Search.length());
+        Log.d("개수", "" + number);
+        Log.d("서치",Search);
+    }
+    //주소 찾기
+    public String getCurrentAddress( double latitude, double longitude) {
+
+        //지오코더... GPS를 주소로 변환
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+
+        List<Address> addresses;
+
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 7);
+        } catch (IOException ioException) {
+            //네트워크 문제
+            //Toast.makeText(this, "지오코더 서비스 사용불가", Toast.LENGTH_LONG).show();
+            return "지오코더 서비스 사용불가";
+        } catch (IllegalArgumentException illegalArgumentException) {
+            //Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
+            return "잘못된 GPS 좌표";
+
+        }
+        if (addresses == null || addresses.size() == 0) {
+            //Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
+            return "주소 미발견";
+        }
+
+        Address address = addresses.get(0);
+        return address.getAddressLine(0).toString();
     }
 }
