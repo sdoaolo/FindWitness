@@ -97,11 +97,12 @@ public class ChatActivity<data> extends AppCompatActivity {
         MY_NICKNAME = intent.getStringExtra("UserName");
         Log.d("hhhhhhhhhhhhhh","userNickName: "+MY_NICKNAME);
 
+
         dbHelper = new ChatSQLiteHelper(this, dbName, null, 1);
         sqlite = new ChatSQLiteControl(dbHelper);
         database = dbHelper.getReadableDatabase();
-
         toolbar = findViewById(R.id.my_toolbar);
+
         Log.d("lllllllllllllll","toolbar");
         setSupportActionBar(toolbar);
         Log.d("lllllllllllllll","toolbar2");
