@@ -1,330 +1,507 @@
 package com.example.findwitness;
+/*
+        과거에 대화던 내용 불러오기 위해서는 상대방 닉네임과 제 닉네임이 필요합니다.
+        임시로 제가 이름을 지정했습니다.
+        혹시 테스트하실 분은 이름 변경해서 사용하면 됩니다!~!
+        >>>>
+        String real_my_nickname = "지혜";
+        tring your_nickname = "수헌";
 
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
+        <간단 설명>
+        서버-클라이언트의 connection에 성공하면
+        내가 보낸 메시지를 서버가 받고 나를 제외한 상대방에게 뿌려준다.
+* */
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
+import com.example.findwitness.Chat.ChatApp;
+import com.example.findwitness.Chat.LoginActivity;
+import com.example.findwitness.Chat.Message;
+import com.example.findwitness.Chat.MessageAdapter;
+import com.example.findwitness.ChatSQLiteControl;
+import com.example.findwitness.ChatSQLiteHelper;
+import com.example.findwitness.R;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class ChatActivity<data> extends AppCompatActivity {
 
+    private EditText editMessage;
+    private Button sendButton;
+    public static Socket mSocket;
+    private ChatApp app;
+    private boolean mTyping;
+    private String mUsername;
+    TextView typingView;
+    private Boolean isConnected;
+    private String TAG="-->>";
+    private RecyclerView recyclerView;
+    private MessageAdapter mAdapter;
+    private List<Message> messageList;
+    private static final int TIMER=500;
+    private static final int REQUEST_CODE=0;
+    private Handler typingHandler=new Handler(); // //유저가 치고 있는지 여부를 통해 메시지 내용뷰에서 충돌이 안 생김ㅇㅇ
 
+    Toolbar toolbar;
+    TextView chatting_opponent;
+
+    /* DATABASE */
     //데이터 베이스
     SQLiteDatabase database;
     ChatSQLiteControl sqlite;
     private ChatSQLiteHelper dbHelper;
     String dbName = "chat.db";
     String tag = "SQLite"; // Log 에 사용할 tag (DB용)
-    String tag2 = "SOCKEt"; // Log 에 사용할 tag (소켓용)
 
-    // 서버 접속 여부를 판별하기 위한 변수
-    boolean isConnect = false;
 
-    EditText edit1;
-    Button btn1;
-    LinearLayout container;
-    ScrollView scroll;
-    ProgressDialog pro;
-    // 어플 종료시 스레드 중지를 위해...
-    boolean isRunning=false;
-    // 서버와 연결되어있는 소켓 객체
-    Socket member_socket;
-    // 사용자 닉네임( 내 닉넴과 일치하면 내가보낸 말풍선으로 설정 아니면 반대설정)
-    String user_nickname;
-    //String your_nickname;
-
-    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-    SimpleDateFormat format2 = new SimpleDateFormat("HH:mm:ss");
+    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd"); //날짜
+    SimpleDateFormat format2 = new SimpleDateFormat("HH:mm:ss"); //시간
     Calendar calendar = Calendar.getInstance();
+    String date = format1.format(calendar.getTime());
+    String time = format2.format(calendar.getTime());
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        //DB
         dbHelper = new ChatSQLiteHelper(this,dbName,null,1);
         sqlite = new ChatSQLiteControl(dbHelper);
         database = dbHelper.getReadableDatabase();
 
-        Intent intent = getIntent();
-        //목격자닉네임 클릭시 채팅창에 목격자닉네임이 뜸
-        TextView you_nickname = (TextView)findViewById(R.id.tv_User_Nickname);
-        you_nickname.setText(intent.getStringExtra("nickname"));
-        String your_nickname = you_nickname.getText().toString();
 
-        edit1 = findViewById(R.id.editText);
-        btn1 = findViewById(R.id.button);
-        container=findViewById(R.id.container);
-        scroll=findViewById(R.id.scroll);
-
-        //과거에 대화했던 내용 있다면 불러오기
-        String sql = "select * from chat where sender="+"\'"+your_nickname+"\'";
-        Cursor cursor = database.rawQuery(sql,null);
-        if(cursor.moveToFirst()!=false){
-            while (cursor.moveToNext()){
-                int rcv = cursor.getInt(2);//rcv값 뽑기
-                int send = cursor.getInt(3);//send값 뽑기
-                String message = cursor.getString(4); //메시지 내용 뽑기
-                // 텍스트뷰의 객체를 생성
-                TextView tv=new TextView(ChatActivity.this);
-                tv.setTextColor(Color.BLACK);
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,22);
-                //상대방에게 받은 메시지
-                if (rcv==1){
-                    tv.setBackgroundResource(R.drawable.activity_background);
-                    String content = message;
-                    tv.setText(content);
-
-                //내가 쓴 메시지
-                } else if(send==1){
-                    tv.setBackgroundResource(R.drawable.activity_background);
-                    String content =message;
-                    tv.setText(content);
-                }
-                container.addView(tv);
-                // 제일 하단으로 스크롤 한다
-                scroll.fullScroll(View.FOCUS_DOWN);
-
-
-            }
-        }
-
-
+        //toolbar 선언 및 어쩌구 저쩌구 3줄 없앰.
+        toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        isConnected=false;
+        chatting_opponent = (TextView)findViewById(R.id.chatting_opponent);
+        chatting_opponent.setText("INPUT STRING"); //INPUT USER NICKNAME STRING
+        mTyping=false;
+        app=new ChatApp();
+        Log.d("LLLLLLLLLL","Hello");
+        initializeSocket();
+        Log.d("LLLLLLLLLL","ByeBye");
+        signIn();
+        pastContentPickUP thread = new pastContentPickUP();
+        thread.start();
+        setUpUI();
     }
 
-    // 버튼과 연결된 메소드
-    public void btnMethod(View v) {
-        if (isConnect == false) {   //접속전
-            //사용자가 입력한 닉네임을 받는다.
-            String nickName = edit1.getText().toString(); //textview(사용자 id?nickname?)로 입력받음
-            if (nickName.length() > 0 && nickName != null) {
-                //서버에 접속한다.
-                // ProgressDialog : 오래걸릴 때 사용자에게 보여줌(기다려라..^^)
-                pro = ProgressDialog.show(this, null, "접속중입니다"); //폰에서 보임- 보이면 99%확률로 연결안된겨^^..
-                // 접속 스레드 가동
-                ConnectionThread thread = new ConnectionThread();
-                thread.start();
-
-            }
-            // 닉네임이 입력되지않을경우 다이얼로그창 띄운다.
-            else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("닉네임을 입력해주세요");
-                builder.setPositiveButton("확인", null);
-                builder.show();
-            }
-        } else {                  // 접속 후
-            // 입력한 문자열을 가져온다.
-            String msg=edit1.getText().toString();
-            // 송신 스레드 가동(서버에게 메시지 보내기)
-            SendToServerThread thread=new SendToServerThread(member_socket,msg);
-            thread.start();
-        }
-    }
-
-    // 서버접속 처리하는 스레드 클래스 - 안드로이드에서 네트워크 관련 동작은 항상
-    // 메인스레드가 아닌 스레드에서 처리해야 한다.
-    class ConnectionThread extends Thread {
+    class pastContentPickUP extends Thread{
         @Override
-        public void run() {
+        public void run(){
             try {
-                // 접속한다.
-                //final Socket socket = new Socket("192.168.219.100", 30000); //host: 서버ip
-                final Socket socket = new Socket("192.168.0.8", 30000); //host: 서버ip
-                member_socket=socket;
-                // 미리 입력했던 닉네임을 서버로 전달한다.
-                String nickName = edit1.getText().toString();
-                user_nickname=nickName;     // 화자에 따라 말풍선을 바꿔주기위해
-                // 스트림을 추출
-                OutputStream os = socket.getOutputStream();
-                DataOutputStream dos = new DataOutputStream(os);
-                // 닉네임을 송신한다.
-                dos.writeUTF(nickName);
-                // ProgressDialog 를 제거한다.
-                // runOnUiThread : 현재 스레드가 UI 스레드가 아니라면 행동은 UI 스레드의 자원 사용 이벤트 큐에 들어가게 되는 것 입니다.
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        pro.dismiss();
-                        edit1.setText("");
-                        edit1.setHint("메세지 입력");
-                        btn1.setText("전송");
-                        // 접속 상태를 true로 셋팅한다.
-                        isConnect=true;
-                        // 메세지 수신을 위한 스레드 가동
-                        isRunning=true;
-                        MessageThread thread=new MessageThread(socket);
-                        thread.start();
-                    }
-                });
+                        String real_my_nickname = "지혜";
+                        // 로그인화면에서 이름입력받은 값으로 real_my_nickname하면 에러남 :  NullPointerException
+                        String your_nickname = "수헌"; // 나중에 이름 받아오면 변경하자
+                        //TextView my_nickname = (EditText) findViewById(R.id.username_editText);
+                        //String real_my_nickname = my_nickname.getText().toString();
+                        String sql = "select * from chat where sender=" + "\'" + your_nickname + "\'";
+                        Cursor cursor = database.rawQuery(sql, null);
+                        if (cursor.moveToFirst() != false) {
+                            while (cursor.moveToNext()) {
+                                int rcv = cursor.getInt(2);//rcv값 뽑기
+                                int send = cursor.getInt(3);//send값 뽑기
+                                String message = cursor.getString(4); //메시지 내용 뽑기
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    class MessageThread extends Thread {
-        Socket socket;
-        DataInputStream dis;
-
-        public MessageThread(Socket socket) {
-            try {
-                this.socket = socket;
-                InputStream is = socket.getInputStream();
-                dis = new DataInputStream(is);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void run() {
-            try{
-                while (isRunning){
-                    // 서버로부터 데이터를 수신받는다.
-                    //if(dis.readUTF() != null)
-                    final String msg=dis.readUTF();
-                    int idx = msg.indexOf(":");
-                    final String real_nickname = msg.substring(0, idx-1); //누가 보낸건지 파악
-                    //System.out.println(message_nickname);
-                    final String real_message = msg.substring(idx+2); // 메시지 내용
-                    //System.out.println(real_message);
-                    //System.out.println("내이름 : "+user_nickname);
-
-                    // 화면에 출력
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 텍스트뷰의 객체를 생성
-                            TextView tv=new TextView(ChatActivity.this);
-                            TextView tv2 = (TextView)findViewById(R.id.tv_User_Nickname);
-                            String your_nickname = tv2.getText().toString();
-
-                            int align;
-                            tv.setTextColor(Color.BLACK);
-                            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,22);
-                            String date = format1.format(calendar.getTime());
-                            String time = format2.format(calendar.getTime());
-
-                            //System.out.println("내이름2 :"+user_nickname+",");
-                            //System.out.println("내이름3 :"+real_nickname+",");
-                            // 메세지의 시작 이름이 내 닉네임과 일치한다면(나의 말)
-                            if(msg.startsWith(user_nickname)){
-                                tv.setBackgroundResource(R.drawable.activity_background);
-                                align = Gravity.RIGHT;
-                                container.setGravity(align);
-                                String content = real_message;
-                                tv.setText(content);
-                                sqlite.insert(user_nickname,0,1,real_message,date,time);
-                                Log.d(tag, "insert 성공~!");
-
-
-                            } else{ // 메시지의 네임이 앞에서 message_nickname이라면 >> 목격자의 이름(your_nickname)으로 바꿈
-                                //(상대 방 말 or 서버 말)
-                                tv.setBackgroundResource(R.drawable.activity_background);
-                                align = Gravity.LEFT;
-                                container.setGravity(align);
-                                String content2 = real_message;
-                                tv.setText(content2);
-                                sqlite.insert(your_nickname,1,0,real_message,date,time);
-                                Log.d(tag, "insert 성공~!");
+                                //상대방에게 받은 메시지
+                                if (rcv == 1) {
+                                    addMessage(your_nickname, message, Message.TYPE_MESSAGE_RECEIVED);
+                                } else if (send == 1) { //내가 쓴 메시지
+                                    addMessage(real_my_nickname, message, Message.TYPE_MESSAGE_SENT);
+                                }
 
                             }
-
-                            container.addView(tv);
-                            // 제일 하단으로 스크롤 한다
-                            scroll.fullScroll(View.FOCUS_DOWN);
-
                         }
-                    });
-                }
-
-            }catch (Exception e){
+                    }
+                });
+            } catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
 
-    // 서버에 데이터를 전달하는 스레드
-    class SendToServerThread extends Thread{
-        Socket socket;
-        String msg;
-        DataOutputStream dos;
 
-        public SendToServerThread(Socket socket, String msg){
-            try{
-                this.socket=socket;
-                this.msg=msg;
-                OutputStream os=socket.getOutputStream();
-                dos=new DataOutputStream(os);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+    public void initializeSocket(){
 
-        @Override
-        public void run() {
-            try{
-                // 서버로 데이터를 보낸다.
-                dos.writeUTF(msg);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        edit1.setText("");
-                    }
-                });
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+        // mSocket.on 서버에게 받은 이벤트 (Emitter.Listener 로 받은 내용 처리함)
+
+
+        mSocket=app.getSocket();
+        Log.d("LLLLLLLLL","get socket"+mSocket);
+        mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
+        mSocket.on(Socket.EVENT_CONNECT_ERROR,onConnectError);
+        mSocket.on("user joined",onUserJoined);
+        mSocket.on("user left",onUserLeft);
+        mSocket.on("new message",onNewMessage);
+        mSocket.on("typing",onTyping);
+        mSocket.on("stop typing",onStopTyping);
+    }
+    private void signIn(){
+        mUsername=null;
+        Intent i=new Intent(this, LoginActivity.class); //login activity에서
+        startActivityForResult(i,REQUEST_CODE);  // >>onActivityResult
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!= Activity.RESULT_OK) {
+            finish();
+            return;
         }
+        isConnected=true;
+        Snackbar.make(findViewById(android.R.id.content),"Welcome to Socket Chat", Snackbar.LENGTH_SHORT).show();
+        mUsername=data.getStringExtra("username");
+        int numUsers=data.getIntExtra("numUsers",1);
+        addParticipantsLog(numUsers);
+    }
+
+    public void setUpUI(){
+        messageList=new ArrayList<>();
+        recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
+        mAdapter=new MessageAdapter(messageList);
+        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+        editMessage=(EditText)findViewById(R.id.editMessage);
+        typingView=findViewById(R.id.typing);
+        sendButton=(Button)findViewById(R.id.sendButton);
+
+        editMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(mUsername==null)
+                    return;
+                if(!mSocket.connected())
+                    return;
+                if(TextUtils.isEmpty(editMessage.getText()))
+                    return;
+                if(mTyping==false) {
+                    mTyping = true;
+                    mSocket.emit("typing"); //나 치고 있딴다^^라고 서버에게 보내기
+
+                }
+                typingHandler.removeCallbacks(onTypingTimeout);
+                typingHandler.postDelayed(onTypingTimeout,TIMER);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptSend();
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try{
-            member_socket.close();
-            //isRunning=false;
-
-        }catch (Exception e){
-            e.printStackTrace();
+        if(isConnected) {
+            mSocket.disconnect();
+            isConnected = false;
         }
+
+
+        mSocket.off(Socket.EVENT_DISCONNECT,onDisconnect);
+        mSocket.off(Socket.EVENT_CONNECT_ERROR,onConnectError);
+        mSocket.off("user joined",onUserJoined);
+        mSocket.off("user left",onUserLeft);
+        mSocket.off("new message",onNewMessage);
+        mSocket.off("typing",onTyping);
+        mSocket.off("stop typing",onStopTyping);
+
+        mTyping=false;
+
     }
+
+
+    private Emitter.Listener onDisconnect=new Emitter.Listener() {
+        @Override
+        public void call(Object... args) { //EVENT_DISCONNECT 이벤트 받음
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    isConnected=false;
+                    Log.w(TAG, "onDisconnect");
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onConnectError=new Emitter.Listener() {
+        @Override
+        public void call(Object... args) { //EVENT_CONNECT_ERROR 이벤트 받음
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e(TAG,"error connecting");
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+
+            Log.w(TAG,"onNewMesage");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data= (JSONObject)args[0]; //상대방 채팅창 참가
+                    String username=null;
+                    String message=null;
+                    try {
+                        username=data.getString("username"); //메시지 보낸 사람(나이거나 상대방이다.)
+                        message=data.getString("message"); //메시지 내용
+                    } catch (JSONException e) {
+                        Log.e(TAG,e.getMessage());
+                        e.printStackTrace();
+                    }
+
+                    addMessage(username,message,Message.TYPE_MESSAGE_RECEIVED);//받은 메시지
+                    sqlite.insert(username,1,0,message,date,time);
+                    Log.d(tag, "insert 성공~!");
+                }
+            });
+        }
+    };
+
+
+    private Emitter.Listener onUserJoined = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.w(TAG,"onUserJoined");
+            runOnUiThread(new Runnable() {
+                @SuppressLint("StringFormatInvalid")
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username=null;
+                    int numUsers;
+                    try {
+                        username = data.getString("username");
+                        numUsers = data.getInt("numUsers");
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.getMessage());
+                        return;
+                    }
+
+                    addLog(username+" has joined");  //누가 참가했다 알리기
+                    addParticipantsLog(numUsers); //총 몇명인지 알리기
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onUserLeft = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) { //user left 이벤트 받음
+
+            Log.w(TAG,"onUserLeft");
+            runOnUiThread(new Runnable() {
+                @SuppressLint("StringFormatInvalid")
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    int numUsers;
+                    try {
+                        username = data.getString("username");
+                        numUsers = data.getInt("numUsers");
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.getMessage());
+                        return;
+                    }
+
+                    addLog(username+" left"); //누가 떠났는지 말해줌
+                    addParticipantsLog(numUsers); //남은 사람들 몇명인지 알랴줌
+
+                    removeTyping();
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onTyping = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) { //typing 이벤트 받음
+
+            Log.w(TAG,"onTyping");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    try {
+                        username = data.getString("username");
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.getMessage());
+                        return;
+                    }
+                    addTyping(username); //누가 메시지 입력했는지 알랴줌
+
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onStopTyping = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.w(TAG,"onStopTyping");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    removeTyping();
+                }
+            });
+        }
+    };
+
+    private void addLog(String message){
+        messageList.add(new Message(Message.TYPE_LOG,message));
+        mAdapter.notifyItemInserted(messageList.size()-1);
+        scrollUp();
+    }
+
+    private void addMessage(String username,String message, int messageType){
+        messageList.add(new Message(messageType,username,message));
+        mAdapter.notifyItemInserted(messageList.size()-1);
+        scrollUp();
+    }
+
+    private void addParticipantsLog(int numUsers) { //몇명있는지 알랴줌
+        SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
+        String format_time2 = format2.format (System.currentTimeMillis());
+        String currentDate = format_time2.substring(0,12);
+        addLog(currentDate);
+        //addLog("There are "+numUsers+" users in the chat room");
+        scrollUp();
+    }
+
+    private void addTyping(String username){
+        typingView.setText(username.trim()+" is typing");
+    }
+
+    private void removeTyping() {
+        typingView.setText(null);
+    }
+
+    private void attemptSend() { //메시지 쓰고 보냅니다.
+        if (mUsername==null) return;
+        if (!mSocket.connected()) return;
+        if(mTyping) { //true를 false로 고침
+            mTyping = false;
+            mSocket.emit("stop typing"); //이벤트 보내기
+        }
+        String message = editMessage.getText().toString().trim(); //trim: 문자열 공백 제거
+
+        if (TextUtils.isEmpty(message)) { //메시지가 비어있지 않으면 editMessage로 focuss
+
+            editMessage.requestFocus();
+            return;
+        }
+
+        editMessage.setText("");
+        addMessage(mUsername, message, Message.TYPE_MESSAGE_SENT); // 내가 보낸 메시지
+        sqlite.insert(mUsername,0,1,message,date,time);
+        Log.d(tag, "insert 성공~!");
+
+
+        // perform the sending message attempt.
+        mSocket.emit("new message", message); //새로운 메시지 이벤트 보내기 (서버에게 >>서버가 그 메시지 뿌려줌)
+
+    }
+
+    private Runnable onTypingTimeout=new Runnable() {
+        @Override
+        public void run() {
+            if(mTyping==false) //치고 있지 않음.
+
+                return;
+
+            mTyping=false;
+            mSocket.emit("stop typing"); //stop typing 이벤트 전송
+        }
+    };
+    private void scrollUp(){ //리스트의 가장 마지막을 보여주도록 스크롤을 이동
+        recyclerView.scrollToPosition(mAdapter.getItemCount()-1);
+    }
+
     @Override
-    protected void onStop() {
-        super.onStop();
-        try {
-            member_socket.close();
-            isRunning=false;
-        } catch (Exception e){
-            Log.d(tag2,"error");
-            e.printStackTrace();
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.test_menu,menu);
+        return true;
     }
 
+    //로그아웃 (( 나중에 없애쟈..^^))
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout:
+                logout();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        mSocket.disconnect();
+        isConnected=false;
+        mTyping=false;
+        messageList.clear();
+        this.recreate();
+    }
 }
