@@ -15,7 +15,6 @@ package com.example.findwitness.Chat;
         내가 보낸 메시지를 서버가 받고 내가 보내고 싶은 사람한테 뿌려준다.
 * */
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;

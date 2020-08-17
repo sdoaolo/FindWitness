@@ -90,7 +90,7 @@ public class MainGPSFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","start");
                 handler.sendEmptyMessage(MESSAGE_START);
-                NET_handler.sendEmptyMessage(NET_START);
+                //NET_handler.sendEmptyMessage(NET_START);
             }
         });
         btn_finish.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +98,7 @@ public class MainGPSFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","finish");
                 handler.removeMessages(MESSAGE_START);
-                NET_handler.sendEmptyMessage(NET_START);
+                //NET_handler.sendEmptyMessage(NET_START);
                 Toast.makeText(getActivity(),"Thread is stop",Toast.LENGTH_SHORT).show();
             }
         });
@@ -125,6 +125,10 @@ public class MainGPSFragment extends Fragment {
             String longitude = parameter[1];
             String date = parameter[2];
             String time = parameter[3];
+            latitude = latitude.substring(2);
+            longitude = longitude.substring(2);
+            date = date.substring(2);
+            time = time.substring(2);
             try {
                 URL url = new URL("http://192.168.0.4:8080/servelet/login");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -139,7 +143,7 @@ public class MainGPSFragment extends Fragment {
                     conn.setDoInput(true);
 
                     String sendMsg = "long=" + longitude + "&date=" + date + "&lati="
-                            + latitude + "&time=" + time + "&id=10&num=" + num;
+                            + latitude + "&time=" + time + "&id=10&save=1&num=" + num ;
 
                     OutputStream os = conn.getOutputStream();
                     os.write(sendMsg.getBytes("utf-8"));
@@ -231,7 +235,7 @@ public class MainGPSFragment extends Fragment {
                 case MESSAGE_START:
                     Log.d("GPS_ 시작","횟수 : " + count++);
                     gps_start();
-                    if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
+                    //if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
                     this.sendEmptyMessageDelayed(MESSAGE_START, 2000);
                     break;
             }
@@ -359,7 +363,7 @@ public class MainGPSFragment extends Fragment {
     @Override
     public void onDestroy() {
         handler.removeMessages(MESSAGE_START);
-        NET_handler.sendEmptyMessage(NET_START);
+        //NET_handler.sendEmptyMessage(NET_START);
         super.onDestroy();
     }
 }
