@@ -43,6 +43,7 @@ public class MainGPSFragment extends Fragment {
     private static final int NET_START = 1;
     private static final int NET_FINISH = 2;
     Network_handler NET_handler;
+    boolean server_net_start = false;
 
     //데이터 베이스 만들기
     private SQLiteDatabase db;
@@ -72,13 +73,13 @@ public class MainGPSFragment extends Fragment {
         btn_start = view.findViewById(R.id.btn_start);
         btn_finish = view.findViewById(R.id.btn_finish);
         btn_list = view.findViewById(R.id.btn_list);
-
         // 데이터베이스 생성
         boolean isOpen = openDatabase();
         if(!isOpen) {
             //Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
         }
 
+        NET_handler = new Network_handler();
         this.InitializeData();
         ListView listView = view.findViewById(R.id.gps_list);
         final GPSListViewAdapter adapter;
@@ -90,7 +91,8 @@ public class MainGPSFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","start");
                 handler.sendEmptyMessage(MESSAGE_START);
-                //NET_handler.sendEmptyMessage(NET_START);
+                NET_handler.sendEmptyMessage(NET_START);
+                server_net_start = true;
             }
         });
         btn_finish.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +100,7 @@ public class MainGPSFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","finish");
                 handler.removeMessages(MESSAGE_START);
-                //NET_handler.sendEmptyMessage(NET_START);
+                if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
                 Toast.makeText(getActivity(),"Thread is stop",Toast.LENGTH_SHORT).show();
             }
         });
@@ -235,7 +237,7 @@ public class MainGPSFragment extends Fragment {
                 case MESSAGE_START:
                     Log.d("GPS_ 시작","횟수 : " + count++);
                     gps_start();
-                    //if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
+                    if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
                     this.sendEmptyMessageDelayed(MESSAGE_START, 2000);
                     break;
             }
@@ -363,7 +365,7 @@ public class MainGPSFragment extends Fragment {
     @Override
     public void onDestroy() {
         handler.removeMessages(MESSAGE_START);
-        //NET_handler.sendEmptyMessage(NET_START);
+        if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
         super.onDestroy();
     }
 }
