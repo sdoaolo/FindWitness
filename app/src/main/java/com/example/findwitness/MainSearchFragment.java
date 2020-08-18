@@ -195,7 +195,7 @@ public class MainSearchFragment extends Fragment {
         Log.d("변환","date : " + date + " time  :" + time);
 
         //데이터베이스 조회
-        Cursor c1 = db.rawQuery("select LATITUDE,LONGITUDE from gps where _DATE = '" +
+        Cursor c1 = db.rawQuery("select DISTINCT LATITUDE,LONGITUDE from gps where _DATE = '" +
                 date + "' AND _TIME LIKE '" + time + "';", null);
         int number = c1.getCount();
         num = Integer.toString(number);
@@ -208,6 +208,7 @@ public class MainSearchFragment extends Fragment {
             Search += "|" + latitude + "#" + longitude + "#" + address;
         }
         if(number != 0) Search = Search.substring(1,Search.length());
+
         Log.d("개수", "" + number);
         Log.d("서치",Search);
         c1.close();

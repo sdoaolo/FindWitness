@@ -32,7 +32,7 @@ public class MainSelectFragment extends Fragment {
 
     //핸들러
     Server_handler handler = new Server_handler();
-    String latitude="123", longtitude="456";
+    double latitude = 0.0, longitude = 0.0;
     String timeResult, dateResult,Search="",num;
     public MainSelectFragment() {
         // Required empty public constructor
@@ -46,6 +46,13 @@ public class MainSelectFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        GPSTracker gpsTracker = new GPSTracker(getActivity());
+
+        latitude = gpsTracker.getLatitude();
+        longitude = gpsTracker.getLongitude();
+        TextView currentGps = view.findViewById(R.id.currentGpsTextView);
+        currentGps.setText("current gps : "+latitude+", "+longitude);
+
         Log.d("ssssssssssss","들어왔어!");
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
         if(bundle != null){
@@ -54,8 +61,6 @@ public class MainSelectFragment extends Fragment {
             Search =  bundle.getString("SearchResult");
             num = bundle.getString("SearchResult_num");
         }
-        TextView currentGps = view.findViewById(R.id.currentGpsTextView);
-        currentGps.setText("current gps : "+latitude+", "+longtitude);
 
         this.InitializeGpsData();
 
