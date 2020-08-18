@@ -29,6 +29,7 @@ import java.util.ArrayList;
 public class MainSelectFragment extends Fragment {
 
     ArrayList<GPSListViewItem> selectGpsList;
+    Boolean isDataExist;
     private CustomProgressDialog customProgressDialog;
 
     //핸들러
@@ -81,13 +82,14 @@ public class MainSelectFragment extends Fragment {
                 Thread thread = new Network_server_Thread(temp_data);
                 thread.start();
 
-                Bundle bundle = new Bundle();
-                bundle.putString("SearchDate",dateResult);
-                bundle.putString("SearchTime",timeResult);
-                bundle.putString("requireServer","10:suin,4:girmf");
-                ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
-                ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
-
+                if(isDataExist) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("SearchDate",dateResult);
+                    bundle.putString("SearchTime",timeResult);
+                    bundle.putString("requireServer","10:suin,4:girmf");
+                    ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
+                    ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
+                }
                 /* 다이얼로그 어디다 넣을까용.. 서버랑 통신해서 받았다는 신호 받을때까지 띄워줄거임!
                 customProgressDialog = new CustomProgressDialog(getActivity());
                 // 위에서 테두리를 둥글게 했지만 다이얼로그 자체가 네모라 사각형 여백이 보입니다. 아래 코드로 다이얼로그 배경을 투명처리합니다.
@@ -95,6 +97,7 @@ public class MainSelectFragment extends Fragment {
                 customProgressDialog.show(); // 보여주기
                 customProgressDialog.dismiss(); // 없애기
                 */
+
         }
         });
 
@@ -131,6 +134,7 @@ public class MainSelectFragment extends Fragment {
     {
         selectGpsList = new ArrayList<GPSListViewItem>();
         if(Search != ""){
+            isDataExist = true;
             String search_ary[] = Search.split("\\|");
             int search_num = Integer.parseInt(num);
             for(int i=0; i<search_num; i++) {
@@ -139,6 +143,7 @@ public class MainSelectFragment extends Fragment {
             }
         }
         else {    // 결과가 없을 경우
+            isDataExist = false;
             selectGpsList.add(new GPSListViewItem("해당 날짜와 시간에 gps 기록이 없습니다.", "", "", "", ""));
         }
     }

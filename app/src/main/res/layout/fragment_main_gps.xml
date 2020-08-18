@@ -70,7 +70,8 @@
         <ListView
             android:id="@+id/gps_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clickable="false"/>
 
     </FrameLayout>
 </RelativeLayout>
