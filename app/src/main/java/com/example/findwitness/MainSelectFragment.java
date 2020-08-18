@@ -1,6 +1,5 @@
 package com.example.findwitness;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.findwitness.Adapter.GPSListViewAdapter;
 import com.example.findwitness.Item.GPSListViewItem;
+import com.example.findwitness.UI.CustomProgressDialog;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 public class MainSelectFragment extends Fragment {
 
     ArrayList<GPSListViewItem> selectGpsList;
+    private CustomProgressDialog customProgressDialog;
 
     //핸들러
     Server_handler handler = new Server_handler();
@@ -87,8 +88,13 @@ public class MainSelectFragment extends Fragment {
                 ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
                 ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
 
-
-
+                /* 다이얼로그 어디다 넣을까용.. 서버랑 통신해서 받았다는 신호 받을때까지 띄워줄거임!
+                customProgressDialog = new CustomProgressDialog(getActivity());
+                // 위에서 테두리를 둥글게 했지만 다이얼로그 자체가 네모라 사각형 여백이 보입니다. 아래 코드로 다이얼로그 배경을 투명처리합니다.
+                customProgressDialog .getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                customProgressDialog.show(); // 보여주기
+                customProgressDialog.dismiss(); // 없애기
+                */
         }
         });
 
@@ -133,10 +139,7 @@ public class MainSelectFragment extends Fragment {
             }
         }
         else {    // 결과가 없을 경우
-            selectGpsList.add(new GPSListViewItem("200818", "12:22", "123", "235", "ddd"));
-            selectGpsList.add(new GPSListViewItem("200818", "12:22", "125", "234", "aaaa"));
-            selectGpsList.add(new GPSListViewItem("200818", "12:22", "123", "235", "ccc"));
-            selectGpsList.add(new GPSListViewItem("200818", "12:22", "125", "234", "dddd"));
+            selectGpsList.add(new GPSListViewItem("해당 날짜와 시간에 gps 기록이 없습니다.", "", "", "", ""));
         }
     }
     class Network_server_Thread extends Thread{

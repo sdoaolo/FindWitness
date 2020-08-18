@@ -19,6 +19,9 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,6 +68,9 @@ public class MainSearchFragment extends Fragment {
 
         appliedDateText = view.findViewById(R.id.appliedDateText);
         appliedTimeText = view.findViewById(R.id.appliedTimeText);
+        Date current = Calendar.getInstance().getTime();
+        String dt = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).format((current));
+        appliedDateText.setText("Aplied Date : "+dt);
 
         //데이터베이스 열기
         dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
