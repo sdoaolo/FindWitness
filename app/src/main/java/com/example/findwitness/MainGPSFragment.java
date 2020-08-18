@@ -274,7 +274,6 @@ public class MainGPSFragment extends Fragment {
     public boolean exist_database_data(){
         boolean exist = true;
         Cursor c1 = db.rawQuery("select * from " + "gps", null);
-        int size = c1.getCount();
         if(c1.getCount() == 0) exist = false;
         return exist;
     }
@@ -332,8 +331,8 @@ public class MainGPSFragment extends Fragment {
         return true;
     }
     public void insertRecord(String latitude, String longitude, String data, String time) {
-        //latitude = String_to_seven(latitude);
-        //longitude = String_to_seven(longitude);
+        latitude = String_to_seven(latitude);
+        longitude = String_to_seven(longitude);
         ContentValues value = new ContentValues();
         value.put("LATITUDE", latitude);
         value.put("LONGITUDE", longitude);
@@ -342,7 +341,7 @@ public class MainGPSFragment extends Fragment {
         db.insert("gps", null, value);
     }
     public String String_to_seven(String str){
-        String temp[] = str.split("."), zero = "0000000", ans;
+        String temp[] = str.split("\\."), zero = "0000000", ans;
         int num = temp[1].length();
         if(num > 7) temp[1] = temp[1].substring(0,7);
         else if(num < 7) temp[1] += zero.substring(0,7-num);
