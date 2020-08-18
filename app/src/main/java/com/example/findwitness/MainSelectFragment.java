@@ -74,9 +74,16 @@ public class MainSelectFragment extends Fragment {
                 //서버와 통신
                 Thread thread = new Network_server_Thread(temp_data);
                 thread.start();
-                /*
 
-                 */
+                Bundle bundle = new Bundle();
+                bundle.putString("SearchDate",dateResult);
+                bundle.putString("SearchTime",timeResult);
+                bundle.putString("requireServer","10:suin,4:girmf");
+                ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
+                ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
+
+
+
         }
         });
 
@@ -194,12 +201,15 @@ public class MainSelectFragment extends Fragment {
             Bundle message = msg.getData();
             String account = message.getString("account_list");
             Log.d("서버에서 회원정보 받음", account);
+            /*
             Bundle bundle = new Bundle();
             bundle.putString("SearchDate",dateResult);
             bundle.putString("SearchTime",timeResult);
             bundle.putString("requireServer",account);
             ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
             ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
+            */
+
         }
     }
 
