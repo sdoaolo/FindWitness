@@ -26,7 +26,7 @@ public class MainSearchFragment extends Fragment {
     //데이터베이스 생성
     private SQLiteDatabase db;
     private GPSdatabaseHelper dbHelper;
-    String date, time, Search = "";
+    String date, time, Search = "", num;
 
     Button btnDate, btnTime,btnApply,btnSearch ;
     LinearLayout pickerLayout;
@@ -67,8 +67,8 @@ public class MainSearchFragment extends Fragment {
         appliedTimeText = view.findViewById(R.id.appliedTimeText);
 
         //데이터베이스 열기
-        //dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
-        //db = dbHelper.getWritableDatabase();
+        dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
+        db = dbHelper.getWritableDatabase();
 
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
                 new DatePicker.OnDateChangedListener() {
@@ -155,10 +155,12 @@ public class MainSearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("ssssssssssss","데이터 보낼거임");
+                search_gps();
                 Bundle bundle = new Bundle();
                 bundle.putString("SearchDate",dateResult);
                 bundle.putString("SearchTime",timeResult);
                 bundle.putString("SearchResult",Search);
+                bundle.putString("SearchResult_num", num);
                 ((MainActivity)getActivity()).mainSelectFragment.setArguments(bundle);
                 Log.d("ssssssssssss","이동합니다!");
                 ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainSelectFragment);
@@ -189,25 +191,26 @@ public class MainSearchFragment extends Fragment {
         else time = time_temp[0];
         if(time_temp[1].length() == 1) time += "0" + time_temp[1];
         else time += time_temp[1];
-
+        time = time + "%";
         Log.d("변환","date : " + date + " time  :" + time);
 
         //데이터베이스 조회
         Cursor c1 = db.rawQuery("select LATITUDE,LONGITUDE from gps where _DATE = '" +
-                date + "' AND _TIME LIKE '" + time + "%';", null);
+                date + "' AND _TIME LIKE '" + time + "';", null);
         int number = c1.getCount();
+        num = Integer.toString(number);
         for(int i=0; i< number; i++){
             c1.moveToNext();
             String latitude = c1.getString(0);
             String longitude = c1.getString(1);
             String address = getCurrentAddress(Double.parseDouble(latitude),Double.parseDouble(longitude));
             //Log.d("데이터 : ","latitude : " + latitude + "longitude : " + longitude);
-            Search += "|" + latitude + "," + longitude + "," + address;
+            Search += "|" + latitude + "#" + longitude + "#" + address;
         }
         if(number != 0) Search = Search.substring(1,Search.length());
         Log.d("개수", "" + number);
         Log.d("서치",Search);
-
+        c1.close();
     }
     //주소 찾기
     public String getCurrentAddress( double latitude, double longitude) {
