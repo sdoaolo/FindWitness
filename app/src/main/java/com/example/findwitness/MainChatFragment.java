@@ -13,13 +13,15 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.findwitness.Adapter.ChatListViewAdapter;
 import com.example.findwitness.Chat.ChatActivity;
+import com.example.findwitness.Item.ChatListViewItem;
 
 import java.util.ArrayList;
 
 
 public class MainChatFragment extends Fragment {
-    String SearchResultDate , SearchResultTime;
+    String SearchInfoDate , SearchInfoTime,checkBundle;
     ArrayList<ChatListViewItem> chatList;
     public MainChatFragment() {
         // Required empty public constructor
@@ -38,13 +40,14 @@ public class MainChatFragment extends Fragment {
 
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
         if(bundle != null){
-            SearchResultDate = bundle.getString("SearchDate"); //Name 받기.
-            SearchResultTime = bundle.getString("SearchTime"); //Name 받기.
+            SearchInfoDate = bundle.getString("SearchDate"); //search info : date
+            SearchInfoTime = bundle.getString("SearchTime"); //search info : time
+            checkBundle = bundle.getString("requireServer");
             ((MainActivity)getActivity()).btn_search.setBackgroundResource(R.drawable.main_search);
             ((MainActivity)getActivity()).btn_list.setBackgroundResource(R.drawable.main_blue_back);
             ((MainActivity)getActivity()).btn_list.setTextColor(Color.parseColor(((MainActivity)getActivity()).strWhite));
-            recent_list_date.setText(SearchResultDate);
-            recent_list_time.setText(SearchResultTime);
+            recent_list_date.setText(SearchInfoDate);
+            recent_list_time.setText(SearchInfoTime);
         }
 
 

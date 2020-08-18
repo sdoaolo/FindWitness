@@ -37,6 +37,8 @@ public class MainSearchFragment extends Fragment {
 
     String timeResult, dateResult;
 
+
+
     //ArrayList<String> SearchResultList;
 
     public MainSearchFragment() {
@@ -57,6 +59,7 @@ public class MainSearchFragment extends Fragment {
         appliedText = view.findViewById(R.id.PickerText);
         btnApply = view.findViewById(R.id.search_apply_btn);
         btnSearch = view.findViewById(R.id.btn_search);
+
         //SearchResultList = new ArrayList<String>(2);
         //SearchResultList[0]=dateResult;
 
@@ -64,8 +67,8 @@ public class MainSearchFragment extends Fragment {
         appliedTimeText = view.findViewById(R.id.appliedTimeText);
 
         //데이터베이스 열기
-        dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
-        db = dbHelper.getWritableDatabase();
+        //dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
+        //db = dbHelper.getWritableDatabase();
 
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
                 new DatePicker.OnDateChangedListener() {
@@ -146,24 +149,26 @@ public class MainSearchFragment extends Fragment {
                 }
             }
         });
+
+
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                search_gps();
-                //fragment chat로 화면 전환 ㅇㅇ
-                Log.d("hhhhhhhhhhhhhh","fragment chat로 화면 전환");
-
+                Log.d("ssssssssssss","데이터 보낼거임");
                 Bundle bundle = new Bundle();
-                Log.d("ssssssssssssdateresult: ",dateResult);
-                Log.d("sssssssssssstimeresult: ",timeResult);
                 bundle.putString("SearchDate",dateResult);
                 bundle.putString("SearchTime",timeResult);
-                ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
-                ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
+                bundle.putString("SearchResult",Search);
+                ((MainActivity)getActivity()).mainSelectFragment.setArguments(bundle);
+                Log.d("ssssssssssss","이동합니다!");
+                ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainSelectFragment);
+                //fragment chat로 화면 전환 ㅇㅇ
+                //search_gps();
             }
 
         });
     }
+
     public void checkApplied(){
         if(isAppliedDate && isAppliedTime){
             btnSearch.setVisibility(View.VISIBLE);
@@ -202,6 +207,7 @@ public class MainSearchFragment extends Fragment {
         if(number != 0) Search = Search.substring(1,Search.length());
         Log.d("개수", "" + number);
         Log.d("서치",Search);
+
     }
     //주소 찾기
     public String getCurrentAddress( double latitude, double longitude) {

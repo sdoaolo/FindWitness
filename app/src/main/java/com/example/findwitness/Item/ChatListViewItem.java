@@ -1,4 +1,4 @@
-package com.example.findwitness;
+package com.example.findwitness.Item;
 
 public class ChatListViewItem {
     private String userName;

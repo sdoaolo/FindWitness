@@ -11,11 +11,16 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.findwitness.Adapter.ChttingListVIewAdapter;
 import com.example.findwitness.Chat.ChatActivity;
+
+import com.example.findwitness.Item.ChattingListViewItem;
+
 import com.example.findwitness.Chat.ChatApp;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import java.util.ArrayList;
 
