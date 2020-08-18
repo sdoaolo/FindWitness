@@ -17,7 +17,7 @@ public class Message {
     public Message(int type,String message){
         this.mType=type;
         this.mMessage=message;
-        this.mUsername=null;
+        //this.mUsername=null;
     }
     public Message(int type,String username,String message){
         this.mType=type;

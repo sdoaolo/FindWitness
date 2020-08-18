@@ -16,6 +16,7 @@ import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
     private List<Message> mMessageList;
+    //private String MY_NICKNAME = "수헌";
 
     public MessageAdapter(List<Message>messageList){
         this.mMessageList=messageList;
@@ -35,6 +36,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 break;
         }
         View itemView= LayoutInflater.from(parent.getContext()).inflate(layout,parent,false);
+
         return new MyViewHolder(itemView);
     }
 
@@ -42,13 +44,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     public void onBindViewHolder(MessageAdapter.MyViewHolder holder, int position) {
         Message currentMessage=mMessageList.get(position);
         Log.d("llllllllllllllllllllllllllllllllllll", "mesage : "+position);
+        //Log.d("getUsername???",currentMessage.getmUsername());
+        //Log.d("getUsernameddd???",mMessageList.get(position-1).getmUsername());
+
         if(currentMessage.getmUsername()!=null) {
 
-            if (currentMessage.getmUsername().equals(mMessageList.get(position).getmUsername())) {
+            if (currentMessage.getmUsername()==mMessageList.get(position).getmUsername()) {
 
                 LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textParams.setMargins(0, 4, 0, 0);
-                holder.mView.setLayoutParams(textParams);
                 if(holder.mUsername!=null)
                     holder.mUsername.setVisibility(View.GONE);
             } else {
@@ -77,6 +81,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
             mMessage=(TextView)itemView.findViewById(R.id.message);
             mUsername=(TextView)itemView.findViewById(R.id.username);
             mView=itemView;
