@@ -13,14 +13,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.findwitness.Adapter.ChttingListVIewAdapter;
 import com.example.findwitness.Chat.ChatActivity;
-
-import com.example.findwitness.Item.ChattingListViewItem;
-
 import com.example.findwitness.Chat.ChatApp;
+import com.example.findwitness.Item.ChattingListViewItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import java.util.ArrayList;
 
@@ -33,7 +30,7 @@ public class MainChattingFragment extends Fragment {
     public static Socket mSocket;
     private String TAG = "-->>";
     private Boolean isConnected;
-    private String MY_NICKNAME = "지혜";
+    private String MY_NICKNAME = "수헌";
 
     public MainChattingFragment() {
         // Required empty public constructor
@@ -81,14 +78,14 @@ public class MainChattingFragment extends Fragment {
 
                 startActivity(intent);
 
-    }
-});
+            }
+        });
     }
     public void InitializeMovieData(String user, String text, String time, String chat_num)
     {
-        chattingList = new ArrayList<ChattingListViewItem>();
-        chattingList.add(new ChattingListViewItem(user,text,time,chat_num));
-        chattingList.add(new ChattingListViewItem("USER_2","안녕하세요!","08:23","1"));
+        //chattingList = new ArrayList<ChattingListViewItem>();
+        //chattingList.add(new ChattingListViewItem(user,text,time,chat_num));
+        //chattingList.add(new ChattingListViewItem("USER_2","안녕하세요!","08:23","1"));
     }
 
     private Emitter.Listener onDisconnect = new Emitter.Listener() {
@@ -112,7 +109,7 @@ public class MainChattingFragment extends Fragment {
         public void call(Object... args) {
             if (!isConnected) {
                 isConnected = true;
-                mSocket.emit("add user", MY_NICKNAME);
+                mSocket.emit("chatlist add user", MY_NICKNAME);
 
             } else {
                 Log.w("-->>", "onConnect Failure");
@@ -138,6 +135,8 @@ public class MainChattingFragment extends Fragment {
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();
             }
+            //정보의 유무를 flag값으로 줘서 만약 0이면
+            //이제 로컬디비 뒤져서 방만들어야겠따.
             chattingList.add(new ChattingListViewItem(user,text,time,chat_num));
             Log.d(TAG, "정보 가져오기 성공!~~!!!");
 
