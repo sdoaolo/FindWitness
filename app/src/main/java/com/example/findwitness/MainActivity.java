@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     MainChatFragment mainChatFragment;
     MainGPSFragment mainGPSFragment;
     MainChattingFragment mainChattingFragment;
+    MainSelectFragment mainSelectFragment;
+
     String strWhite = "#FFFFFF";
     String strBlue = "#78A2DB";
     int priNum;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-
+    FragmentTransaction fragmentTransaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         mainChatFragment = new MainChatFragment();
         mainGPSFragment = new MainGPSFragment();
         mainChattingFragment = new MainChattingFragment();
+        mainSelectFragment = new MainSelectFragment();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_frame, mainSearchFragment); //초기화면 설정
