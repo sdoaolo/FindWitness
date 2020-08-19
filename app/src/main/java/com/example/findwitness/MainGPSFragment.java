@@ -71,7 +71,7 @@ public class MainGPSFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         btn_start = view.findViewById(R.id.btn_start);
         btn_finish = view.findViewById(R.id.btn_finish);
@@ -112,9 +112,16 @@ public class MainGPSFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","showlist");
                 boolean existdata = exist_database_data();   // 데이터가 존재하면 true, 존재하지 않으면 false
-
+                update(view);
             }
         });
+    }
+    public void update(View view){
+        this.InitializeData();
+        ListView listView = view.findViewById(R.id.gps_list);
+        final GPSListViewAdapter adapter;
+        adapter = new GPSListViewAdapter(getActivity(),gpsList);
+        listView.setAdapter(adapter);
     }
     class Network_Thread extends Thread{
         private String[] parameter;
