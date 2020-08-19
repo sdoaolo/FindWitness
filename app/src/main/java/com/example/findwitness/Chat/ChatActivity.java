@@ -18,8 +18,10 @@ package com.example.findwitness.Chat;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -76,6 +78,9 @@ public class ChatActivity extends AppCompatActivity {
     private static final int TIMER = 500;
     private static final int REQUEST_CODE = 0;
 
+    private final int SELECT_IMAGE = 1;
+    private final int SELECT_MOVIE = 2;
+
     Toolbar toolbar;
     TextView chatting_opponent;
 
@@ -106,6 +111,16 @@ public class ChatActivity extends AppCompatActivity {
         ArrayList<String> userInfo = (ArrayList<String>) intent.getSerializableExtra("userinfo");
         MY_NICKNAME = userInfo.get(0);
         MY_NUM = Integer.parseInt(userInfo.get(1));
+
+        Button fileBtn = findViewById(R.id.btnFile);
+
+        fileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doSelectMovie();
+                Log.d("ccccccccccccccc","click");
+            }
+        });
 
         //MY_NICKNAME = intent.getStringExtra("User");
         Log.d("hhhhhhhhhhhhhh","userNickName: "+MY_NICKNAME);
@@ -427,6 +442,93 @@ public class ChatActivity extends AppCompatActivity {
 
     private void scrollUp() { //리스트의 가장 마지막을 보여주도록 스크롤을 이동
         recyclerView.scrollToPosition(mAdapter.getItemCount()-1);
+    }
+
+    // 이미지 선택
+    private void doSelectImage()
+    {
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("image/*");
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        try
+        {
+            startActivityForResult(i, SELECT_IMAGE);
+        } catch (android.content.ActivityNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    // 동영상선택
+    private void doSelectMovie()
+    {
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("video/*");
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        try
+        {
+            startActivityForResult(i, SELECT_MOVIE);
+        } catch (android.content.ActivityNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (resultCode == RESULT_OK)
+        {
+            if (requestCode == SELECT_IMAGE)
+            {
+                Uri uri = intent.getData();
+                String path = getPath(uri);
+                String name = getName(uri);
+                String uriId = getUriId(uri);
+                Log.e("###", "실제경로 : " + path + "\n파일명 : " + name + "\nuri : " + uri.toString() + "\nuri id : " + uriId);
+            }
+            else if (requestCode == SELECT_MOVIE)
+            {
+                Uri uri = intent.getData();
+                String path = getPath(uri);
+                String name = getName(uri);
+                String uriId = getUriId(uri);
+                Log.e("###", "실제경로 : " + path + "\n파일명 : " + name + "\nuri : " + uri.toString() + "\nuri id : " + uriId);
+            }
+        }
+    }
+
+    // 실제 경로 찾기
+    private String getPath(Uri uri)
+    {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+    // 파일명 찾기
+    private String getName(Uri uri)
+    {
+        String[] projection = { MediaStore.Images.ImageColumns.DISPLAY_NAME };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DISPLAY_NAME);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+    // uri 아이디 찾기
+    private String getUriId(Uri uri)
+    {
+        String[] projection = { MediaStore.Images.ImageColumns._ID };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns._ID);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
 }
