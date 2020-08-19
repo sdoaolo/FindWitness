@@ -51,7 +51,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#ffffff">
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FILE"
+            android:textColor="#78A2DB"
+            android:id="@+id/btnFile"
+            android:background="?attr/selectableItemBackground"/>
         <EditText
             android:id="@+id/editMessage"
             android:layout_width="0dp"
