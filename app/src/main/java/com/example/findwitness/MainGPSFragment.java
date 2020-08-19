@@ -1,11 +1,17 @@
 package com.example.findwitness;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +24,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.findwitness.Adapter.GPSListViewAdapter;
@@ -40,6 +48,7 @@ public class MainGPSFragment extends Fragment {
     Button btn_start;
     Button btn_finish;
     Button btn_list;
+    Button btn_combine;
     //핸들러
     GPS_handler handler = new GPS_handler();
     private static final int MESSAGE_START = 1;
@@ -47,19 +56,17 @@ public class MainGPSFragment extends Fragment {
     private static final int NET_FINISH = 2;
     Network_handler NET_handler;
     boolean server_net_start = false;
-
+    int authority = 0;
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     //데이터 베이스 만들기
     private SQLiteDatabase db;
     private GPSdatabaseHelper dbHelper;
-    private final String id_my = Integer.toString(((MainActivity)getActivity()).priNum);
+    //private final String id_my = Integer.toString(((MainActivity)getActivity()).priNum);
 
     ArrayList<GPSListViewItem> gpsList;
 
     //private GpsTracker gpsTracker;
 
-    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
     public MainGPSFragment() {
         // Required empty public constructor
@@ -76,12 +83,13 @@ public class MainGPSFragment extends Fragment {
         btn_start = view.findViewById(R.id.btn_start);
         btn_finish = view.findViewById(R.id.btn_finish);
         btn_list = view.findViewById(R.id.btn_list);
+        btn_combine = view.findViewById(R.id.btn_combine);
+
         // 데이터베이스 생성
         boolean isOpen = openDatabase();
         if(!isOpen) {
             //Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
         }
-
         NET_handler = new Network_handler();
         this.InitializeData();
         ListView listView = view.findViewById(R.id.gps_list);
@@ -93,9 +101,13 @@ public class MainGPSFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","start");
-                handler.sendEmptyMessage(MESSAGE_START);
-                //NET_handler.sendEmptyMessage(NET_START);
-                server_net_start = true;
+
+                if(checkLocationServicesStatus()){
+                    handler.sendEmptyMessage(MESSAGE_START);
+                    //NET_handler.sendEmptyMessage(NET_START);
+                    server_net_start = true;
+                }
+                else showDialogForLocationServiceSetting();
             }
         });
         btn_finish.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +127,43 @@ public class MainGPSFragment extends Fragment {
                 update(view);
             }
         });
+        btn_combine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("RRRRRRRRR","start");
+                Toast.makeText(getActivity(),"서버와 통신 시작",Toast.LENGTH_SHORT).show();
+                NET_handler.sendEmptyMessage(NET_START);
+            }
+        });
+    }
+    public boolean checkLocationServicesStatus() {
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+    private void showDialogForLocationServiceSetting() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("위치 서비스 비활성화");
+        builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
+                + "위치 설정을 수정하실래요?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                Intent callGPSSettingIntent
+                        = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(callGPSSettingIntent, GPS_ENABLE_REQUEST_CODE);
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        builder.create().show();
     }
     public void update(View view){
         this.InitializeData();
@@ -155,7 +204,7 @@ public class MainGPSFragment extends Fragment {
                     conn.setDoInput(true);
 
                     String sendMsg = "long=" + longitude + "&date=" + date + "&lati="
-                            + latitude + "&time=" + time + "&id=" + id_my +"&save=1&num=" + num ;
+                            + latitude + "&time=" + time + "&id=" + "9" +"&save=1&num=" + num ;
 
                     OutputStream os = conn.getOutputStream();
                     os.write(sendMsg.getBytes("utf-8"));
@@ -236,6 +285,7 @@ public class MainGPSFragment extends Fragment {
                 case NET_FINISH:
                     this.status = true;
                     this.dis_net = 0;
+                    Toast.makeText(getActivity(),"서버와 통신 끝",Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -253,9 +303,6 @@ public class MainGPSFragment extends Fragment {
                     break;
             }
         }
-    }
-    public void combine(View v){
-        NET_handler.sendEmptyMessage(NET_START);
     }
     public void gps_start(){
         GPSTracker gpsTracker = new GPSTracker(getActivity());

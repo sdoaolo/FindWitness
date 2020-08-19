@@ -487,7 +487,7 @@ public class ChatActivity extends AppCompatActivity {
                 String path = getPath(uri);
                 String name = getName(uri);
                 String uriId = getUriId(uri);
-                Log.e("###", "실제경로 : " + path + "\n파일명 : " + name + "\nuri : " + uri.toString() + "\nuri id : " + uriId);
+                Log.d("###", "실제경로 : " + path + "\n파일명 : " + name + "\nuri : " + uri.toString() + "\nuri id : " + uriId);
             }
             else if (requestCode == SELECT_MOVIE)
             {
@@ -495,7 +495,7 @@ public class ChatActivity extends AppCompatActivity {
                 String path = getPath(uri);
                 String name = getName(uri);
                 String uriId = getUriId(uri);
-                Log.e("###", "실제경로 : " + path + "\n파일명 : " + name + "\nuri : " + uri.toString() + "\nuri id : " + uriId);
+                Log.d("###", "실제경로 : " + path + "\n파일명 : " + name + "\nuri : " + uri.toString() + "\nuri id : " + uriId);
             }
         }
     }
