@@ -51,7 +51,7 @@ public class MainGPSFragment extends Fragment {
     //데이터 베이스 만들기
     private SQLiteDatabase db;
     private GPSdatabaseHelper dbHelper;
-
+    private final String id_my = Integer.toString(((MainActivity)getActivity()).priNum);
 
     ArrayList<GPSListViewItem> gpsList;
 
@@ -94,7 +94,7 @@ public class MainGPSFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","start");
                 handler.sendEmptyMessage(MESSAGE_START);
-                NET_handler.sendEmptyMessage(NET_START);
+                //NET_handler.sendEmptyMessage(NET_START);
                 server_net_start = true;
             }
         });
@@ -103,7 +103,7 @@ public class MainGPSFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","finish");
                 handler.removeMessages(MESSAGE_START);
-                if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
+                //if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
                 Toast.makeText(getActivity(),"Thread is stop",Toast.LENGTH_SHORT).show();
             }
         });
@@ -155,7 +155,7 @@ public class MainGPSFragment extends Fragment {
                     conn.setDoInput(true);
 
                     String sendMsg = "long=" + longitude + "&date=" + date + "&lati="
-                            + latitude + "&time=" + time + "&id=10&save=1&num=" + num ;
+                            + latitude + "&time=" + time + "&id=" + id_my +"&save=1&num=" + num ;
 
                     OutputStream os = conn.getOutputStream();
                     os.write(sendMsg.getBytes("utf-8"));
@@ -192,9 +192,9 @@ public class MainGPSFragment extends Fragment {
         boolean status = true;
         int dis_net = 0;
         public Network_handler(){
-            Cursor c1 = db.rawQuery("select _ID from gps ", null);
-            this.count = c1.getCount();
-            Log.d("db", "db_count : " + count);
+            //Cursor c1 = db.rawQuery("select _ID from gps ", null);
+            //this.count = c1.getCount();
+            //Log.d("db", "db_count : " + count);
         }
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -248,11 +248,14 @@ public class MainGPSFragment extends Fragment {
                 case MESSAGE_START:
                     Log.d("GPS_ 시작","횟수 : " + count++);
                     gps_start();
-                    if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
-                    this.sendEmptyMessageDelayed(MESSAGE_START, 2000);
+                    //if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
+                    this.sendEmptyMessageDelayed(MESSAGE_START, 5000);
                     break;
             }
         }
+    }
+    public void combine(View v){
+        NET_handler.sendEmptyMessage(NET_START);
     }
     public void gps_start(){
         GPSTracker gpsTracker = new GPSTracker(getActivity());
@@ -385,7 +388,7 @@ public class MainGPSFragment extends Fragment {
     @Override
     public void onDestroy() {
         handler.removeMessages(MESSAGE_START);
-        if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
+        //if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
         super.onDestroy();
     }
 }
