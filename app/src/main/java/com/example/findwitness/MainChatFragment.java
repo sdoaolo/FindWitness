@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class MainChatFragment extends Fragment {
     String SearchInfoDate , SearchInfoTime,checkBundle;
     String nickname[], id[];
+    Boolean isNextSearch = false;
     int num = 0;        // 목격자가 몇명인지 정보가 담겨있다.
     ArrayList<ChatListViewItem> chatList;
     public MainChatFragment() {
@@ -42,6 +43,7 @@ public class MainChatFragment extends Fragment {
 
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
         if(bundle != null){
+            isNextSearch = true;
             SearchInfoDate = bundle.getString("SearchDate"); //search info : date
             SearchInfoTime = bundle.getString("SearchTime"); //search info : time
             checkBundle = bundle.getString("requireServer");
@@ -55,38 +57,37 @@ public class MainChatFragment extends Fragment {
             ((MainActivity)getActivity()).btn_list.setTextColor(Color.parseColor(((MainActivity)getActivity()).strWhite));
             recent_list_date.setText(SearchInfoDate);
             recent_list_time.setText(SearchInfoTime);
+
+            ListView listView = view.findViewById(R.id.recent_list);
+            final ChatListViewAdapter myAdapter = new ChatListViewAdapter(getActivity(),chatList);
+
+            listView.setAdapter(myAdapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView parent, View v, int position, long id){
+                    Log.d("cccccccccccccc","item clicked: "+myAdapter.getItem(position).getUserName()); //
+                    ChatActivity chatActivity = new ChatActivity();
+                    Intent intent = new Intent(getActivity(),chatActivity.getClass());
+                    //putExtra의 첫 값은 식별 태그, 뒤에는 다음 화면에 넘길 값(user nickname을 넘겨 줌)
+                    Log.d("lllllllllllllll","클릭에러발생");
+
+                    ArrayList<String> userInfo = new ArrayList<String>(2);
+                    userInfo.add(chatList.get(position).getUserName());
+                    userInfo.add(chatList.get(position).getUserId());
+                    intent.putExtra("userinfo",userInfo);
+                    startActivity(intent);
+                }
+            });
         }
-
-
         //please set Text View of Recent List Info (date, time)
-
-        //listview
-        this.InitializeMovieData();
-
-        ListView listView = view.findViewById(R.id.recent_list);
-        final ChatListViewAdapter myAdapter = new ChatListViewAdapter(getActivity(),chatList);
-
-        listView.setAdapter(myAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView parent, View v, int position, long id){
-                Log.d("cccccccccccccc","item clicked: "+myAdapter.getItem(position).getUserName()); //
-                ChatActivity chatActivity = new ChatActivity();
-                Intent intent = new Intent(getActivity(),chatActivity.getClass());
-                //putExtra의 첫 값은 식별 태그, 뒤에는 다음 화면에 넘길 값(user nickname을 넘겨 줌)
-                Log.d("lllllllllllllll","클릭에러발생");
-                intent.putExtra("nickname",chatList.get(position).getUserName());
-
-                startActivity(intent);
-            }
-        });
     }
-    public void InitializeMovieData()
+    public void InitializeMovieData(int size, String[] nicknames, String[]ids)
     {
         chatList = new ArrayList<ChatListViewItem>();
-        chatList.add(new ChatListViewItem("test 1"));
-        chatList.add(new ChatListViewItem("test 2"));
+        for(int i = 0 ;i<size;i++){
+            chatList.add(new ChatListViewItem(nicknames[i],ids[i]));
+        }
     }
     public void nickname_id_find(String data){
         String[] list = data.split(",");
@@ -99,6 +100,7 @@ public class MainChatFragment extends Fragment {
             nickname[i] = temp_list[1];
         }
         num = size;
+        this.InitializeMovieData(size,nickname,id);
     }
 }
 
