@@ -14,11 +14,11 @@ public class Message {
     private Message(){
     }
 
-    public Message(int type,String message){
+    /*public Message(int type,String message){
         this.mType=type;
         this.mMessage=message;
-        //this.mUsername=null;
-    }
+        this.mUsername="수헌";
+    }*/
     public Message(int type,String username,String message){
         this.mType=type;
         this.mMessage=message;

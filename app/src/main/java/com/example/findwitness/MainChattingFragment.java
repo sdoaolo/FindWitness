@@ -19,29 +19,36 @@ import com.example.findwitness.Item.ChattingListViewItem;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class MainChattingFragment extends Fragment {
     ArrayList<ChattingListViewItem> chattingList=new ArrayList<ChattingListViewItem>();
-    private ChatApp app;
     public static Socket mSocket;
     private String TAG = "-->>";
     private Boolean isConnected;
-    private String MY_NICKNAME = "수헌";
+    private String MY_NICKNAME = "엄마";
+    String CHAT_URL="http://192.168.219.102:8004/"; //>>채팅리스트화면용
 
     public MainChattingFragment() {
         // Required empty public constructor
         isConnected = false;
-        app = new ChatApp();
-        mSocket = app.getSocket();
+
+        try {
+            mSocket= IO.socket(CHAT_URL);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.connect();
         Log.d("lllllllllllll","connect 성공");
         mSocket.on(Socket.EVENT_CONNECT, onConnect); //MY_NICKNAME 이름 전달함.
+        mSocket.emit("person");
         mSocket.on("person",onNewPerson);//사람들 값 받아오기.마지막메시지,시간,메시지갯수
 
     }
@@ -57,7 +64,6 @@ public class MainChattingFragment extends Fragment {
         Log.d("LLLLLLLLLL","Im in Chatting Fragment : on View Created");
         //listview
 
-        //this.InitializeMovieData();
 
         ListView listView = view.findViewById(R.id.recent_list);
         final ChttingListVIewAdapter myAdapter = new ChttingListVIewAdapter(getActivity(),chattingList);
@@ -81,12 +87,7 @@ public class MainChattingFragment extends Fragment {
             }
         });
     }
-    public void InitializeMovieData(String user, String text, String time, String chat_num)
-    {
-        //chattingList = new ArrayList<ChattingListViewItem>();
-        //chattingList.add(new ChattingListViewItem(user,text,time,chat_num));
-        //chattingList.add(new ChattingListViewItem("USER_2","안녕하세요!","08:23","1"));
-    }
+
 
     private Emitter.Listener onDisconnect = new Emitter.Listener() {
         @Override
@@ -130,13 +131,14 @@ public class MainChattingFragment extends Fragment {
                 text = data.getString("text"); //메시지 내용
                 time = data.getString("time");
                 chat_num = data.getString("chat_num");
+                time = time.substring(0,2) + "시 " + time.substring(2,4) + "분";
 
             } catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();
             }
-            //정보의 유무를 flag값으로 줘서 만약 0이면
-            //이제 로컬디비 뒤져서 방만들어야겠따.
+
+
             chattingList.add(new ChattingListViewItem(user,text,time,chat_num));
             Log.d(TAG, "정보 가져오기 성공!~~!!!");
 
