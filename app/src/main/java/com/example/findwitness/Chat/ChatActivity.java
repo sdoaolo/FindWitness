@@ -141,7 +141,7 @@ public class ChatActivity<data> extends AppCompatActivity {
 
 
 
-        setUpUI();
+        //setUpUI();
 
 
 
@@ -371,7 +371,7 @@ public class ChatActivity<data> extends AppCompatActivity {
 
 
     private void addLog(String message) {
-        messageList.add(new Message(Message.TYPE_LOG, message));
+        messageList.add(new Message(Message.TYPE_LOG,"0",message));
         mAdapter.notifyDataSetChanged();
         scrollUp();
     }

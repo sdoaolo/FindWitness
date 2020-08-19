@@ -13,12 +13,12 @@ public class Message {
     private String mMessage;
     private Message(){
     }
-
+/*
     public Message(int type,String message){
         this.mType=type;
         this.mMessage=message;
-        //this.mUsername=null;
-    }
+        this.mUsername="user";
+    }*/
     public Message(int type,String username,String message){
         this.mType=type;
         this.mMessage=message;
