@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 public class MainChatFragment extends Fragment {
     String SearchInfoDate , SearchInfoTime,checkBundle;
+    String nickname[], id[];
+    int num = 0;        // 목격자가 몇명인지 정보가 담겨있다.
     ArrayList<ChatListViewItem> chatList;
     public MainChatFragment() {
         // Required empty public constructor
@@ -43,6 +45,11 @@ public class MainChatFragment extends Fragment {
             SearchInfoDate = bundle.getString("SearchDate"); //search info : date
             SearchInfoTime = bundle.getString("SearchTime"); //search info : time
             checkBundle = bundle.getString("requireServer");
+            nickname_id_find(checkBundle);   // id[], nickname[] 에다가 값 넣기
+            for(int i=0; i<num; i++){    //값 잘 들어갔나 확인용 필요없으면 지워주세요
+                Log.d("값 : ", "id[" + i + "] : " + id[i]);
+                Log.d("값 : ", "nickname[" + i + "] : " + nickname[i]);
+            }
             ((MainActivity)getActivity()).btn_search.setBackgroundResource(R.drawable.main_search);
             ((MainActivity)getActivity()).btn_list.setBackgroundResource(R.drawable.main_blue_back);
             ((MainActivity)getActivity()).btn_list.setTextColor(Color.parseColor(((MainActivity)getActivity()).strWhite));
@@ -80,6 +87,18 @@ public class MainChatFragment extends Fragment {
         chatList = new ArrayList<ChatListViewItem>();
         chatList.add(new ChatListViewItem("test 1"));
         chatList.add(new ChatListViewItem("test 2"));
+    }
+    public void nickname_id_find(String data){
+        String[] list = data.split(",");
+        int size = list.length;
+        nickname = new String[size];
+        id = new String[size];
+        for(int i=0; i<size; i++){
+            String temp_list[] = list[i].split(":");
+            id[i] = temp_list[0];
+            nickname[i] = temp_list[1];
+        }
+        num = size;
     }
 }
 

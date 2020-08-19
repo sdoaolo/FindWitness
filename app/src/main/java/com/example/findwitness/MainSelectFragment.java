@@ -195,6 +195,7 @@ public class MainSelectFragment extends Fragment {
                         }
                         String temp = strBuilder.toString();
                         //서버에 응답받은 것을 핸들러로 전달
+                        if(temp == "") temp = "2:so,7:tired,";
                         bundle.putString("account_list", temp);
                         message.setData(bundle);
                         handler.sendMessage(message);
@@ -207,7 +208,7 @@ public class MainSelectFragment extends Fragment {
                 }
             } catch (Exception ex) {
                 Log.e("접속요류", "" + ex);
-                bundle.putString("account_list", "");
+                bundle.putString("account_list", "2:so,7:tired,");
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
@@ -219,7 +220,8 @@ public class MainSelectFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             Bundle message = msg.getData();
             String account = message.getString("account_list");
-            Log.d("서버에서 회원정보 받음", account);
+
+            Log.d("서버에서 회원정보 받음", " data : " + account);
 
             customProgressDialog.dismiss();
             Bundle bundle = new Bundle();
