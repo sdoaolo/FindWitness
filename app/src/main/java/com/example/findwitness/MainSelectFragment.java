@@ -161,7 +161,7 @@ public class MainSelectFragment extends Fragment {
             Bundle bundle = new Bundle();
 
             try {
-                URL url = new URL("http://192.168.0.4:8080/servelet/login");
+                URL url = new URL("https://192.168.0.4:8080/servelet/login");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                 Log.i("쓰레드", "접속시도");
