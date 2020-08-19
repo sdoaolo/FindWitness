@@ -1,5 +1,6 @@
 package com.example.findwitness;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -75,20 +76,19 @@ public class MainSelectFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id){
                 Log.d("ssssssssssss","fragment chat로 화면 전환");
-                Log.d("ssssssssssss","item clicked: " + selectGpsList.get(position).getAddress());
-                String temp_data = data_format("37.1234543","-127.43223313",timeResult,dateResult);
+                //Log.d("ssssssssssss","item clicked: " + selectGpsList.get(position).getAddress());
 
-                //서버와 통신
-                Thread thread = new Network_server_Thread(temp_data);
-                thread.start();
+                customProgressDialog = new CustomProgressDialog(getActivity());
+                // 위에서 테두리를 둥글게 했지만 다이얼로그 자체가 네모라 사각형 여백이 보입니다. 아래 코드로 다이얼로그 배경을 투명처리합니다.
+                customProgressDialog .getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                customProgressDialog.show(); // 보여주기
 
                 if(isDataExist) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("SearchDate",dateResult);
-                    bundle.putString("SearchTime",timeResult);
-                    bundle.putString("requireServer","10:suin,4:girmf");
-                    ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
-                    ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
+                    String temp_data = data_format(selectGpsList.get(position).getLongitude(),selectGpsList.get(position).getLatitude(),timeResult,dateResult);
+                    //서버와 통신
+                    Thread thread = new Network_server_Thread(temp_data);
+                    thread.start();
+
                 }
                 /* 다이얼로그 어디다 넣을까용.. 서버랑 통신해서 받았다는 신호 받을때까지 띄워줄거임!
                 customProgressDialog = new CustomProgressDialog(getActivity());
@@ -156,8 +156,12 @@ public class MainSelectFragment extends Fragment {
         public void run() {// longitude, latitude, date, time
             Log.d("네트워크 쓰레드 시작", "개수 : ");
             String server_gps[] = this.server_data.split(",");
+
+            Message message = handler.obtainMessage();
+            Bundle bundle = new Bundle();
+
             try {
-                URL url = new URL("http://192.168.0.4:8080/servelet/login");
+                URL url = new URL("https://192.168.0.4:8080/servelet/login");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                 Log.i("쓰레드", "접속시도");
@@ -191,8 +195,6 @@ public class MainSelectFragment extends Fragment {
                         }
                         String temp = strBuilder.toString();
                         //서버에 응답받은 것을 핸들러로 전달
-                        Message message = handler.obtainMessage();
-                        Bundle bundle = new Bundle();
                         bundle.putString("account_list", temp);
                         message.setData(bundle);
                         handler.sendMessage(message);
@@ -205,23 +207,27 @@ public class MainSelectFragment extends Fragment {
                 }
             } catch (Exception ex) {
                 Log.e("접속요류", "" + ex);
+                bundle.putString("account_list", "");
+                message.setData(bundle);
+                handler.sendMessage(message);
             }
         }
     }
+
     class Server_handler extends Handler {
         @Override
         public void handleMessage(@NonNull Message msg) {
             Bundle message = msg.getData();
             String account = message.getString("account_list");
             Log.d("서버에서 회원정보 받음", account);
-            /*
+
+            customProgressDialog.dismiss();
             Bundle bundle = new Bundle();
             bundle.putString("SearchDate",dateResult);
             bundle.putString("SearchTime",timeResult);
             bundle.putString("requireServer",account);
             ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
             ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
-            */
 
         }
     }
