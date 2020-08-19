@@ -24,7 +24,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -103,9 +102,14 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         Intent intent = getIntent();
-        //MY_NICKNAME = intent.getStringExtra("UserName");
-        Log.d("hhhhhhhhhhhhhh","userNickName: "+MY_NICKNAME);
 
+        ArrayList<String> userInfo = (ArrayList<String>) intent.getSerializableExtra("userinfo");
+        MY_NICKNAME = userInfo.get(0);
+        MY_NUM = Integer.parseInt(userInfo.get(1));
+
+        //MY_NICKNAME = intent.getStringExtra("User");
+        Log.d("hhhhhhhhhhhhhh","userNickName: "+MY_NICKNAME);
+        Log.d("hhhhhhhhhhhhhh","MY_NUM : "+MY_NUM);
 
         dbHelper = new ChatSQLiteHelper(this, dbName, null, 1);
         sqlite = new ChatSQLiteControl(dbHelper);
