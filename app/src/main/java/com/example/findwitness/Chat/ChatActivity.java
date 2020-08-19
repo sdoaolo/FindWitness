@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -29,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -51,15 +53,15 @@ import java.util.List;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class ChatActivity<data> extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity {
 
     //닉네임
     //나중에 입력값받아야함
-    private String MY_NICKNAME = "수헌";
+    private String MY_NICKNAME = "엄마";
     private String YOU_NICKNAME = "지혜";
 
-    //고유번호 >> 채팅방이름에 이용할거임.
-    private int MY_NUM = 2;
+    //고유번호 >> 채팅방이름에 이용
+    private int MY_NUM = 4;
     private int YOU_NUM = 1;
     private String CHAT_ROOM_NAME;
 
@@ -85,6 +87,7 @@ public class ChatActivity<data> extends AppCompatActivity {
     private ChatSQLiteHelper dbHelper;
     String dbName = "chat.db";
     String tag = "SQLite"; // Log 에 사용할 tag (DB용)
+    db_handler handler = new db_handler();
 
 
     SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd"); //날짜
@@ -135,14 +138,11 @@ public class ChatActivity<data> extends AppCompatActivity {
         mSocket.on("login", onLogin);
         //mSocket.on("login2", onSave); //환영 인사 + 날짜 표시(흠..옮겨야 할 것 같긴헌디큐큐..)
 
+
+        setUpUI();
         //사용자 로컬 DB용
         pastContentPickUP thread = new pastContentPickUP();
         thread.start();
-
-
-
-        //setUpUI();
-
 
 
 
@@ -165,16 +165,19 @@ public class ChatActivity<data> extends AppCompatActivity {
                                 String message = cursor.getString(4); //메시지 내용// 뽑기
 
 
-                                //상대방에게 받은 메시지
-                                if (rcv == 1) {
-                                    addMessage(YOU_NICKNAME, message, Message.TYPE_MESSAGE_RECEIVED);
-                                } else if (send == 1) { //내가 쓴 메시지
-                                    addMessage(MY_NICKNAME, message, Message.TYPE_MESSAGE_SENT);
+                                if(message!=null){
+                                    Log.d("3333333333",message);
+                                    //상대방에게 받은 메시지
+                                    if (rcv == 1) {
+                                        addMessage(YOU_NICKNAME, message, Message.TYPE_MESSAGE_RECEIVED);
+                                    } else if (send == 1) { //내가 쓴 메시지
+                                        addMessage(MY_NICKNAME, message, Message.TYPE_MESSAGE_SENT);
+                                    }
                                 }
-                                //mAdapter.notifyDataSetChanged();
+                                    //mAdapter.notifyDataSetChanged();
 
                             }
-                        }
+                        } //handler.sendEmptyMessage(0);
                     }
                 });
 
@@ -188,8 +191,15 @@ public class ChatActivity<data> extends AppCompatActivity {
         mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on("new message", onNewMessage);
-        mSocket.on("login2", onSave);
+        //mSocket.on("login2", onSave);
 
+    }
+
+    class db_handler extends Handler {
+        @Override
+        public void handleMessage(@NonNull android.os.Message msg) {
+            setUpUI();
+        }
     }
 
 
@@ -250,7 +260,7 @@ public class ChatActivity<data> extends AppCompatActivity {
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.off("login", onLogin);
         mSocket.off("new message", onNewMessage);
-        mSocket.off("login2", onSave);
+        //mSocket.off("login2", onSave);
 
     }
 
@@ -289,8 +299,8 @@ public class ChatActivity<data> extends AppCompatActivity {
                 @Override
                 public void run() {
                     JSONObject data = (JSONObject) args[0]; //상대방 채팅창 참가
-                    String username = null;
-                    String message = null;
+                    String username = "a";
+                    String message = "b";
                     try {
                         username = data.getString("username"); //메시지 보낸 사람
                         message = data.getString("message"); //메시지 내용
@@ -334,8 +344,10 @@ public class ChatActivity<data> extends AppCompatActivity {
             SimpleDateFormat format2 = new SimpleDateFormat("yyyy년 MM월dd일 HH시mm분ss초");
             String format_time2 = format2.format(System.currentTimeMillis());
             String currentDate = format_time2.substring(0, 12);
-            addLog(currentDate);
-            scrollUp();
+            Log.d("1111111111111111111111111111",currentDate);
+            ///addLog(currentDate);
+            //Log.d("1111111111111111111111111111",currentDate);
+            //scrollUp();
         }
     };
 
@@ -371,14 +383,17 @@ public class ChatActivity<data> extends AppCompatActivity {
 
 
     private void addLog(String message) {
-        messageList.add(new Message(Message.TYPE_LOG,"0",message));
-        mAdapter.notifyDataSetChanged();
-        scrollUp();
+        //messageList.add(new Message(Message.TYPE_LOG, message));
+        //messageList.add(new Message(Message.TYPE_LOG, "0" ,message));
+        //mAdapter.notifyDataSetChanged();
+        //mAdapter.notifyItemInserted(messageList.size());
+        //scrollUp();
     }
 
     private void addMessage(String username, String message, int messageType) {
         messageList.add(new Message(messageType, username, message));
         Log.d("이름이 왜 아느ㄸ지",username);
+        //mAdapter.notifyItemInserted(messageList.size());
         mAdapter.notifyDataSetChanged();
         scrollUp();
     }
