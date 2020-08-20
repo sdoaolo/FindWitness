@@ -41,7 +41,7 @@ public class MainChattingFragment extends Fragment {
         try {
             mSocket= IO.socket(CHAT_URL);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            Log.e("URISyntaxException error", e.getMessage());
         }
         mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
@@ -134,8 +134,7 @@ public class MainChattingFragment extends Fragment {
                 time = time.substring(0,2) + "시 " + time.substring(2,4) + "분";
 
             } catch (JSONException e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e("JSONException error", e.getMessage());
             }
 
 

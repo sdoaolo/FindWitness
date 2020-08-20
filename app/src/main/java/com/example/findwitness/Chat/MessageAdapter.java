@@ -53,8 +53,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
                 LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textParams.setMargins(0, 4, 0, 0);
-                if(holder.mUsername!=null)
+                if(holder.mUsername!=null){
                     holder.mUsername.setVisibility(View.GONE);
+                }
             } else {
                 LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textParams.setMargins(0, 16, 0, 0);
@@ -88,14 +89,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         }
 
         public void setmUsername(String username){
-            if(mUsername==null)
+            if(mUsername==null){
                 return;
+            }
             mUsername.setText(username);
         }
 
         public void setmMessage(String message){
-            if(mMessage==null)
+            if(mMessage==null){
                 return;
+            }
             mMessage.setText(message);
         }
     }

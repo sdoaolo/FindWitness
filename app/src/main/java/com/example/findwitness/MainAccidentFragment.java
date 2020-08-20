@@ -62,7 +62,7 @@ public class MainAccidentFragment  extends Fragment {
                 Log.d("kk", "trraffkc_accident_array["+i+"] : "+traffic_accident_array[i]);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("IOException error", e.getMessage());
         }
     }
 }

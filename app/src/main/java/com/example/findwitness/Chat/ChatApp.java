@@ -1,6 +1,7 @@
 package com.example.findwitness.Chat;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.net.URISyntaxException;
 import io.socket.client.IO;
@@ -14,7 +15,7 @@ public class ChatApp extends Application {
         try {
             mSocket= IO.socket(CHAT_URL);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            Log.e("URISyntaxException error", e.getMessage());
         }
     }
     public Socket getSocket(){

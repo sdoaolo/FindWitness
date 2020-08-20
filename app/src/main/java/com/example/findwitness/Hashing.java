@@ -1,5 +1,7 @@
 package com.example.findwitness;
 
+import android.util.Log;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -16,7 +18,7 @@ public class Hashing {
             }
             result = sb.toString();
         } catch(NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            Log.e("NoSuchAlgorithmException error", e.getMessage());
             result = null;
         }
 

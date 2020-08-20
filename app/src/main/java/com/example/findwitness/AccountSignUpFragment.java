@@ -74,7 +74,7 @@ public class AccountSignUpFragment extends Fragment {
                     try {
                         sleep(2000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.e("InterruptedExceptio error", e.getMessage());
                     }
 
                     response = socket_connect.getMessage();
@@ -129,7 +129,7 @@ public class AccountSignUpFragment extends Fragment {
                     try {
                         sleep(2000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.e("InterruptedException error", e.getMessage());
                     }
 
                     response = socket_connect.getMessage();
@@ -217,7 +217,7 @@ public class AccountSignUpFragment extends Fragment {
                     try {
                         sleep(5000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.e("InterruptedException error", e.getMessage());
                     }
 
                     response = socket_connect.getMessage();

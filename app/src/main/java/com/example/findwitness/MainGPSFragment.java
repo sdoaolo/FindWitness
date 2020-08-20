@@ -98,7 +98,9 @@ public class MainGPSFragment extends Fragment {
                     //NET_handler.sendEmptyMessage(NET_START);
                     server_net_start = true; //이거 관련 UrF는 건들지 말 것!
                 }
-                else showDialogForLocationServiceSetting();
+                else {
+                    showDialogForLocationServiceSetting();
+                }
             }
         });
         btn_finish.setOnClickListener(new View.OnClickListener() {
@@ -359,7 +361,9 @@ public class MainGPSFragment extends Fragment {
     public boolean exist_database_data(){
         boolean exist = true;
         Cursor c1 = db.rawQuery("select * from " + "gps", null);
-        if(c1.getCount() == 0) exist = false;
+        if(c1.getCount() == 0) {
+            exist = false;
+        }
         return exist;
     }
     // init data
@@ -424,8 +428,12 @@ public class MainGPSFragment extends Fragment {
     public String String_to_seven(String str){
         String temp[] = str.split("\\."), zero = "0000000", ans;
         int num = temp[1].length();
-        if(num > 7) temp[1] = temp[1].substring(0,7);
-        else if(num < 7) temp[1] += zero.substring(0,7-num);
+        if(num > 7) {
+            temp[1] = temp[1].substring(0,7);
+        }
+        else if(num < 7) {
+            temp[1] += zero.substring(0,7-num);
+        }
         ans = temp[0] + "." + temp[1];
         return ans;
     }

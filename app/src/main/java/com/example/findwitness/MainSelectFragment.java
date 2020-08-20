@@ -108,15 +108,15 @@ public class MainSelectFragment extends Fragment {
         String date_temp[] = date_s.split(" ");
         String time_temp[] = time_s.split(" : ");
         date_s = date_temp[0].substring(0,4);
-        if(date_temp[1].length() > 2) date_s += date_temp[1].substring(0,2);
-        else date_s += "0" + date_temp[1].substring(0,1);
-        if(date_temp[2].length() > 2) date_s += date_temp[2].substring(0,2);
-        else date_s += "0" + date_temp[2].substring(0,1);
+        if(date_temp[1].length() > 2) {date_s += date_temp[1].substring(0,2);}
+        else {date_s += "0" + date_temp[1].substring(0,1);}
+        if(date_temp[2].length() > 2) {date_s += date_temp[2].substring(0,2);}
+        else {date_s += "0" + date_temp[2].substring(0,1);}
 
-        if(time_temp[0].length() == 1) time_s = "0" + time_temp[0];
-        else time_s = time_temp[0];
-        if(time_temp[1].length() == 1) time_s += "0" + time_temp[1];
-        else time_s += time_temp[1];
+        if(time_temp[0].length() == 1) {time_s = "0" + time_temp[0];}
+        else {time_s = time_temp[0];}
+        if(time_temp[1].length() == 1) {time_s += "0" + time_temp[1];}
+        else {time_s += time_temp[1];}
 
         result = String_to_seven(longtit) + "," + String_to_seven(latit) + "," + date_s + "," + time_s;
 
@@ -125,8 +125,11 @@ public class MainSelectFragment extends Fragment {
     public String String_to_seven(String str){
         String temp[] = str.split("\\."), zero = "0000000", ans;
         int num = temp[1].length();
-        if(num > 7) temp[1] = temp[1].substring(0,7);
-        else if(num < 7) temp[1] += zero.substring(0,7-num);
+        if(num > 7) {
+            temp[1] = temp[1].substring(0,7);
+        } else if(num < 7) {
+            temp[1] += zero.substring(0,7-num);
+        }
         ans = temp[0] + "." + temp[1];
         return ans;
     }
@@ -185,7 +188,8 @@ public class MainSelectFragment extends Fragment {
                     os.close();
                     int resCode = conn.getResponseCode();
                     Log.i("응답코드", "" + resCode);
-                    if (resCode == HttpURLConnection.HTTP_OK) {
+                    if (resCode == HttpURLConnection.HTTP_OK)
+                    {
                         Log.i("쓰레드", "응답수신");
                         InputStream is = conn.getInputStream();
                         InputStreamReader isr = new InputStreamReader(is);

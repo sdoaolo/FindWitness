@@ -188,15 +188,31 @@ public class MainSearchFragment extends Fragment {
         String date_temp[] = date.split(" ");
         String time_temp[] = time.split(" : ");
         date = date_temp[0].substring(0,4);
-        if(date_temp[1].length() > 2) date += date_temp[1].substring(0,2);
-        else date += "0" + date_temp[1].substring(0,1);
-        if(date_temp[2].length() > 2) date += date_temp[2].substring(0,2);
-        else date += "0" + date_temp[2].substring(0,1);
+        if(date_temp[1].length() > 2) {
+            date += date_temp[1].substring(0,2);
+        }
+        else {
+            date += "0" + date_temp[1].substring(0,1);
+        }
+        if(date_temp[2].length() > 2) {
+            date += date_temp[2].substring(0,2);
+        }
+        else {
+            date += "0" + date_temp[2].substring(0,1);
+        }
 
-        if(time_temp[0].length() == 1) time = "0" + time_temp[0];
-        else time = time_temp[0];
-        if(time_temp[1].length() == 1) time += "0" + time_temp[1];
-        else time += time_temp[1];
+        if(time_temp[0].length() == 1) {
+            time = "0" + time_temp[0];
+        }
+        else {
+            time = time_temp[0];
+        }
+        if(time_temp[1].length() == 1) {
+            time += "0" + time_temp[1];
+        }
+        else {
+            time += time_temp[1];
+        }
         time = time + "%";
         Log.d("변환","date : " + date + " time  :" + time);
 
@@ -213,7 +229,9 @@ public class MainSearchFragment extends Fragment {
             //Log.d("데이터 : ","latitude : " + latitude + "longitude : " + longitude);
             Search += "|" + latitude + "#" + longitude + "#" + address;
         }
-        if(number != 0) Search = Search.substring(1,Search.length());
+        if(number != 0) {
+            Search = Search.substring(1,Search.length());
+        }
 
         Log.d("개수", "" + number);
         Log.d("서치",Search);

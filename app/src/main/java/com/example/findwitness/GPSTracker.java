@@ -54,7 +54,9 @@ public class GPSTracker extends Service implements LocationListener {
 
                     ;
                 } else
+                {
                     return null;
+                }
 
                 if (isNetworkEnabled) {
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);

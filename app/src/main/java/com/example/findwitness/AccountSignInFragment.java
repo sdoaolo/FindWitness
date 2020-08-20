@@ -103,7 +103,7 @@ public class AccountSignInFragment  extends Fragment {
                     try {
                         sleep(6000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.e("InterruptedException error", e.getMessage());
                     }
                     response = socket_connect.getMessage();
                     String[] res = response.split(",");
@@ -134,8 +134,8 @@ public class AccountSignInFragment  extends Fragment {
                         }
                     } catch (Exception e) {
                         //Toast.makeText(getApplicationContext(), "오류가 발생했습니다.", Toast.LENGTH_LONG).show();
-                        Log.d("RRRRRRRRR","Exception e 발생");
-                        e.printStackTrace();
+                        Log.e("Exception error", e.getMessage());
+
                     }
                 }
                 //Intent intent=new Intent(((AccountActivity)getActivity()),MainActivity.class);

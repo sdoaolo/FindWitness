@@ -1,5 +1,7 @@
 package com.example.findwitness;
 
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayOutputStream;
@@ -22,7 +24,7 @@ public class socket_connect extends AppCompatActivity {
         try{
             socket = new Socket(addr, port);
         }catch (Exception e){
-            e.printStackTrace();
+            Log.e("Exception error", e.getMessage());
         }
     }
     /*public static void connectSocket(String data) {
@@ -140,12 +142,11 @@ public class socket_connect extends AppCompatActivity {
                     break;
 
                 }catch (Exception e){
-                    e.printStackTrace();
+                    Log.e("Exception error", e.getMessage());
                 }
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.e("Exception error", e.getMessage());
         }
     }
 
