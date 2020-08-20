@@ -36,12 +36,12 @@ public class MainChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TextView recent_list_date = view.findViewById(R.id.recent_list_date);
         TextView recent_list_time = view.findViewById(R.id.recent_list_time);
-        Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
+        Bundle bundle = getArguments();
         if(bundle != null){
-            SearchInfoDate = bundle.getString("SearchDate"); //search info : date
-            SearchInfoTime = bundle.getString("SearchTime"); //search info : time
+            SearchInfoDate = bundle.getString("SearchDate");
+            SearchInfoTime = bundle.getString("SearchTime");
             checkBundle = bundle.getString("requireServer");
-            if(checkBundle != "" ) nickname_id_find(checkBundle);   // id[], nickname[] 에다가 값 넣기
+            if(checkBundle != "" ) nickname_id_find(checkBundle);
 
             ((MainActivity)getActivity()).btn_search.setBackgroundResource(R.drawable.main_search);
             ((MainActivity)getActivity()).btn_list.setBackgroundResource(R.drawable.main_blue_back);
@@ -57,11 +57,9 @@ public class MainChatFragment extends Fragment {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView parent, View v, int position, long id){
-                    Log.d("cccccccccccccc","item clicked: "+myAdapter.getItem(position).getUserName()); //
+
                     ChatActivity chatActivity = new ChatActivity();
                     Intent intent = new Intent(getActivity(),chatActivity.getClass());
-                    //putExtra의 첫 값은 식별 태그, 뒤에는 다음 화면에 넘길 값(user nickname을 넘겨 줌)
-                    Log.d("lllllllllllllll","클릭에러발생");
 
                     ArrayList<String> userInfo = new ArrayList<String>(2);
                     userInfo.add(chatList.get(position).getUserName());

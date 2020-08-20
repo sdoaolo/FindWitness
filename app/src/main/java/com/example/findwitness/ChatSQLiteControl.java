@@ -28,10 +28,6 @@ public class ChatSQLiteControl {
         sqlite.insert(helper.TABLE_NAME,null,values);
 
     }
-    //DB select
-    public void select(){
-
-    }
 
     public void db_close(){
         sqlite.close();
