@@ -26,10 +26,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainSelectFragment extends Fragment {
 
-    ArrayList<GPSListViewItem> selectGpsList;
+    List<GPSListViewItem> selectGpsList;
     Boolean isDataExist;
     private CustomProgressDialog customProgressDialog;
 
@@ -41,7 +42,6 @@ public class MainSelectFragment extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vieww = inflater.inflate(R.layout.fragment_main_select, container, false);
         return inflater.inflate(R.layout.fragment_main_select, container, false);
     }
 

@@ -24,12 +24,10 @@ import java.util.List;
 public class MainChatFragment extends Fragment {
     String SearchInfoDate , SearchInfoTime,checkBundle;
     String nickname[], id[];
-    Boolean isNextSearch;
     List<ChatListViewItem> chatList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vieww = inflater.inflate(R.layout.fragment_main_chat, container, false);
         return inflater.inflate(R.layout.fragment_main_chat, container, false);
     }
 
@@ -38,10 +36,8 @@ public class MainChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TextView recent_list_date = view.findViewById(R.id.recent_list_date);
         TextView recent_list_time = view.findViewById(R.id.recent_list_time);
-        isNextSearch = false;
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
         if(bundle != null){
-            isNextSearch = true;
             SearchInfoDate = bundle.getString("SearchDate"); //search info : date
             SearchInfoTime = bundle.getString("SearchTime"); //search info : time
             checkBundle = bundle.getString("requireServer");

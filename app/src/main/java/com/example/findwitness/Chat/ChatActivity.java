@@ -46,7 +46,6 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -117,7 +116,7 @@ public class ChatActivity extends AppCompatActivity {
         fileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                doSelectMovie();
+                //doSelectMovie();
                 Log.d("ccccccccccccccc","click");
             }
         });
@@ -395,7 +394,7 @@ public class ChatActivity extends AppCompatActivity {
     private void scrollUp() { //리스트의 가장 마지막을 보여주도록 스크롤을 이동
         recyclerView.scrollToPosition(mAdapter.getItemCount()-1);
     }
-
+/*
     // 이미지 선택
     private void doSelectImage()
     {
@@ -482,7 +481,7 @@ public class ChatActivity extends AppCompatActivity {
                 .getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DISPLAY_NAME);
         cursor.moveToFirst();
         return cursor.getString(column_index);
-    }
+    }*/
 
     // uri 아이디 찾기
     private String getUriId(Uri uri) {
