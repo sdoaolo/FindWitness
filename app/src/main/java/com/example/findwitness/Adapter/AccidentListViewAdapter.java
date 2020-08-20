@@ -10,14 +10,14 @@ import android.widget.TextView;
 import com.example.findwitness.Item.AccidentListViewItem;
 import com.example.findwitness.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class AccidentListViewAdapter  extends BaseAdapter {
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
-    ArrayList<AccidentListViewItem> sample;
+    List<AccidentListViewItem> sample;
 
-    public AccidentListViewAdapter(Context context, ArrayList<AccidentListViewItem> data) {
+    public AccidentListViewAdapter(Context context, List<AccidentListViewItem> data) {
         mContext = context;
         sample = data;
         mLayoutInflater = LayoutInflater.from(mContext);

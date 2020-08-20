@@ -22,7 +22,8 @@ public class AccountSignUpFragment extends Fragment {
 
     Button signUn_Btn, email_same_check_Btn, nickname_same_check_Btn;
     EditText signUp_email, signUp_password, signUp_password_check, sighUp_Nickname;
-    String email, password="", password_check="", nickname, message = "", response = "", email_Check_Result = "false", nickname_Check_Result = "false", password_Check_Result = "false";
+    String email, password="", password_check="", nickname, message = "";
+    String response = "", email_Check_Result = "false", nickname_Check_Result = "false", password_Check_Result = "false";
     TextView password_check_result_Tv;
     private Context context;
 

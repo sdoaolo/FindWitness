@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.findwitness.Adapter.ChttingListVIewAdapter;
 import com.example.findwitness.Chat.ChatActivity;
-import com.example.findwitness.Chat.ChatApp;
 import com.example.findwitness.Item.ChattingListViewItem;
 
 import org.json.JSONException;
@@ -21,13 +20,14 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class MainChattingFragment extends Fragment {
-    ArrayList<ChattingListViewItem> chattingList=new ArrayList<ChattingListViewItem>();
+    List<ChattingListViewItem> chattingList=new ArrayList<ChattingListViewItem>();
     public static Socket mSocket;
     private String TAG = "-->>";
     private Boolean isConnected;
@@ -46,7 +46,6 @@ public class MainChattingFragment extends Fragment {
         mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.connect();
-        Log.d("lllllllllllll","connect 성공");
         mSocket.on(Socket.EVENT_CONNECT, onConnect); //MY_NICKNAME 이름 전달함.
         mSocket.emit("person");
         mSocket.on("person",onNewPerson);//사람들 값 받아오기.마지막메시지,시간,메시지갯수
@@ -54,12 +53,15 @@ public class MainChattingFragment extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_main_chatting, container, false);
         View vieww = inflater.inflate(R.layout.fragment_main_chatting, container, false);
         return inflater.inflate(R.layout.fragment_main_chatting, container, false);
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //listview
 
         ListView listView = view.findViewById(R.id.recent_list);
         final ChttingListVIewAdapter myAdapter = new ChttingListVIewAdapter(getActivity(),chattingList);
@@ -70,8 +72,6 @@ public class MainChattingFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id){
 
-
-                //((MainActivity)getActivity()).userNickName
                 ChatActivity chatActivity = new ChatActivity();
                 Intent intent = new Intent(getActivity(),chatActivity.getClass());
                 intent.putExtra("UserName", ((MainActivity)getActivity()).userNickName);

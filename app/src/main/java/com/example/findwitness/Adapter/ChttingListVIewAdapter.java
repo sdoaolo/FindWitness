@@ -10,14 +10,14 @@ import android.widget.TextView;
 import com.example.findwitness.Item.ChattingListViewItem;
 import com.example.findwitness.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ChttingListVIewAdapter  extends BaseAdapter {
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
-    ArrayList<ChattingListViewItem> sample;
+    List<ChattingListViewItem> sample;
 
-    public ChttingListVIewAdapter(Context context, ArrayList<ChattingListViewItem> data) {
+    public ChttingListVIewAdapter(Context context, List<ChattingListViewItem> data) {
         mContext = context;
         sample = data;
         mLayoutInflater = LayoutInflater.from(mContext);

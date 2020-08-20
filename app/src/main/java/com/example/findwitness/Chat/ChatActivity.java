@@ -131,7 +131,7 @@ public class ChatActivity extends AppCompatActivity {
         database = dbHelper.getReadableDatabase();
         toolbar = findViewById(R.id.my_toolbar);
 
-
+        Log.d("lllllllllllllll","toolbar");
         setSupportActionBar(toolbar);
         isConnected = false;
         chatting_opponent = (TextView) findViewById(R.id.chatting_opponent);
