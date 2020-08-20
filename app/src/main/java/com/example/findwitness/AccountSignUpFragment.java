@@ -26,9 +26,6 @@ public class AccountSignUpFragment extends Fragment {
     TextView password_check_result_Tv;
     private Context context;
 
-    String address = "192.168.0.88";
-    int port = Integer.parseInt("9999");
-
     public AccountSignUpFragment() {
         // Required empty public constructor
     }
@@ -48,16 +45,6 @@ public class AccountSignUpFragment extends Fragment {
         signUp_password_check = view.findViewById(R.id.signup_check_password);
         sighUp_Nickname = view.findViewById(R.id.signup_nickname);
         password_check_result_Tv = view.findViewById(R.id.TextView_password_check_result);
-
-        Toast.makeText(context, "w", Toast.LENGTH_SHORT).show();
-
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //socket_connect.connectSocket("test");
-                socket_connect.connectSocket("192.168.0.8", 9999);
-            }
-        }).start();*/
 
         email_same_check_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,23 +83,6 @@ public class AccountSignUpFragment extends Fragment {
                 }
             }
         });
-
-        /*signUp_email.addTextChangedListener(new TextWatcher() { 검사 뒤 다시 변경했을 경우 사용
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                email_Check_Result = "false";
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });*/
 
         nickname_same_check_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,9 +203,6 @@ public class AccountSignUpFragment extends Fragment {
                     if(response.equals("success") || response.equals("succes")){
                         Log.d("RRRRRRRRR", "GO TO SIGN IN");
                         Toast.makeText(context, "회원가입 성공", Toast.LENGTH_SHORT).show();
-                        /*((AccountActivity)getActivity()).fm = getActivity().getSupportFragmentManager();
-                        ((AccountActivity)getActivity()).fm .beginTransaction().remove(AccountSignUpFragment.this).commit();
-                        ((AccountActivity)getActivity()).fm.popBackStack();*/
                         ((AccountActivity) getActivity()).replaceFragment(((AccountActivity) getActivity()).signInFragment);
                         ((AccountActivity) getActivity()).txt.setText("SIGN IN");
                     }else if(response.equals("fail")){
@@ -244,11 +211,6 @@ public class AccountSignUpFragment extends Fragment {
                     }else{
                         Log.d("RRRRRRRRR", "SIGN UP FAIL ERROR");
                         Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                        /*signUp_email.setText("");
-                        signUp_password.setText("");
-                        signUp_password_check.setText("");
-                        sighUp_Nickname.setText("");*/
-
                     }
                 }
             }
@@ -269,13 +231,4 @@ public class AccountSignUpFragment extends Fragment {
             }
         }
     }
-/*
-    public void onClick(View view){
-        switch (view.getId()){
-            case R.id.signup_button:
-
-                break;
-        }
-    }
-*/
 }

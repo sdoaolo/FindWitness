@@ -59,7 +59,7 @@ public class MainAccidentFragment  extends Fragment {
             String accident_data = new String(readStr);
             traffic_accident_array = accident_data.split(";");
             for(int i = 0; i < traffic_accident_array.length; i++){
-                Log.d("kk", "trraffkc_accident_array["+i+"] : "+traffic_accident_array[i]);
+                Log.d("kk", "traffic_accident_array["+i+"] : "+traffic_accident_array[i]);
             }
         } catch (IOException e) {
             e.printStackTrace();
