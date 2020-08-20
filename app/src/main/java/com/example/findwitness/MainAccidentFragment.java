@@ -45,7 +45,7 @@ public class MainAccidentFragment  extends Fragment {
 
         loadItemsFromFile();
 
-        for(int i = 0; i < traffic_accident_array.length-1; i++){
+        for(int i = 0; i < traffic_accident_array.length; i++){
             accidentList.add(new AccidentListViewItem(traffic_accident_array[i]));
         }
     }
@@ -58,7 +58,7 @@ public class MainAccidentFragment  extends Fragment {
             is.close();
             String accident_data = new String(readStr);
             traffic_accident_array = accident_data.split(";");
-            for(int i = 0; i < traffic_accident_array.length-1; i++){
+            for(int i = 0; i < traffic_accident_array.length; i++){
                 Log.d("kk", "trraffkc_accident_array["+i+"] : "+traffic_accident_array[i]);
             }
         } catch (IOException e) {
