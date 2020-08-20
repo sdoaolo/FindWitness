@@ -1,25 +1,16 @@
 package com.example.findwitness;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -27,14 +18,14 @@ import androidx.fragment.app.FragmentTransaction;
 public class MainActivity extends AppCompatActivity {
     ImageButton btn_search;
     ImageButton btn_chat;
-    Button btn_gps;
-    Button btn_list;
+    Button btn_gps, btn_list, btn_accident;
     FragmentManager fragmentManager = getSupportFragmentManager();
     MainSearchFragment mainSearchFragment;
     MainChatFragment mainChatFragment;
     MainGPSFragment mainGPSFragment;
     MainChattingFragment mainChattingFragment;
     MainSelectFragment mainSelectFragment;
+    MainAccidentFragment mainAccidentFragment;
 
     String strWhite = "#FFFFFF";
     String strBlue = "#78A2DB";
@@ -56,12 +47,14 @@ public class MainActivity extends AppCompatActivity {
         btn_chat = findViewById(R.id.main_btn_chat);
         btn_gps = findViewById(R.id.main_btn_gps);
         btn_list = findViewById(R.id.main_btn_list);
+        btn_accident = findViewById(R.id.main_btn_accident);
 
         mainSearchFragment = new MainSearchFragment();
         mainChatFragment = new MainChatFragment();
         mainGPSFragment = new MainGPSFragment();
         mainChattingFragment = new MainChattingFragment();
         mainSelectFragment = new MainSelectFragment();
+        mainAccidentFragment = new MainAccidentFragment();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_frame, mainSearchFragment); //초기화면 설정
@@ -118,6 +111,18 @@ public class MainActivity extends AppCompatActivity {
                 btn_list.setTextColor(Color.parseColor(strBlue));
                 replaceFragment(mainGPSFragment);
                 break;
+            case R.id.main_btn_accident:
+                btn_search.setBackgroundResource(R.drawable.main_search);
+                btn_chat.setBackgroundResource(R.drawable.main_chat);
+                btn_gps.setBackgroundResource(R.drawable.main_white_back);
+                btn_gps.setTextColor(Color.parseColor(strBlue));
+                btn_list.setBackgroundResource(R.drawable.main_white_back);
+                btn_list.setTextColor(Color.parseColor(strBlue));
+                btn_accident.setBackgroundResource(R.drawable.main_blue_back);
+                btn_accident.setTextColor(Color.parseColor(strWhite));
+                replaceFragment(mainAccidentFragment);
+                break;
+
         }
     }
     public void replaceFragment(Fragment fragment) {

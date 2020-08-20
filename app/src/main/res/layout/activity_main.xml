@@ -19,7 +19,7 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:weightSum="4">
+        android:weightSum="5">
 
         <ImageButton
             android:id="@+id/main_btn_search"
@@ -52,6 +52,16 @@
             android:layout_weight="1"
             android:text="GPS"
             android:textSize="24dp"
+            android:textColor="#78A2DB"
+            android:background="@drawable/main_white_back"
+            android:onClick="onClick"/>
+        <Button
+            android:id="@+id/main_btn_accident"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="교통사고 통계"
+            android:textSize="18dp"
             android:textColor="#78A2DB"
             android:background="@drawable/main_white_back"
             android:onClick="onClick"/>

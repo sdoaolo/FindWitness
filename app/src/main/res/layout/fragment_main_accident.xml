@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/logo_accident"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/logo"
+        android:layout_marginBottom="10dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="교통사고 통계"
+        android:textSize="30dp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:id="@+id/text_statistics"
+        android:layout_below="@+id/logo_accident"
+        android:layout_marginBottom="5dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/textview4"
+        android:layout_below="@+id/text_statistics"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="연도"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:paddingLeft="10dp"
+            android:textColor="#FFFFFF"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사고"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textColor="#FFFFFF"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사망"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textColor="#FFFFFF"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 부상"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textColor="#FFFFFF"
+            />
+    </LinearLayout>
+    <FrameLayout
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/statistics_list"
+        android:layout_centerHorizontal="true"
+        android:background="#FFFFFF"
+        android:visibility="visible"
+        android:layout_below="@+id/textview4"
+        android:layout_marginBottom="20dp">
+
+        <ListView
+            android:id="@+id/statistics_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"/>
+
+    </FrameLayout>
+</RelativeLayout>
