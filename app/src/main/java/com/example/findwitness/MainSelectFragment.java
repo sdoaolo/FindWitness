@@ -133,6 +133,8 @@ public class MainSelectFragment extends Fragment {
     public void InitializeGpsData()
     {
         selectGpsList = new ArrayList<GPSListViewItem>();
+       // if(String)
+
         if(Search != ""){
             isDataExist = true;
             String search_ary[] = Search.split("\\|");
@@ -191,7 +193,8 @@ public class MainSelectFragment extends Fragment {
                         StringBuilder strBuilder = new StringBuilder();
                         String line = null;
                         while ((line = br.readLine()) != null) {
-                            strBuilder.append(line + "\n");
+                            line = line + "\n";
+                            strBuilder.append(line);
                         }
                         String temp = strBuilder.toString();
                         //서버에 응답받은 것을 핸들러로 전달

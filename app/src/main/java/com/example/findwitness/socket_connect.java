@@ -10,7 +10,6 @@ import java.net.Socket;
 
 public class socket_connect extends AppCompatActivity {
 
-
     static String response="";
     static InetSocketAddress sockAdr = null;
     static Socket socket = null;
@@ -147,8 +146,6 @@ public class socket_connect extends AppCompatActivity {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }finally{
-
         }
     }
 

@@ -26,17 +26,10 @@ public class AccountSignInFragment  extends Fragment {
     static String message = "", response = "";
     int pri_num = 0;
     String nickname = "";
-//    String address = "192.168.0.88";
-//    int port = Integer.parseInt("8888");
 
-    private boolean isFragmentSignIn = true ;
-    public AccountSignInFragment() {
-        // Required empty public constructor
-    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
-
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
     }
 

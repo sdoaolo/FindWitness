@@ -15,14 +15,14 @@ public class ChatSQLiteHelper extends SQLiteOpenHelper{
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "chat.db";
-    public final String TABLE_NAME = "chat";
-    public final String TID = "_id";
-    public final String SENDER = "sender";
-    public final String RCV = "rcv";
-    public final String SEND = "send";
-    public final String MESSAGE = "message";
-    public final String DATE = "date";
-    public final String TIME = "time";
+    public static final String TABLE_NAME = "chat";
+    public static final String TID = "_id";
+    public static final String SENDER = "sender";
+    public static final String RCV = "rcv";
+    public static final String SEND = "send";
+    public static final String MESSAGE = "message";
+    public static final String DATE = "date";
+    public static final String TIME = "time";
 
     public ChatSQLiteHelper(Context context, String name,
                             CursorFactory factory, int version) {

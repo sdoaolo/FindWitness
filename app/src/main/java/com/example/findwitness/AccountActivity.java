@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 public class AccountActivity  extends AppCompatActivity {
-    private boolean isFragmentSignIn = true ;
+    //private boolean isFragmentSignIn = true ;
     FragmentManager fm = getSupportFragmentManager();
     AccountSignInFragment signInFragment;
     AccountSignUpFragment signUpFragment;
@@ -42,7 +42,8 @@ public class AccountActivity  extends AppCompatActivity {
         }else {
             checkRunTimePermission();
         }
-        Intent intent=new Intent(this.getIntent());
+
+        //Intent intent=new Intent(this.getIntent());
 
         signInFragment = new AccountSignInFragment();
         txt = (TextView) findViewById(R.id.login_text);
@@ -185,13 +186,10 @@ public class AccountActivity  extends AppCompatActivity {
             case GPS_ENABLE_REQUEST_CODE:
 
                 //사용자가 GPS 활성 시켰는지 검사
-                if (checkLocationServicesStatus()) {
-                    if (checkLocationServicesStatus()) {
-
-                        Log.d("@@@", "onActivityResult : GPS 활성화 되있음");
-                        checkRunTimePermission();
-                        return;
-                    }
+                if (checkLocationServicesStatus() && checkLocationServicesStatus()) {
+                    Log.d("@@@", "onActivityResult : GPS 활성화 되있음");
+                    checkRunTimePermission();
+                    return;
                 }
 
                 break;
