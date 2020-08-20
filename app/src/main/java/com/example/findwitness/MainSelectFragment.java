@@ -50,6 +50,7 @@ public class MainSelectFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         GPSTracker gpsTracker = new GPSTracker(getActivity());
+        gpsTracker.getLocation();
 
         latitude = gpsTracker.getLatitude();
         longitude = gpsTracker.getLongitude();

@@ -207,7 +207,7 @@ public class MainGPSFragment extends Fragment {
         public Network_Thread(String[] parameter, int number) {
             this.parameter = parameter;
             this.num = number;
-        }
+        }    // 잠시 화장실 좀 갖다오겠습니다
         @Override
         public void run() {// 위도 경도, 날짜, 시간
             Log.d("네트워크 쓰레드 시작", "개수 : " + num);
@@ -338,6 +338,7 @@ public class MainGPSFragment extends Fragment {
     }
     public void gps_start(){
         GPSTracker gpsTracker = new GPSTracker(getActivity());
+        gpsTracker.getLocation();
 
         double latitude = gpsTracker.getLatitude();
         double longitude = gpsTracker.getLongitude();
