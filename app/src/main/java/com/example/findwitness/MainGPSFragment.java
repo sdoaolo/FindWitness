@@ -138,11 +138,12 @@ public class MainGPSFragment extends Fragment {
             public void onItemClick(AdapterView parent, View v, int position, long id){
                 Log.d("ssssssssssss","삭제 할건지 물어보는 곳");
                 time = gpsList.get(position).getTime();
-                show_delete();
+                show_delete(view);
             }
         });
     }
-    private void show_delete() {
+    private void show_delete(View view) {
+        final View v = view;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("내 저장소에 있는 gps 데이터 수정");
         builder.setMessage("해당 데이터를 삭제하시겠습니까?");
@@ -152,6 +153,7 @@ public class MainGPSFragment extends Fragment {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
                 Delete();
+                update(v);
                 Toast.makeText(getActivity(),"삭제되었습니다.",Toast.LENGTH_SHORT).show();
             }
         });
@@ -164,6 +166,8 @@ public class MainGPSFragment extends Fragment {
         builder.create().show();
     }
     public void Delete(){
+        time = time.substring(0,2) + time.substring(3,5) + time.substring(6,8);
+        Log.d("delete", "삭제할 데이터 : " + time);
         db.execSQL("DELETE FROM gps WHERE _TIME = '" + time + "';");
     }
     public boolean checkLocationServicesStatus() {
