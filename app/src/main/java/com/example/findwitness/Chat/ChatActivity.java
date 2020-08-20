@@ -46,6 +46,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,7 +63,7 @@ public class ChatActivity extends AppCompatActivity {
     private String YOU_NICKNAME = "지혜";
 
     //고유번호 >> 채팅방이름에 이용
-    private int MY_NUM = 4;
+    /*private int MY_NUM = 4;*/
     private int YOU_NUM = 1;
     private String CHAT_ROOM_NAME;
 
@@ -78,8 +79,8 @@ public class ChatActivity extends AppCompatActivity {
     private static final int TIMER = 500;
     private static final int REQUEST_CODE = 0;
 
-    private final int SELECT_IMAGE = 1;
-    private final int SELECT_MOVIE = 2;
+    private final static int SELECT_IMAGE = 1;
+    private final static int SELECT_MOVIE = 2;
 
     Toolbar toolbar;
     TextView chatting_opponent;
@@ -91,8 +92,6 @@ public class ChatActivity extends AppCompatActivity {
     private ChatSQLiteHelper dbHelper;
     String dbName = "chat.db";
     String tag = "SQLite"; // Log 에 사용할 tag (DB용)
-    db_handler handler = new db_handler();
-
 
     SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd"); //날짜
     SimpleDateFormat format2 = new SimpleDateFormat("HH:mm:ss"); //시간
@@ -109,6 +108,8 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         ArrayList<String> userInfo = (ArrayList<String>) intent.getSerializableExtra("userinfo");
+        String MY_NICKNAME;
+        int MY_NUM;
         MY_NICKNAME = userInfo.get(0);
         MY_NUM = Integer.parseInt(userInfo.get(1));
 
@@ -138,7 +139,7 @@ public class ChatActivity extends AppCompatActivity {
         chatting_opponent = (TextView) findViewById(R.id.chatting_opponent);
         chatting_opponent.setText("INPUT STRING"); //INPUT USER NICKNAME STRING
 
-        if(MY_NUM>YOU_NUM){
+        if(MY_NUM > YOU_NUM){
             CHAT_ROOM_NAME = YOU_NUM+"&"+MY_NUM ;
         }else {
             CHAT_ROOM_NAME = MY_NUM + "&"+YOU_NUM;
@@ -370,45 +371,6 @@ public class ChatActivity extends AppCompatActivity {
         }
     };
 
-
-    private Emitter.Listener onSave = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-
-            Log.w(TAG, "onSave");
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0]; //상대방 채팅창 참가
-                    String username = null;
-                    String message = null;
-                    try {
-                        username = data.getString("username"); //메시지 보낸 사람
-                        message = data.getString("message"); //메시지 내용
-                    } catch (JSONException e) {
-                        Log.e(TAG, e.getMessage());
-                        e.printStackTrace();
-                    }
-                    Log.d("LLLLLLLLLLLLLL:onsave",username);
-
-                    addMessage(username, message, Message.TYPE_MESSAGE_RECEIVED);//받은 메시지
-                    sqlite.insert(username, 1, 0, message, date, time);
-                    Log.d(tag, "insert 성공~!");
-                }
-            });
-        }
-    };
-
-
-
-    private void addLog(String message) {
-        //messageList.add(new Message(Message.TYPE_LOG, message));
-        //messageList.add(new Message(Message.TYPE_LOG, "0" ,message));
-        //mAdapter.notifyDataSetChanged();
-        //mAdapter.notifyItemInserted(messageList.size());
-        //scrollUp();
-    }
-
     private void addMessage(String username, String message, int messageType) {
         messageList.add(new Message(messageType, username, message));
         Log.d("이름이 왜 아느ㄸ지",username);
@@ -484,7 +446,7 @@ public class ChatActivity extends AppCompatActivity {
             if (requestCode == SELECT_IMAGE)
             {
                 Uri uri = intent.getData();
-                String path = getPath(uri);
+                String path = getRealPathFromURI(uri);
                 String name = getName(uri);
                 String uriId = getUriId(uri);
                 Log.d("###", "실제경로 : " + path + "\n파일명 : " + name + "\nuri : " + uri.toString() + "\nuri id : " + uriId);
@@ -492,7 +454,8 @@ public class ChatActivity extends AppCompatActivity {
             else if (requestCode == SELECT_MOVIE)
             {
                 Uri uri = intent.getData();
-                String path = getPath(uri);
+               // String path = FileUtils.getPath(this,uri);
+                String path = uri.getPath();
                 String name = getName(uri);
                 String uriId = getUriId(uri);
                 Log.d("###", "실제경로 : " + path + "\n파일명 : " + name + "\nuri : " + uri.toString() + "\nuri id : " + uriId);
@@ -501,18 +464,27 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     // 실제 경로 찾기
-    private String getPath(Uri uri)
-    {
+    private String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+    public String getRealPathFromURI(Uri contentUri) {
 
+        String[] proj = { MediaStore.Images.Media.DATA };
+
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        cursor.moveToNext();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+        Uri uri = Uri.fromFile(new File(path));
+
+        cursor.close();
+        return path;
+    }
     // 파일명 찾기
-    private String getName(Uri uri)
-    {
+    private String getName(Uri uri) {
         String[] projection = { MediaStore.Images.ImageColumns.DISPLAY_NAME };
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         int column_index = cursor
@@ -522,13 +494,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     // uri 아이디 찾기
-    private String getUriId(Uri uri)
-    {
+    private String getUriId(Uri uri) {
         String[] projection = { MediaStore.Images.ImageColumns._ID };
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns._ID);
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
-
 }

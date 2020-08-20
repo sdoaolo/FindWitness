@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class MainChatFragment extends Fragment {
     String SearchInfoDate , SearchInfoTime,checkBundle;
     String nickname[], id[];
-    Boolean isNextSearch = false;
+    Boolean isNextSearch;
     int num = 0;        // 목격자가 몇명인지 정보가 담겨있다.
     ArrayList<ChatListViewItem> chatList;
     public MainChatFragment() {
@@ -40,7 +40,7 @@ public class MainChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TextView recent_list_date = view.findViewById(R.id.recent_list_date);
         TextView recent_list_time = view.findViewById(R.id.recent_list_time);
-
+        isNextSearch = false;
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
         if(bundle != null){
             isNextSearch = true;
@@ -48,10 +48,7 @@ public class MainChatFragment extends Fragment {
             SearchInfoTime = bundle.getString("SearchTime"); //search info : time
             checkBundle = bundle.getString("requireServer");
             nickname_id_find(checkBundle);   // id[], nickname[] 에다가 값 넣기
-            for(int i=0; i<num; i++){    //값 잘 들어갔나 확인용 필요없으면 지워주세요
-                Log.d("값 : ", "id[" + i + "] : " + id[i]);
-                Log.d("값 : ", "nickname[" + i + "] : " + nickname[i]);
-            }
+
             ((MainActivity)getActivity()).btn_search.setBackgroundResource(R.drawable.main_search);
             ((MainActivity)getActivity()).btn_list.setBackgroundResource(R.drawable.main_blue_back);
             ((MainActivity)getActivity()).btn_list.setTextColor(Color.parseColor(((MainActivity)getActivity()).strWhite));
@@ -80,7 +77,6 @@ public class MainChatFragment extends Fragment {
                 }
             });
         }
-        //please set Text View of Recent List Info (date, time)
     }
     public void InitializeMovieData(int size, String[] nicknames, String[]ids)
     {

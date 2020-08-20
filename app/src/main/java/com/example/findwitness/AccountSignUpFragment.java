@@ -26,12 +26,6 @@ public class AccountSignUpFragment extends Fragment {
     TextView password_check_result_Tv;
     private Context context;
 
-    String address = "192.168.0.88";
-    int port = Integer.parseInt("9999");
-
-    public AccountSignUpFragment() {
-        // Required empty public constructor
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = container.getContext();

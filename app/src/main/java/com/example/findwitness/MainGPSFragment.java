@@ -53,22 +53,16 @@ public class MainGPSFragment extends Fragment {
     private static final int NET_FINISH = 2;
     Network_handler NET_handler;
     boolean server_net_start = false;
-    int authority = 0;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     //데이터 베이스 만들기
     String time = "";
     private SQLiteDatabase db;
-    private GPSdatabaseHelper dbHelper;
+
     //private final String id_my = Integer.toString(((MainActivity)getActivity()).priNum);
 
     ArrayList<GPSListViewItem> gpsList;
 
     //private GpsTracker gpsTracker;
-
-
-    public MainGPSFragment() {
-        // Required empty public constructor
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_gps, container, false);
@@ -83,11 +77,10 @@ public class MainGPSFragment extends Fragment {
         btn_list = view.findViewById(R.id.btn_list);
         btn_combine = view.findViewById(R.id.btn_combine);
 
-        // 데이터베이스 생성
-        boolean isOpen = openDatabase();
-        if(!isOpen) {
-            //Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
-        }
+        GPSdatabaseHelper dbHelper;
+        dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
+        db = dbHelper.getWritableDatabase();
+
         NET_handler = new Network_handler();
         this.InitializeData();
         ListView listView = view.findViewById(R.id.gps_list);
@@ -103,7 +96,7 @@ public class MainGPSFragment extends Fragment {
                 if(checkLocationServicesStatus()){
                     handler.sendEmptyMessage(MESSAGE_START);
                     //NET_handler.sendEmptyMessage(NET_START);
-                    server_net_start = true;
+                    server_net_start = true; //이거 관련 UrF는 건들지 말 것!
                 }
                 else showDialogForLocationServiceSetting();
             }
@@ -113,7 +106,7 @@ public class MainGPSFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("RRRRRRRRR","finish");
                 handler.removeMessages(MESSAGE_START);
-                //if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
+                //이거 관련 UrF는 건들지 말 것! //if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
                 Toast.makeText(getActivity(),"Thread is stop",Toast.LENGTH_SHORT).show();
             }
         });
@@ -255,7 +248,8 @@ public class MainGPSFragment extends Fragment {
                         StringBuilder strBuilder = new StringBuilder();
                         String line = null;
                         while ((line = br.readLine()) != null) {
-                            strBuilder.append(line + "\n");
+                            line = line + "\n";
+                            strBuilder.append(line);
                         }
                         String temp = strBuilder.toString();
                         Log.d("응답", temp);
@@ -416,11 +410,7 @@ public class MainGPSFragment extends Fragment {
         return time_make;
     }
     //데이터 베이스
-    private boolean openDatabase(){
-        dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
-        db = dbHelper.getWritableDatabase();
-        return true;
-    }
+
     public void insertRecord(String latitude, String longitude, String data, String time) {
         latitude = String_to_seven(latitude);
         longitude = String_to_seven(longitude);
