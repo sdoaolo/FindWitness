@@ -91,8 +91,6 @@ public class MainGPSFragment extends Fragment {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("RRRRRRRRR","start");
-
                 if(checkLocationServicesStatus()){
                     handler.sendEmptyMessage(MESSAGE_START);
                     //NET_handler.sendEmptyMessage(NET_START);

@@ -26,9 +26,7 @@ public class MainChatFragment extends Fragment {
     Boolean isNextSearch;
     int num = 0;        // 목격자가 몇명인지 정보가 담겨있다.
     ArrayList<ChatListViewItem> chatList;
-    public MainChatFragment() {
-        // Required empty public constructor
-    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_chat, container, false);

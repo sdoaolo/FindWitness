@@ -72,7 +72,7 @@ public class ChatActivity extends AppCompatActivity {
     public static Socket mSocket;
     private ChatApp app;
     private Boolean isConnected;
-    private String TAG = "-->>";
+    static final private String TAG = "-->>";
     private RecyclerView recyclerView;
     private MessageAdapter mAdapter;
     private List<Message> messageList;
@@ -243,11 +243,11 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (MY_NICKNAME == null)
-                    return;
+                {return;}
                 if (!mSocket.connected())
-                    return;
+                {return;}
                 if (TextUtils.isEmpty(editMessage.getText()))
-                    return;
+                {return;}
 
                 //typingHandler.removeCallbacks(onTypingTimeout);
                 //typingHandler.postDelayed(onTypingTimeout, TIMER);
@@ -380,7 +380,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void attemptSend() { //메시지 쓰고 보냅니다.
-        if (MY_NICKNAME == null) return;
+        if (MY_NICKNAME == null) {return;}
         if (!mSocket.connected()) return;
         String message = editMessage.getText().toString().trim(); //trim: 문자열 공백 제거
 
