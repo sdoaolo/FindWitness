@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
                 btn_accident.setTextColor(Color.parseColor(strWhite));
                 replaceFragment(mainAccidentFragment);
                 break;
-
         }
     }
     public void replaceFragment(Fragment fragment) {
