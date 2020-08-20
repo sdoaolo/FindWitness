@@ -145,7 +145,7 @@ public class MainGPSFragment extends Fragment {
     private void show_delete(View view) {
         final View v = view;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("내 저장소에 있는 gps 데이터 수정");
+        builder.setTitle("내 저장소에 있는 gps 데이터 삭제");
         builder.setMessage("해당 데이터를 삭제하시겠습니까?");
         builder.setCancelable(true);
         builder.setPositiveButton("네", new DialogInterface.OnClickListener() {

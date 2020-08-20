@@ -30,13 +30,13 @@
 
     <Button
         android:id="@+id/btn_combine"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/gps_text"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/main_list"
+        android:background="#00000000"
         android:onClick="onClick"
-        android:text="서버에 한꺼번에 보내기"
+        android:text=""
         android:textColor="#FFFFFF"
         android:textSize="10dp" />
 
