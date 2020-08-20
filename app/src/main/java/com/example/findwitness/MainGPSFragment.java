@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -59,6 +60,7 @@ public class MainGPSFragment extends Fragment {
     int authority = 0;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     //데이터 베이스 만들기
+    String time = "";
     private SQLiteDatabase db;
     private GPSdatabaseHelper dbHelper;
     //private final String id_my = Integer.toString(((MainActivity)getActivity()).priNum);
@@ -135,6 +137,38 @@ public class MainGPSFragment extends Fragment {
                 NET_handler.sendEmptyMessage(NET_START);
             }
         });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView parent, View v, int position, long id){
+                Log.d("ssssssssssss","삭제 할건지 물어보는 곳");
+                time = gpsList.get(position).getTime();
+                show_delete();
+            }
+        });
+    }
+    private void show_delete() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("내 저장소에 있는 gps 데이터 수정");
+        builder.setMessage("해당 데이터를 삭제하시겠습니까?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                Delete();
+                Toast.makeText(getActivity(),"삭제되었습니다.",Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        builder.create().show();
+    }
+    public void Delete(){
+        db.execSQL("DELETE FROM gps WHERE _TIME = '" + time + "';");
     }
     public boolean checkLocationServicesStatus() {
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
