@@ -19,7 +19,7 @@ public class AccountSignInFragment  extends Fragment {
     EditText Edt_login, Edt_pw;
     String input_id, input_password;
     static String message = "", response = "";
-    int pri_num = 0;
+    static int pri_num = 0;
     String nickname = "";
 
     private boolean isFragmentSignIn = true ;
@@ -94,7 +94,7 @@ public class AccountSignInFragment  extends Fragment {
                             pri_num = Integer.parseInt(res[1]);
                             nickname = res[2];
 
-                            Log.d("RRRRRRRRR","로그인 성공"+pri_num+","+nickname);
+                            Log.d("RRRRRRRRR","로그인 성공,"+pri_num+","+nickname);
                             Intent intent=new Intent(((AccountActivity)getActivity()),MainActivity.class);
                             intent.putExtra("pri_num", pri_num);
                             intent.putExtra("nickname", nickname);

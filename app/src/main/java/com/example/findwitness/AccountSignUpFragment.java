@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.Thread.sleep;
 
@@ -45,6 +50,9 @@ public class AccountSignUpFragment extends Fragment {
         signUp_password_check = view.findViewById(R.id.signup_check_password);
         sighUp_Nickname = view.findViewById(R.id.signup_nickname);
         password_check_result_Tv = view.findViewById(R.id.TextView_password_check_result);
+
+        final String pwPattern = "^(?=.*\\d)(?=.*[~`!@#$%\\^&*()-])(?=.*[a-z])(?=.*[A-Z]).{9,12}$";
+        final String pwPattern_two = "(.)\\1\\1\\1";
 
         email_same_check_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,11 +133,30 @@ public class AccountSignUpFragment extends Fragment {
         signUp_password.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //password = signUp_password.getText().toString();
+
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Matcher matcher = Pattern.compile(pwPattern).matcher(password);
+                Matcher matcher_two = Pattern.compile(pwPattern_two).matcher(password);
+
+                if(!matcher.matches()){
+                    password_check_result_Tv.setText("영문(대소문자 구분), 숫자, 특수문자를 조합하여주세요.");
+                    password_check_result_Tv.setTextColor(Color.parseColor("#FF0000"));
+                    password_Check_Result = "false";
+                }else if(matcher.matches()){
+                    password_check_result_Tv.setText("조건을 만족하였습니다.");
+                    password_check_result_Tv.setTextColor(Color.parseColor("#00FF00"));
+                    password_Check_Result = "true";
+                }
+
+                if(matcher_two.find()){
+                    password_check_result_Tv.setText("같은 문자를 4개이상 사용하실 수 없습니다.");
+                    password_check_result_Tv.setTextColor(Color.parseColor("#FF0000"));
+                    password_Check_Result = "false";
+                }
+
                 if(!password_check.equals("")){
                     password_equal_check();
                 }
@@ -147,7 +174,7 @@ public class AccountSignUpFragment extends Fragment {
         signUp_password_check.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //password_check = signUp_password_check.getText().toString();
+
             }
 
             @Override
@@ -231,4 +258,5 @@ public class AccountSignUpFragment extends Fragment {
             }
         }
     }
+
 }
