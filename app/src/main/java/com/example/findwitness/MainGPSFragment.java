@@ -253,6 +253,8 @@ public class MainGPSFragment extends Fragment {
                         }
                         String temp = strBuilder.toString();
                         Log.d("응답", temp);
+                        is.close();
+                        isr.close();
                         br.close();
                         conn.disconnect();
                     }

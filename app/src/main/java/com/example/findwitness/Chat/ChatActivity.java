@@ -202,7 +202,7 @@ public class ChatActivity extends AppCompatActivity {
                 });
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("Exception error", e.getMessage());
             }
         }
     }
@@ -242,12 +242,15 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (MY_NICKNAME == null)
-                {return;}
-                if (!mSocket.connected())
-                {return;}
-                if (TextUtils.isEmpty(editMessage.getText()))
-                {return;}
+                if (MY_NICKNAME == null) {
+                    return;
+                }
+                if (!mSocket.connected()) {
+                    return;
+                }
+                if (TextUtils.isEmpty(editMessage.getText())) {
+                    return;
+                }
 
                 //typingHandler.removeCallbacks(onTypingTimeout);
                 //typingHandler.postDelayed(onTypingTimeout, TIMER);
@@ -325,8 +328,7 @@ public class ChatActivity extends AppCompatActivity {
                         username = data.getString("username"); //메시지 보낸 사람
                         message = data.getString("message"); //메시지 내용
                     } catch (JSONException e) {
-                        Log.e(TAG, e.getMessage());
-                        e.printStackTrace();
+                        Log.e("JONException", e.getMessage());
                     }
                     Log.d("222222222222",username);
 
@@ -380,8 +382,12 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void attemptSend() { //메시지 쓰고 보냅니다.
-        if (MY_NICKNAME == null) {return;}
-        if (!mSocket.connected()) return;
+        if (MY_NICKNAME == null) {
+            return;
+        }
+        if (!mSocket.connected()) {
+            return;
+        }
         String message = editMessage.getText().toString().trim(); //trim: 문자열 공백 제거
 
         if (TextUtils.isEmpty(message)) { //메시지가 비어있지 않으면 editMessage로 focuss
@@ -417,7 +423,8 @@ public class ChatActivity extends AppCompatActivity {
             startActivityForResult(i, SELECT_IMAGE);
         } catch (android.content.ActivityNotFoundException e)
         {
-            e.printStackTrace();
+
+            Log.e("ActivityNotFoundException error", e.getMessage());
         }
     }
 
@@ -432,7 +439,7 @@ public class ChatActivity extends AppCompatActivity {
             startActivityForResult(i, SELECT_MOVIE);
         } catch (android.content.ActivityNotFoundException e)
         {
-            e.printStackTrace();
+            Log.e("ActivityNotFoundException error", e.getMessage());
         }
     }
 

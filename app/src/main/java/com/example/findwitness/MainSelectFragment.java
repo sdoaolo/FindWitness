@@ -208,6 +208,8 @@ public class MainSelectFragment extends Fragment {
                         handler.sendMessage(message);
 
                         Log.d("응답", temp);
+                        is.close();
+                        isr.close();
                         br.close();
                         conn.disconnect();
                     }
