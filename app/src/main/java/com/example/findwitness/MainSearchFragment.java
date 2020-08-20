@@ -28,7 +28,6 @@ import java.util.Locale;
 public class MainSearchFragment extends Fragment {
     //데이터베이스 생성
     private SQLiteDatabase db;
-    private GPSdatabaseHelper dbHelper;
     String date, time, Search = "", num;
 
     Button btnDate, btnTime,btnApply,btnSearch ;
@@ -49,7 +48,7 @@ public class MainSearchFragment extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_search, container, false);
+        View vieww = inflater.inflate(R.layout.fragment_main_search, container, false);
         return inflater.inflate(R.layout.fragment_main_search, container, false);
     }
 
@@ -73,7 +72,7 @@ public class MainSearchFragment extends Fragment {
         appliedDateText.setText("Aplied Date : "+dt);
 
         //데이터베이스 열기
-        dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
+        GPSdatabaseHelper dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
         db = dbHelper.getWritableDatabase();
 
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),

@@ -46,7 +46,7 @@ public class MainGPSFragment extends Fragment {
     Button btn_finish;
     Button btn_list;
     Button btn_combine;
-
+    //핸들러
     GPS_handler handler = new GPS_handler();
     private static final int MESSAGE_START = 1;
     private static final int NET_START = 1;
@@ -64,7 +64,7 @@ public class MainGPSFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_gps, container, false);
+        View vieww = inflater.inflate(R.layout.fragment_main_gps, container, false);
         return inflater.inflate(R.layout.fragment_main_gps, container, false);
     }
 

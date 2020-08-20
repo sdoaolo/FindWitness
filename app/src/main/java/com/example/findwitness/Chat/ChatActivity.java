@@ -68,7 +68,7 @@ public class ChatActivity extends AppCompatActivity {
     private String CHAT_ROOM_NAME;
 
     private EditText editMessage;
-    private Button sendButton;
+
     public static Socket mSocket;
     private ChatApp app;
     private Boolean isConnected;
@@ -76,8 +76,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MessageAdapter mAdapter;
     private List<Message> messageList;
-    private static final int TIMER = 500;
-    private static final int REQUEST_CODE = 0;
+
 
     private final static int SELECT_IMAGE = 1;
     private final static int SELECT_MOVIE = 2;
@@ -89,7 +88,7 @@ public class ChatActivity extends AppCompatActivity {
     //데이터 베이스
     SQLiteDatabase database;
     ChatSQLiteControl sqlite;
-    private ChatSQLiteHelper dbHelper;
+
     String dbName = "chat.db";
     String tag = "SQLite"; // Log 에 사용할 tag (DB용)
 
@@ -127,14 +126,13 @@ public class ChatActivity extends AppCompatActivity {
         Log.d("hhhhhhhhhhhhhh","userNickName: "+MY_NICKNAME);
         Log.d("hhhhhhhhhhhhhh","MY_NUM : "+MY_NUM);
 
-        dbHelper = new ChatSQLiteHelper(this, dbName, null, 1);
+        ChatSQLiteHelper dbHelper = new ChatSQLiteHelper(this, dbName);
         sqlite = new ChatSQLiteControl(dbHelper);
         database = dbHelper.getReadableDatabase();
         toolbar = findViewById(R.id.my_toolbar);
 
         Log.d("lllllllllllllll","toolbar");
         setSupportActionBar(toolbar);
-        Log.d("lllllllllllllll","toolbar2");
         isConnected = false;
         chatting_opponent = (TextView) findViewById(R.id.chatting_opponent);
         chatting_opponent.setText("INPUT STRING"); //INPUT USER NICKNAME STRING
@@ -146,17 +144,13 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         app = new ChatApp();
-        Log.d("LLLLLLLLL", "appt");
 
 
         initializeSocket();
         mSocket.connect();
         mSocket.on(Socket.EVENT_CONNECT, onConnect); //MY_NICKNAME 이름 전달함.
-        //mSocket.on(Socket.EVENT_CONNECT, onConnect); //MY_NICKNAME 이름 전달함.
-        Log.d("LLLLLLLLL", "mSocket.connect");
-        //mSocket.emit("chat room name", CHAT_ROOM_NAME); //서버DB에서 못받은 메시지 받기 위해
         mSocket.on("login", onLogin);
-        //mSocket.on("login2", onSave); //환영 인사 + 날짜 표시(흠..옮겨야 할 것 같긴헌디큐큐..)
+
 
 
         setUpUI();
@@ -177,7 +171,7 @@ public class ChatActivity extends AppCompatActivity {
                     public void run() {
                         String sql = "select * from chat where sender=" + "\'" + YOU_NICKNAME + "\'";
                         Cursor cursor = database.rawQuery(sql, null);
-                        int size=cursor.getCount();
+
                         if (cursor.moveToFirst() != false) {
                             while (cursor.moveToNext()) {
                                 int rcv = cursor.getInt(2);//rcv값 뽑기
@@ -194,10 +188,10 @@ public class ChatActivity extends AppCompatActivity {
                                         addMessage(MY_NICKNAME, message, Message.TYPE_MESSAGE_SENT);
                                     }
                                 }
-                                    //mAdapter.notifyDataSetChanged();
+
 
                             }
-                        } //handler.sendEmptyMessage(0);
+                        }
                     }
                 });
 
@@ -211,18 +205,8 @@ public class ChatActivity extends AppCompatActivity {
         mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on("new message", onNewMessage);
-        //mSocket.on("login2", onSave);
 
     }
-
-    class db_handler extends Handler {
-        @Override
-        public void handleMessage(@NonNull android.os.Message msg) {
-            setUpUI();
-        }
-    }
-
-
     public void setUpUI() {
         messageList = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -232,7 +216,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         editMessage = (EditText) findViewById(R.id.editMessage);
-        sendButton = (Button) findViewById(R.id.sendButton);
+        Button sendButton = (Button) findViewById(R.id.sendButton);
 
         editMessage.addTextChangedListener(new TextWatcher() {
             @Override

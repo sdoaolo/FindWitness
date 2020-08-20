@@ -15,9 +15,10 @@ import com.example.findwitness.Item.AccidentListViewItem;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainAccidentFragment  extends Fragment {
-    ArrayList<AccidentListViewItem> accidentList;
+    List<AccidentListViewItem> accidentList;
     String [] traffic_accident_array;
 
     public MainAccidentFragment() {

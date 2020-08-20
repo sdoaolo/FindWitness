@@ -24,9 +24,8 @@ public class ChatSQLiteHelper extends SQLiteOpenHelper{
     public static final String DATE = "date";
     public static final String TIME = "time";
 
-    public ChatSQLiteHelper(Context context, String name,
-                            CursorFactory factory, int version) {
-        super(context, name, factory, 1);
+    public ChatSQLiteHelper(Context context, String name) {
+        super(context, name, null, 1);
     }
 
     @Override

@@ -41,7 +41,7 @@ public class MainSelectFragment extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_select, container, false);
+        View vieww = inflater.inflate(R.layout.fragment_main_select, container, false);
         return inflater.inflate(R.layout.fragment_main_select, container, false);
     }
 
@@ -127,7 +127,7 @@ public class MainSelectFragment extends Fragment {
     {
         selectGpsList = new ArrayList<GPSListViewItem>();
 
-        if(Search != ""){
+        if(!Search.equals("")){
             isDataExist = true;
             String search_ary[] = Search.split("\\|");
             int search_num = Integer.parseInt(num);
@@ -184,7 +184,8 @@ public class MainSelectFragment extends Fragment {
                         BufferedReader br = new BufferedReader(isr);
                         StringBuilder strBuilder = new StringBuilder();
                         String line = null;
-                        while ((line = br.readLine()) != null) {
+
+                        while ( !(line = br.readLine()).equals(null)) {
                             line = line + "\n";
                             strBuilder.append(line);
                         }
