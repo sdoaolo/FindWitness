@@ -26,10 +26,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainSelectFragment extends Fragment {
 
-    ArrayList<GPSListViewItem> selectGpsList;
+    List<GPSListViewItem> selectGpsList;
     Boolean isDataExist;
     private CustomProgressDialog customProgressDialog;
 
@@ -42,7 +43,6 @@ public class MainSelectFragment extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_select, container, false);
         return inflater.inflate(R.layout.fragment_main_select, container, false);
     }
 
@@ -169,9 +169,7 @@ public class MainSelectFragment extends Fragment {
                 URL url = new URL("https://192.168.0.4:8080/servelet/login");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                Log.i("쓰레드", "접속시도");
                 if (conn != null) {
-                    Log.i("쓰레드", "접속성공");
                     conn.setConnectTimeout(10000);
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -197,13 +195,14 @@ public class MainSelectFragment extends Fragment {
                         StringBuilder strBuilder = new StringBuilder();
                         String line = null;
 
-                        while ( !(line = br.readLine()).equals(null)) {
+                        //!(line = br.readLine()).equals(null)
+                        while ( (line = br.readLine())!= null) {
                             line = line + "\n";
                             strBuilder.append(line);
                         }
                         String temp = strBuilder.toString();
                         //서버에 응답받은 것을 핸들러로 전달
-                        if(temp == "") temp = "2:so,7:tired,";
+                        if(temp.equals("")) temp = "2:so,7:tired,";
                         bundle.putString("account_list", temp);
                         message.setData(bundle);
                         handler.sendMessage(message);

@@ -65,7 +65,6 @@ public class MainGPSFragment extends Fragment {
     //private GpsTracker gpsTracker;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_gps, container, false);
         return inflater.inflate(R.layout.fragment_main_gps, container, false);
     }
 
