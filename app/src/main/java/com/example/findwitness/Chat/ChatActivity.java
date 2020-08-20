@@ -72,7 +72,7 @@ public class ChatActivity extends AppCompatActivity {
     public static Socket mSocket;
     private ChatApp app;
     private Boolean isConnected;
-    private String TAG = "-->>";
+    static final private String TAG = "-->>";
     private RecyclerView recyclerView;
     private MessageAdapter mAdapter;
     private List<Message> messageList;
@@ -177,7 +177,6 @@ public class ChatActivity extends AppCompatActivity {
                     public void run() {
                         String sql = "select * from chat where sender=" + "\'" + YOU_NICKNAME + "\'";
                         Cursor cursor = database.rawQuery(sql, null);
-                        int size=cursor.getCount();
                         if (cursor.moveToFirst() != false) {
                             while (cursor.moveToNext()) {
                                 int rcv = cursor.getInt(2);//rcv값 뽑기

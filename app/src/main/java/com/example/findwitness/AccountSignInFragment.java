@@ -73,7 +73,6 @@ public class AccountSignInFragment  extends Fragment {
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // 로그인 버튼 클릭
-                Log.d("RRRRRRRRR","GoToMain");
                 input_id = Edt_login.getText().toString();
                 input_password = Edt_pw.getText().toString();
                 input_password = Hashing.hashing(input_password);

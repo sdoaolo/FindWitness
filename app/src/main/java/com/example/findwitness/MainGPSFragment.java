@@ -60,7 +60,7 @@ public class MainGPSFragment extends Fragment {
 
     //private final String id_my = Integer.toString(((MainActivity)getActivity()).priNum);
 
-    ArrayList<GPSListViewItem> gpsList;
+    List<GPSListViewItem> gpsList;
 
     //private GpsTracker gpsTracker;
     @Override
@@ -91,8 +91,6 @@ public class MainGPSFragment extends Fragment {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("RRRRRRRRR","start");
-
                 if(checkLocationServicesStatus()){
                     handler.sendEmptyMessage(MESSAGE_START);
                     //NET_handler.sendEmptyMessage(NET_START);

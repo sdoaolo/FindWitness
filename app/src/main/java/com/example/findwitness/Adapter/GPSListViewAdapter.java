@@ -10,14 +10,14 @@ import android.widget.TextView;
 import com.example.findwitness.Item.GPSListViewItem;
 import com.example.findwitness.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class GPSListViewAdapter  extends BaseAdapter {
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
-    ArrayList<GPSListViewItem> sample;
+    List<GPSListViewItem> sample;
 
-    public GPSListViewAdapter(Context context, ArrayList<GPSListViewItem> data) {
+    public GPSListViewAdapter(Context context, List<GPSListViewItem> data) {
         mContext = context;
         sample = data;
         mLayoutInflater = LayoutInflater.from(mContext);
