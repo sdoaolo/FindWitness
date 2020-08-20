@@ -82,7 +82,7 @@ public class MainSelectFragment extends Fragment {
 
                 if(isDataExist) {
                     String temp_data = data_format(selectGpsList.get(position).getLongitude(),selectGpsList.get(position).getLatitude(),timeResult,dateResult);
-                    //서버와 통신
+
                     Thread thread = new Network_server_Thread(temp_data);
                     thread.start();
 
@@ -136,7 +136,7 @@ public class MainSelectFragment extends Fragment {
                 selectGpsList.add(new GPSListViewItem(dateResult, timeResult, record[0], record[1], record[2]));
             }
         }
-        else {    // 결과가 없을 경우
+        else {
             isDataExist = false;
             selectGpsList.add(new GPSListViewItem("해당 날짜와 시간에 gps 기록이 없습니다.", "", "", "", ""));
         }
@@ -185,14 +185,13 @@ public class MainSelectFragment extends Fragment {
                         StringBuilder strBuilder = new StringBuilder();
                         String line = null;
 
-                        //!(line = br.readLine()).equals(null)
-                        while ( (line = br.readLine())!= null) {
+                        while ( !(line = br.readLine()).equals(null)) {
                             line = line + "\n";
                             strBuilder.append(line);
                         }
                         String temp = strBuilder.toString();
-                        //서버에 응답받은 것을 핸들러로 전달
-                        if(temp.equals("")) temp = "2:so,7:tired,";
+
+                        if(temp == "") temp = "2:so,7:tired,";
                         bundle.putString("account_list", temp);
                         message.setData(bundle);
                         handler.sendMessage(message);

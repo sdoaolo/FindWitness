@@ -103,9 +103,7 @@ public class MainGPSFragment extends Fragment {
         btn_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 handler.removeMessages(MESSAGE_START);
-                Toast.makeText(getActivity(),"Thread is stop",Toast.LENGTH_SHORT).show();
             }
         });
         btn_list.setOnClickListener(new View.OnClickListener() {
@@ -248,7 +246,7 @@ public class MainGPSFragment extends Fragment {
                             strBuilder.append(line);
                         }
                         String temp = strBuilder.toString();
-                        Log.d("응답", temp);
+
                         is.close();
                         isr.close();
                         br.close();
@@ -342,6 +340,7 @@ public class MainGPSFragment extends Fragment {
                     if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
                     this.sendEmptyMessageDelayed(MESSAGE_START, 5000);
                     break;
+                    
             }
         }
     }
@@ -381,7 +380,6 @@ public class MainGPSFragment extends Fragment {
         gpsList = new ArrayList<GPSListViewItem>();
 
         int text = c1.getCount();
-        String now = "성공 " + text;
 
         for(int i=0; i< text; i++){
             c1.moveToNext();
