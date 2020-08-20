@@ -13,7 +13,9 @@
     <option name="id" value="Android" />
   </component>
   <component name="QAPlugAnalysisUIOptions">
-    <option name="SPLITTER_PROPORTION" value="0.44093406" />
+    <option name="GROUP_BY_SEVERITY" value="true" />
+    <option name="SPLITTER_PROPORTION" value="0.37472767" />
+    <option name="SPLITTER_PROPORTION" value="0.7781845" />
   </component>
   <component name="SuppressionsComponent">
     <option name="suppComments" value="[]" />

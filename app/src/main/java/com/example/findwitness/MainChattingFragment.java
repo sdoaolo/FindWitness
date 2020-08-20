@@ -58,6 +58,7 @@ public class MainChattingFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         //listview
 
         ListView listView = view.findViewById(R.id.recent_list);
@@ -72,6 +73,7 @@ public class MainChattingFragment extends Fragment {
                 ChatActivity chatActivity = new ChatActivity();
                 Intent intent = new Intent(getActivity(),chatActivity.getClass());
                 intent.putExtra("UserName", ((MainActivity)getActivity()).userNickName);
+                //나-상대방의 고유번호랑 닉네임 보내야함
 
                 startActivity(intent);
 

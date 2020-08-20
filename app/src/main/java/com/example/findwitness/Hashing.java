@@ -18,7 +18,7 @@ public class Hashing {
             }
             result = sb.toString();
         } catch(NoSuchAlgorithmException e) {
-            Log.e("NoSuchAlgorithmException error", e.getMessage());
+            Log.e("Exception error", e.getMessage());
             result = null;
         }
 

@@ -51,18 +51,17 @@ public class MainGPSFragment extends Fragment {
     private static final int MESSAGE_START = 1;
     private static final int NET_START = 1;
     private static final int NET_FINISH = 2;
+    private static final int NET_COMBINE = 3;
     Network_handler NET_handler;
-    boolean server_net_start = false;
+
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    //데이터 베이스 만들기
+
     String time = "";
     private SQLiteDatabase db;
 
-    //private final String id_my = Integer.toString(((MainActivity)getActivity()).priNum);
+    private String id_my;
+    ArrayList<GPSListViewItem> gpsList;
 
-    List<GPSListViewItem> gpsList;
-
-    //private GpsTracker gpsTracker;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main_gps, container, false);
@@ -75,6 +74,7 @@ public class MainGPSFragment extends Fragment {
         btn_finish = view.findViewById(R.id.btn_finish);
         btn_list = view.findViewById(R.id.btn_list);
         btn_combine = view.findViewById(R.id.btn_combine);
+        id_my = Integer.toString(((MainActivity)getActivity()).priNum);
 
         GPSdatabaseHelper dbHelper;
         dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
@@ -90,10 +90,10 @@ public class MainGPSFragment extends Fragment {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(checkLocationServicesStatus()){
                     handler.sendEmptyMessage(MESSAGE_START);
-                    //NET_handler.sendEmptyMessage(NET_START);
-                    server_net_start = true; //이거 관련 UrF는 건들지 말 것!
+                    NET_handler.sendEmptyMessage(NET_START);
                 }
                 else {
                     showDialogForLocationServiceSetting();
@@ -103,32 +103,31 @@ public class MainGPSFragment extends Fragment {
         btn_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("RRRRRRRRR","finish");
+
                 handler.removeMessages(MESSAGE_START);
-                //이거 관련 UrF는 건들지 말 것! //if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
                 Toast.makeText(getActivity(),"Thread is stop",Toast.LENGTH_SHORT).show();
             }
         });
         btn_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("RRRRRRRRR","showlist");
-                boolean existdata = exist_database_data();   // 데이터가 존재하면 true, 존재하지 않으면 false
+
+                boolean existdata = exist_database_data();
                 update(view);
             }
         });
         btn_combine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("RRRRRRRRR","start");
+
                 Toast.makeText(getActivity(),"서버와 통신 시작",Toast.LENGTH_SHORT).show();
-                NET_handler.sendEmptyMessage(NET_START);
+                NET_handler.sendEmptyMessage(NET_COMBINE);
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id){
-                Log.d("ssssssssssss","삭제 할건지 물어보는 곳");
+
                 time = gpsList.get(position).getTime();
                 show_delete(view);
             }
@@ -159,7 +158,6 @@ public class MainGPSFragment extends Fragment {
     }
     public void Delete(){
         time = time.substring(0,2) + time.substring(3,5) + time.substring(6,8);
-        Log.d("delete", "삭제할 데이터 : " + time);
         db.execSQL("DELETE FROM gps WHERE _TIME = '" + time + "';");
     }
     public boolean checkLocationServicesStatus() {
@@ -204,10 +202,10 @@ public class MainGPSFragment extends Fragment {
         public Network_Thread(String[] parameter, int number) {
             this.parameter = parameter;
             this.num = number;
-        }    // 잠시 화장실 좀 갖다오겠습니다
+        }
         @Override
-        public void run() {// 위도 경도, 날짜, 시간
-            Log.d("네트워크 쓰레드 시작", "개수 : " + num);
+        public void run() {
+
             String latitude = parameter[0];
             String longitude = parameter[1];
             String date = parameter[2];
@@ -220,9 +218,8 @@ public class MainGPSFragment extends Fragment {
                 URL url = new URL("http://192.168.0.4:8080/servelet/login");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                Log.i("쓰레드", "접속시도");
                 if (conn != null) {
-                    Log.i("쓰레드", "접속성공");
+
                     conn.setConnectTimeout(10000);
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -230,7 +227,7 @@ public class MainGPSFragment extends Fragment {
                     conn.setDoInput(true);
 
                     String sendMsg = "long=" + longitude + "&date=" + date + "&lati="
-                            + latitude + "&time=" + time + "&id=" + "9" +"&save=1&num=" + num ;
+                            + latitude + "&time=" + time + "&id=" + id_my +"&save=1&num=" + num ;
 
                     OutputStream os = conn.getOutputStream();
                     os.write(sendMsg.getBytes("utf-8"));
@@ -238,9 +235,9 @@ public class MainGPSFragment extends Fragment {
                     os.flush();
                     os.close();
                     int resCode = conn.getResponseCode();
-                    Log.i("응답코드", "" + resCode);
+
                     if (resCode == HttpURLConnection.HTTP_OK) {
-                        Log.i("쓰레드", "응답수신");
+
                         InputStream is = conn.getInputStream();
                         InputStreamReader isr = new InputStreamReader(is);
                         BufferedReader br = new BufferedReader(isr);
@@ -257,35 +254,32 @@ public class MainGPSFragment extends Fragment {
                         br.close();
                         conn.disconnect();
                     }
-                    Log.i("쓰레드", "응답처리완료");
+
                 }
             } catch (Exception ex) {
-                Log.e("접속요류", "" + ex);
+
             }
             NET_handler.sendEmptyMessage(NET_FINISH);
         }
     }
     class Network_handler extends Handler{
-        int count = 0;  // 현재 보내야할 index;
+        int count = 0;
         boolean status = true;
         int dis_net = 0;
         public Network_handler(){
-            //Cursor c1 = db.rawQuery("select _ID from gps ", null);
-            //this.count = c1.getCount();
-            //Log.d("db", "db_count : " + count);
+            Cursor c1 = db.rawQuery("select * from gps ;", null);
+            this.count = c1.getCount();
         }
         @Override
         public void handleMessage(@NonNull Message msg) {
             int num;
             switch (msg.what){
                 case NET_START:
-                    Log.d("네트워크 핸들러 시작","start : ");
                     if(this.status) {
-                        Cursor c1 = db.rawQuery("select * from gps where _ID > " + this.count + ";", null);
+                        Cursor c1 = db.rawQuery("select * from gps ;", null);
                         num = c1.getCount();
-                        Log.d("데이터", "num : " + num);
-
-                        if (num > 0) {  // 위도(latitude) 경도, 날짜, 시간
+                        num = num - this.count;
+                        if (num > 0) {
                             String temp[] = {"0", "0", "0", "0"};
                             for (int i = 0; i < num; i++) {
                                 c1.moveToNext();
@@ -294,8 +288,7 @@ public class MainGPSFragment extends Fragment {
                                 temp[0] += "," + latitude_temp;
                                 temp[1] += "," + longitude_temp;
                                 temp[2] += "," + c1.getString(3);
-                                temp[3] += "," + c1.getString(4);;
-                                //Toast.makeText(getApplicationContext(), temp[3], Toast.LENGTH_LONG).show();
+                                temp[3] += "," + c1.getString(4);
                             }
 
                             Thread thread_net = new Network_Thread(temp, num);
@@ -305,7 +298,7 @@ public class MainGPSFragment extends Fragment {
                         }
                     }
                     else {
-                        if(this.dis_net < 3){
+                        if(this.dis_net < 1){
                             this.sendEmptyMessageDelayed(NET_START,500); //1000 : 1초
                             this.dis_net++;
                         }
@@ -314,7 +307,27 @@ public class MainGPSFragment extends Fragment {
                 case NET_FINISH:
                     this.status = true;
                     this.dis_net = 0;
-                    Toast.makeText(getActivity(),"서버와 통신 끝",Toast.LENGTH_SHORT).show();
+                    break;
+                case NET_COMBINE:
+                    Cursor c1 = db.rawQuery("select * from gps;", null);
+                    num = c1.getCount();
+
+                    if (num > 0) {
+                        String temp[] = {"0", "0", "0", "0"};
+                        for (int i = 0; i < num; i++) {
+                            c1.moveToNext();
+                            String latitude_temp = String_to_seven(c1.getString(1));
+                            String longitude_temp = String_to_seven(c1.getString(2));
+                            temp[0] += "," + latitude_temp;
+                            temp[1] += "," + longitude_temp;
+                            temp[2] += "," + c1.getString(3);
+                            temp[3] += "," + c1.getString(4);
+                        }
+
+                        Thread thread_net = new Network_Thread(temp, num);
+                        thread_net.start();
+                        this.status = false;
+                    }
                     break;
             }
         }
@@ -325,9 +338,8 @@ public class MainGPSFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){
                 case MESSAGE_START:
-                    Log.d("GPS_ 시작","횟수 : " + count++);
                     gps_start();
-                    //if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
+                    if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
                     this.sendEmptyMessageDelayed(MESSAGE_START, 5000);
                     break;
             }
@@ -340,22 +352,18 @@ public class MainGPSFragment extends Fragment {
         double latitude = gpsTracker.getLatitude();
         double longitude = gpsTracker.getLongitude();
 
-        //데이터 베이스에 삽입
         long now = System.currentTimeMillis();
-        //Toast.makeText(getApplicationContext(),temp,Toast.LENGTH_SHORT).show();
+
         Date date = new Date(now);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss");
 
         String getTime = sdf.format(date), dat, time, lati, longi;
         dat = getTime.substring(0, 4) + getTime.substring(5, 7) + getTime.substring(8, 10);
         time = getTime.substring(11, 13) + getTime.substring(14, 16) + getTime.substring(17, 19);
-        //Toast.makeText(getApplicationContext(), time, Toast.LENGTH_SHORT).show();
+
         lati =  Double.toString(latitude);
         longi =  Double.toString(longitude);
-        Log.d("데이터 : ", "시간 : " + time);
-        Log.d("데이터 : ", "latitude" + lati);
-        Log.d("데이터 : ", "longitude" + longi);
-        Log.d("데이터 : ", "end");
+
         insertRecord(lati, longi, dat, time);
     }
     public boolean exist_database_data(){
@@ -374,7 +382,6 @@ public class MainGPSFragment extends Fragment {
 
         int text = c1.getCount();
         String now = "성공 " + text;
-        //Toast.makeText(getApplicationContext(), now , Toast.LENGTH_LONG).show();
 
         for(int i=0; i< text; i++){
             c1.moveToNext();
@@ -392,10 +399,9 @@ public class MainGPSFragment extends Fragment {
             time = time_makeup(time);
 
             gpsList.add(new GPSListViewItem(date,time,latitude,longitude,address));
-            //Toast.makeText(getApplicationContext(),latitude + ", " + longitude + "," + date + ",//" + time, Toast.LENGTH_SHORT).show();
+
         }
         c1.close();
-        //gpsList.add(new GPSListViewItem("a","b","c","d","e"));
     }
     public String date_makeup(String date){
         String date_make;
@@ -413,7 +419,6 @@ public class MainGPSFragment extends Fragment {
         }
         return time_make;
     }
-    //데이터 베이스
 
     public void insertRecord(String latitude, String longitude, String data, String time) {
         latitude = String_to_seven(latitude);
@@ -437,10 +442,9 @@ public class MainGPSFragment extends Fragment {
         ans = temp[0] + "." + temp[1];
         return ans;
     }
-    //주소 찾기
+
     public String getCurrentAddress( double latitude, double longitude) {
 
-        //지오코더... GPS를 주소로 변환
         Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
 
         List<Address> addresses;
@@ -448,16 +452,12 @@ public class MainGPSFragment extends Fragment {
         try {
             addresses = geocoder.getFromLocation(latitude, longitude, 7);
         } catch (IOException ioException) {
-            //네트워크 문제
-            //Toast.makeText(this, "지오코더 서비스 사용불가", Toast.LENGTH_LONG).show();
             return "지오코더 서비스 사용불가";
         } catch (IllegalArgumentException illegalArgumentException) {
-            //Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
             return "잘못된 GPS 좌표";
 
         }
         if (addresses == null || addresses.size() == 0) {
-            //Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
             return "주소 미발견";
         }
 
@@ -467,7 +467,6 @@ public class MainGPSFragment extends Fragment {
     @Override
     public void onDestroy() {
         handler.removeMessages(MESSAGE_START);
-        //if(server_net_start) NET_handler.sendEmptyMessage(NET_START);
         super.onDestroy();
     }
 }

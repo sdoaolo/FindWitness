@@ -73,12 +73,13 @@ public class AccountSignInFragment  extends Fragment {
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // 로그인 버튼 클릭
+                //Log.d("RRRRRRRRR","GoToMain");
                 input_id = Edt_login.getText().toString();
                 input_password = Edt_pw.getText().toString();
                 input_password = Hashing.hashing(input_password);
 
                 if (input_id.equals("") || input_password.equals("")) {
-                    Log.d("RRRRRRRRR","아이디와 비밀번호를 입력하여 주십시오.");
+                    //Log.d("RRRRRRRRR","아이디와 비밀번호를 입력하여 주십시오.");
                     //Toast.makeText(sign_in_Activity.this, "아이디와 비밀번호를 입력하여 주십시오.", Toast.LENGTH_SHORT).show();
                     //    Edt_login.setText("");
                     //    Edt_pw.setText("");
