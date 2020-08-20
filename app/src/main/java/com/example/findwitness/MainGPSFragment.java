@@ -341,6 +341,7 @@ public class MainGPSFragment extends Fragment {
                     if(count%4 == 0) NET_handler.sendEmptyMessage(NET_START);
                     this.sendEmptyMessageDelayed(MESSAGE_START, 5000);
                     break;
+                    
             }
         }
     }
