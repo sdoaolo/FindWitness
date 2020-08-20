@@ -155,7 +155,7 @@ public class MainSelectFragment extends Fragment {
             Bundle bundle = new Bundle();
 
             try {
-                URL url = new URL("https://192.168.0.4:8080/servelet/login");
+                URL url = new URL("http://192.168.0.4:8080/servelet/login");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                 if (conn != null) {
@@ -191,8 +191,7 @@ public class MainSelectFragment extends Fragment {
                         }
                         String temp = strBuilder.toString();
 
-                        if(temp == "") temp = "2:so,7:tired,";
-                        bundle.putString("account_list", temp);
+                        bundle.putString("account_list", "");
                         message.setData(bundle);
                         handler.sendMessage(message);
 
@@ -203,7 +202,7 @@ public class MainSelectFragment extends Fragment {
                     }
                 }
             } catch (Exception ex) {
-                bundle.putString("account_list", "2:so,7:tired,");
+                bundle.putString("account_list", "");
                 message.setData(bundle);
                 handler.sendMessage(message);
             }

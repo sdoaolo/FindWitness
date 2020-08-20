@@ -41,7 +41,7 @@ public class MainChatFragment extends Fragment {
             SearchInfoDate = bundle.getString("SearchDate"); //search info : date
             SearchInfoTime = bundle.getString("SearchTime"); //search info : time
             checkBundle = bundle.getString("requireServer");
-            nickname_id_find(checkBundle);   // id[], nickname[] 에다가 값 넣기
+            if(checkBundle != "" ) nickname_id_find(checkBundle);   // id[], nickname[] 에다가 값 넣기
 
             ((MainActivity)getActivity()).btn_search.setBackgroundResource(R.drawable.main_search);
             ((MainActivity)getActivity()).btn_list.setBackgroundResource(R.drawable.main_blue_back);
