@@ -82,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 btn_gps.setTextColor(Color.parseColor(strBlue));
                 btn_list.setBackgroundResource(R.drawable.main_white_back);
                 btn_list.setTextColor(Color.parseColor(strBlue));
+                btn_accident.setBackgroundResource(R.drawable.main_white_back);
+                btn_accident.setTextColor(Color.parseColor(strBlue));
                 replaceFragment(mainSearchFragment);
                 break;
             case R.id.main_btn_list: //list
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
                 btn_gps.setTextColor(Color.parseColor(strBlue));
                 btn_list.setBackgroundResource(R.drawable.main_blue_back);
                 btn_list.setTextColor(Color.parseColor(strWhite));
+                btn_accident.setBackgroundResource(R.drawable.main_white_back);
+                btn_accident.setTextColor(Color.parseColor(strBlue));
                 replaceFragment(mainChatFragment);
                 break;
             case R.id.main_btn_chat: //chatting
@@ -100,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 btn_gps.setTextColor(Color.parseColor(strBlue));
                 btn_list.setBackgroundResource(R.drawable.main_white_back);
                 btn_list.setTextColor(Color.parseColor(strBlue));
+                btn_accident.setBackgroundResource(R.drawable.main_white_back);
+                btn_accident.setTextColor(Color.parseColor(strBlue));
                 replaceFragment(mainChattingFragment);
                 break;
             case R.id.main_btn_gps:
@@ -109,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
                 btn_gps.setTextColor(Color.parseColor(strWhite));
                 btn_list.setBackgroundResource(R.drawable.main_white_back);
                 btn_list.setTextColor(Color.parseColor(strBlue));
+                btn_accident.setBackgroundResource(R.drawable.main_white_back);
+                btn_accident.setTextColor(Color.parseColor(strBlue));
                 replaceFragment(mainGPSFragment);
                 break;
             case R.id.main_btn_accident:
