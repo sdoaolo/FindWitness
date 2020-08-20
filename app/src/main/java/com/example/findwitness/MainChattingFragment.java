@@ -20,13 +20,14 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class MainChattingFragment extends Fragment {
-    ArrayList<ChattingListViewItem> chattingList=new ArrayList<ChattingListViewItem>();
+    List<ChattingListViewItem> chattingList=new ArrayList<ChattingListViewItem>();
     public static Socket mSocket;
     private String TAG = "-->>";
     private Boolean isConnected;

@@ -18,14 +18,14 @@ import com.example.findwitness.Chat.ChatActivity;
 import com.example.findwitness.Item.ChatListViewItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainChatFragment extends Fragment {
     String SearchInfoDate , SearchInfoTime,checkBundle;
     String nickname[], id[];
     Boolean isNextSearch;
-    int num = 0;        // 목격자가 몇명인지 정보가 담겨있다.
-    ArrayList<ChatListViewItem> chatList;
+    List<ChatListViewItem> chatList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -93,7 +93,6 @@ public class MainChatFragment extends Fragment {
             id[i] = temp_list[0];
             nickname[i] = temp_list[1];
         }
-        num = size;
         this.InitializeMovieData(size,nickname,id);
     }
 }

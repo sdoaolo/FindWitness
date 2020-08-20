@@ -60,7 +60,7 @@ public class MainGPSFragment extends Fragment {
 
     //private final String id_my = Integer.toString(((MainActivity)getActivity()).priNum);
 
-    ArrayList<GPSListViewItem> gpsList;
+    List<GPSListViewItem> gpsList;
 
     //private GpsTracker gpsTracker;
     @Override

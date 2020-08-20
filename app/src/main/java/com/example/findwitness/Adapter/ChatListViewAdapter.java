@@ -1,23 +1,23 @@
 package com.example.findwitness.Adapter;
 
         import android.content.Context;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.BaseAdapter;
-        import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
 
-        import com.example.findwitness.Item.ChatListViewItem;
-        import com.example.findwitness.R;
+import com.example.findwitness.Item.ChatListViewItem;
+import com.example.findwitness.R;
 
-        import java.util.ArrayList;
+import java.util.List;
 
 public class ChatListViewAdapter  extends BaseAdapter {
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
-    ArrayList<ChatListViewItem> sample;
+    List<ChatListViewItem> sample;
 
-    public ChatListViewAdapter(Context context, ArrayList<ChatListViewItem> data) {
+    public ChatListViewAdapter(Context context, List<ChatListViewItem> data) {
         mContext = context;
         sample = data;
         mLayoutInflater = LayoutInflater.from(mContext);
