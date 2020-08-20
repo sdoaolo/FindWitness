@@ -5,11 +5,14 @@ public class AccidentListViewItem {
     private String num;
     private String died;
     private String hurt;
-    public AccidentListViewItem(String year,String num,String died,String hurt) {
-        this.year = year;
-        this .num = num;
-        this.died = died;
-        this .hurt = hurt;}
+
+    public AccidentListViewItem(String data) {
+        String[] accident_data = data.split(":");
+        this.year = accident_data[0];
+        this .num = accident_data[1];
+        this.died = accident_data[2];
+        this .hurt = accident_data[3];
+    }
 
     public String getYear() {
         return year;

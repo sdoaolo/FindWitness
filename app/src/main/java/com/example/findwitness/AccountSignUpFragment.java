@@ -197,7 +197,6 @@ public class AccountSignUpFragment extends Fragment {
         });
 
 
-
         signUn_Btn = view.findViewById(R.id.signup_button);
         signUn_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,6 +208,8 @@ public class AccountSignUpFragment extends Fragment {
                 }else if(password_Check_Result.equals("false")){
                     Toast.makeText(context, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                 }else{
+
+                    password = Hashing.hashing(password);
 
                     //message = "ID : "+email+", PASSWORD : " +password+", NICKNAME : "+nickname;
                     message = "SIGNUP:"+email+","+password+","+nickname+ "\n";
@@ -229,7 +230,7 @@ public class AccountSignUpFragment extends Fragment {
 
                     Log.d("RRRRRRRRR", "회원가입 응답 : "+response);
 
-                    if(response.equals("success")){
+                    if(response.equals("success") || response.equals("succes")){
                         Log.d("RRRRRRRRR", "GO TO SIGN IN");
                         Toast.makeText(context, "회원가입 성공", Toast.LENGTH_SHORT).show();
                         /*((AccountActivity)getActivity()).fm = getActivity().getSupportFragmentManager();
