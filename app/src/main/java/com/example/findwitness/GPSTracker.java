@@ -37,9 +37,7 @@ public class GPSTracker extends Service implements LocationListener {
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-            /*if (!isGPSEnabled && !isNetworkEnabled) {
-                //gpsenabled 가 false 이면서 is NetworkENable이 false이면
-            } else */
+
             if(isGPSEnabled || isNetworkEnabled){
 
                 int hasFineLocationPermission = ContextCompat.checkSelfPermission(mContext,
@@ -88,7 +86,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
         catch (Exception e)
         {
-            Log.d("@@@", ""+e.toString());
+
         }
 
         return location;

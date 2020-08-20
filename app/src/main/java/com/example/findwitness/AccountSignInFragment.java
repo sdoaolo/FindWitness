@@ -14,22 +14,22 @@ import androidx.fragment.app.Fragment;
 import static java.lang.Thread.sleep;
 
 public class AccountSignInFragment  extends Fragment {
-    /*EditText e_id, e_pw;
-    String s_id, s_pw;
-    e_id = (EditText) findViewById(R.id.login_email);
-    e_pw = (EditText) findViewById(R.id.login_password);
-    s_id = e_id.getText().toString();
-    s_pw = e_id.getText().toString();*/
+
     Button signInBtn, signUpBtn, guestLoginBtn;
     EditText Edt_login, Edt_pw;
     String input_id, input_password;
     static String message = "", response = "";
-    int pri_num = 0;
+    static int pri_num = 0;
     String nickname = "";
 
-
+    private boolean isFragmentSignIn = true ;
+    public AccountSignInFragment() {
+        // Required empty public constructor
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
+
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
     }
 
@@ -40,13 +40,6 @@ public class AccountSignInFragment  extends Fragment {
 
         Edt_login = view.findViewById(R.id.login_email);
         Edt_pw = view.findViewById(R.id.login_password);
-
-
-        ////////////////////////////////////////////////////////
-        //Intent intent=new Intent(((AccountActivity)getActivity()),MainActivity.class);
-        //startActivity(intent);
-        ////////////////////////////////////////////////////////
-
 
         guestLoginBtn = view.findViewById(R.id.guest_login);
         guestLoginBtn.setOnClickListener(new View.OnClickListener() {
@@ -61,36 +54,21 @@ public class AccountSignInFragment  extends Fragment {
             }
         });
 
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //socket_connect.connectSocket("성공?");
-                socket_connect.connectSocket("192.168.0.8", 9999);
-            }
-        }).start();*/
-
-
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // 로그인 버튼 클릭
-                //Log.d("RRRRRRRRR","GoToMain");
+
                 input_id = Edt_login.getText().toString();
                 input_password = Edt_pw.getText().toString();
                 input_password = Hashing.hashing(input_password);
 
                 if (input_id.equals("") || input_password.equals("")) {
-                    //Log.d("RRRRRRRRR","아이디와 비밀번호를 입력하여 주십시오.");
-                    //Toast.makeText(sign_in_Activity.this, "아이디와 비밀번호를 입력하여 주십시오.", Toast.LENGTH_SHORT).show();
-                    //    Edt_login.setText("");
-                    //    Edt_pw.setText("");
+
                 } else {
-                    //message = "ID : " + input_id + "," + "PASSWORD : " + input_password + "\n";
+
                     message = "LOGIN:" + input_id + "," + input_password + "\n";
-                    //message = input_id + "/" + input_password;
 
 
-                    //Toast.makeText(sign_in_Activity.this, message, Toast.LENGTH_SHORT).show();
-                    Log.d("RRRRRRRRR",message);
 
                     //서버에 보내고 응답 받아오기
                     new Thread(new Runnable() {
@@ -103,43 +81,31 @@ public class AccountSignInFragment  extends Fragment {
                     try {
                         sleep(6000);
                     } catch (InterruptedException e) {
-                        Log.e("InterruptedException error", e.getMessage());
+                        e.printStackTrace();
                     }
                     response = socket_connect.getMessage();
                     String[] res = response.split(",");
-                    Log.d("RRRRRRRRR","res[0] : "+res[0]);
-                    Log.d("RRRRRRRRR","res[1] : "+res[1]);
-                    Log.d("RRRRRRRRR","res[2] : "+res[2]);
+
 
                     try {
                         if (res[0].equals("Login_success")) {
                             pri_num = Integer.parseInt(res[1]);
                             nickname = res[2];
 
-                            //Toast.makeText(AccountSignInFragment.this, "로그인 성공", Toast.LENGTH_LONG).show();
-                            Log.d("RRRRRRRRR","로그인 성공"+pri_num+","+nickname);
                             Intent intent=new Intent(((AccountActivity)getActivity()),MainActivity.class);
                             intent.putExtra("pri_num", pri_num);
                             intent.putExtra("nickname", nickname);
                             startActivity(intent);
-                            //finish();
-
                         } else if (res[0].equals("Login_fail")) {
-                            //Toast.makeText(getApplicationContext(), "로그인에 실패했습니다.\n아이디와 비밀번호를 확인해주세요.", Toast.LENGTH_LONG).show();
-                            Log.d("RRRRRRRRR","로그인 실패");
+
                         } else {
-                            //Toast.makeText(getApplicationContext(), "알 수 없는 오류입니다.", Toast.LENGTH_LONG).show();
-                            Log.d("RRRRRRRRR","알 수 없는 오류 발생");
-                            Log.d("RRRRRRRRR",response);
+
                         }
                     } catch (Exception e) {
-                        //Toast.makeText(getApplicationContext(), "오류가 발생했습니다.", Toast.LENGTH_LONG).show();
-                        Log.e("Exception error", e.getMessage());
 
+                        e.printStackTrace();
                     }
                 }
-                //Intent intent=new Intent(((AccountActivity)getActivity()),MainActivity.class);
-                //startActivity(intent);
             }
         });
 

@@ -5,14 +5,9 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-//_id: primary key위해 만듬 아무 의미 x
-//rcv가 1, send가 0 >> 받은 메시지를 의미
-//rcv가 0, send가 1 >> 내가 보낸 메시지를 의미
-//message:메시지 내용, date:메시지 받은 날짜, time:메시지 받은 시간
 
 public class ChatSQLiteHelper extends SQLiteOpenHelper{
 
-    // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "chat.db";
     public static final String TABLE_NAME = "chat";

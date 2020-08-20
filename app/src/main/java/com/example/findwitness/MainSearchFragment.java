@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainSearchFragment extends Fragment {
-    //데이터베이스 생성
+
     private SQLiteDatabase db;
     String date, time, Search = "", num;
 
@@ -61,16 +61,13 @@ public class MainSearchFragment extends Fragment {
         btnApply = view.findViewById(R.id.search_apply_btn);
         btnSearch = view.findViewById(R.id.btn_search);
 
-        //SearchResultList = new ArrayList<String>(2);
-        //SearchResultList[0]=dateResult;
-
         appliedDateText = view.findViewById(R.id.appliedDateText);
         appliedTimeText = view.findViewById(R.id.appliedTimeText);
         Date current = Calendar.getInstance().getTime();
         String dt = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).format((current));
         appliedDateText.setText("Aplied Date : "+dt);
 
-        //데이터베이스 열기
+
         GPSdatabaseHelper dbHelper = new GPSdatabaseHelper(getActivity(),"mydb");
         db = dbHelper.getWritableDatabase();
 
@@ -121,7 +118,7 @@ public class MainSearchFragment extends Fragment {
                 appliedText.setVisibility(View.VISIBLE);
                 appliedText.setText("시간 조회");
                 timePicker.setIs24HourView(true);
-                //timePicker.setOnTimeChangedListener(this);
+
             }
         });
         btnApply.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +155,7 @@ public class MainSearchFragment extends Fragment {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("ssssssssssss","데이터 보낼거임");
+
                 search_gps();
                 Bundle bundle = new Bundle();
                 bundle.putString("SearchDate",dateResult);
@@ -168,8 +165,7 @@ public class MainSearchFragment extends Fragment {
                 ((MainActivity)getActivity()).mainSelectFragment.setArguments(bundle);
                 Log.d("ssssssssssss","이동합니다!");
                 ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainSelectFragment);
-                //fragment chat로 화면 전환 ㅇㅇ
-                //search_gps();
+
             }
 
         });
@@ -212,9 +208,7 @@ public class MainSearchFragment extends Fragment {
             time += time_temp[1];
         }
         time = time + "%";
-        Log.d("변환","date : " + date + " time  :" + time);
 
-        //데이터베이스 조회
         Cursor c1 = db.rawQuery("select DISTINCT LATITUDE,LONGITUDE from gps where _DATE = '" +
                 date + "' AND _TIME LIKE '" + time + "';", null);
         int number = c1.getCount();
@@ -224,21 +218,17 @@ public class MainSearchFragment extends Fragment {
             String latitude = c1.getString(0);
             String longitude = c1.getString(1);
             String address = getCurrentAddress(Double.parseDouble(latitude),Double.parseDouble(longitude));
-            //Log.d("데이터 : ","latitude : " + latitude + "longitude : " + longitude);
+
             Search += "|" + latitude + "#" + longitude + "#" + address;
         }
         if(number != 0) {
             Search = Search.substring(1,Search.length());
         }
 
-        Log.d("개수", "" + number);
-        Log.d("서치",Search);
         c1.close();
     }
-    //주소 찾기
     public String getCurrentAddress( double latitude, double longitude) {
 
-        //지오코더... GPS를 주소로 변환
         Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
 
         List<Address> addresses;
@@ -246,16 +236,15 @@ public class MainSearchFragment extends Fragment {
         try {
             addresses = geocoder.getFromLocation(latitude, longitude, 7);
         } catch (IOException ioException) {
-            //네트워크 문제
-            //Toast.makeText(this, "지오코더 서비스 사용불가", Toast.LENGTH_LONG).show();
+
             return "지오코더 서비스 사용불가";
         } catch (IllegalArgumentException illegalArgumentException) {
-            //Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
+
             return "잘못된 GPS 좌표";
 
         }
         if (addresses == null || addresses.size() == 0) {
-            //Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
+
             return "주소 미발견";
         }
 

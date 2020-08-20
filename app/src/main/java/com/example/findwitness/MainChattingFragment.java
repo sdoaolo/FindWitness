@@ -32,10 +32,10 @@ public class MainChattingFragment extends Fragment {
     private String TAG = "-->>";
     private Boolean isConnected;
     private String MY_NICKNAME = "엄마";
-    String CHAT_URL="http://192.168.219.102:8004/"; //>>채팅리스트화면용
+    String CHAT_URL="http://192.168.219.102:8004/";
 
     public MainChattingFragment() {
-        // Required empty public constructor
+
         isConnected = false;
 
         try {
@@ -46,9 +46,9 @@ public class MainChattingFragment extends Fragment {
         mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.connect();
-        mSocket.on(Socket.EVENT_CONNECT, onConnect); //MY_NICKNAME 이름 전달함.
+        mSocket.on(Socket.EVENT_CONNECT, onConnect);
         mSocket.emit("person");
-        mSocket.on("person",onNewPerson);//사람들 값 받아오기.마지막메시지,시간,메시지갯수
+        mSocket.on("person",onNewPerson);
 
     }
     @Override
@@ -59,7 +59,6 @@ public class MainChattingFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //listview
 
         ListView listView = view.findViewById(R.id.recent_list);
         final ChttingListVIewAdapter myAdapter = new ChttingListVIewAdapter(getActivity(),chattingList);
@@ -73,7 +72,6 @@ public class MainChattingFragment extends Fragment {
                 ChatActivity chatActivity = new ChatActivity();
                 Intent intent = new Intent(getActivity(),chatActivity.getClass());
                 intent.putExtra("UserName", ((MainActivity)getActivity()).userNickName);
-                //나-상대방의 고유번호랑 닉네임 보내야함
 
                 startActivity(intent);
 
@@ -86,7 +84,6 @@ public class MainChattingFragment extends Fragment {
         @Override
         public void call(Object... args) {
             isConnected = false;
-            Log.w(TAG, "onDisconnect");
         }
     };
 
@@ -104,37 +101,28 @@ public class MainChattingFragment extends Fragment {
             if (!isConnected) {
                 isConnected = true;
                 mSocket.emit("chatlist add user", MY_NICKNAME);
-
-            } else {
-                Log.w("-->>", "onConnect Failure");
             }
         }
     };
     private Emitter.Listener onNewPerson = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.w(TAG, "onNewPerson");
-            JSONObject data = (JSONObject) args[0]; //상대방 채팅창 참가
+            JSONObject data = (JSONObject) args[0];
             String user = null;
             String text = null;
             String time = null;
             String chat_num = null;
             try {
-                user = data.getString("user"); //메시지 보낸 사람
-                text = data.getString("text"); //메시지 내용
+                user = data.getString("user");
+                text = data.getString("text");
                 time = data.getString("time");
                 chat_num = data.getString("chat_num");
                 time = time.substring(0,2) + "시 " + time.substring(2,4) + "분";
 
             } catch (JSONException e) {
-                Log.e("JSONException error", e.getMessage());
+
             }
-
-
             chattingList.add(new ChattingListViewItem(user,text,time,chat_num));
-            Log.d(TAG, "정보 가져오기 성공!~~!!!");
-
-
         }
     };
 
