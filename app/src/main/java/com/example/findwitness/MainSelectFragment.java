@@ -33,7 +33,6 @@ public class MainSelectFragment extends Fragment {
     Boolean isDataExist;
     private CustomProgressDialog customProgressDialog;
 
-    //핸들러
     Server_handler handler = new Server_handler();
     double latitude = 0.0, longitude = 0.0;
     String timeResult, dateResult,Search="",num;
@@ -57,8 +56,7 @@ public class MainSelectFragment extends Fragment {
         TextView currentGps = view.findViewById(R.id.currentGpsTextView);
         currentGps.setText("current gps : "+latitude+", "+longitude);
 
-        Log.d("ssssssssssss","들어왔어!");
-        Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
+        Bundle bundle = getArguments();
         if(bundle != null){
             dateResult = bundle.getString("SearchDate");
             timeResult = bundle.getString("SearchTime");
@@ -76,8 +74,6 @@ public class MainSelectFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id){
-                Log.d("ssssssssssss","fragment chat로 화면 전환");
-                //Log.d("ssssssssssss","item clicked: " + selectGpsList.get(position).getAddress());
 
                 customProgressDialog = new CustomProgressDialog(getActivity());
                 // 위에서 테두리를 둥글게 했지만 다이얼로그 자체가 네모라 사각형 여백이 보입니다. 아래 코드로 다이얼로그 배경을 투명처리합니다.
@@ -91,13 +87,6 @@ public class MainSelectFragment extends Fragment {
                     thread.start();
 
                 }
-                /* 다이얼로그 어디다 넣을까용.. 서버랑 통신해서 받았다는 신호 받을때까지 띄워줄거임!
-                customProgressDialog = new CustomProgressDialog(getActivity());
-                // 위에서 테두리를 둥글게 했지만 다이얼로그 자체가 네모라 사각형 여백이 보입니다. 아래 코드로 다이얼로그 배경을 투명처리합니다.
-                customProgressDialog .getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                customProgressDialog.show(); // 보여주기
-                customProgressDialog.dismiss(); // 없애기
-                */
 
         }
         });
@@ -159,7 +148,7 @@ public class MainSelectFragment extends Fragment {
         }
         @Override
         public void run() {// longitude, latitude, date, time
-            Log.d("네트워크 쓰레드 시작", "개수 : ");
+
             String server_gps[] = this.server_data.split(",");
 
             Message message = handler.obtainMessage();
@@ -169,9 +158,8 @@ public class MainSelectFragment extends Fragment {
                 URL url = new URL("https://192.168.0.4:8080/servelet/login");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                Log.i("쓰레드", "접속시도");
                 if (conn != null) {
-                    Log.i("쓰레드", "접속성공");
+
                     conn.setConnectTimeout(10000);
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -187,10 +175,10 @@ public class MainSelectFragment extends Fragment {
                     os.flush();
                     os.close();
                     int resCode = conn.getResponseCode();
-                    Log.i("응답코드", "" + resCode);
+
                     if (resCode == HttpURLConnection.HTTP_OK)
                     {
-                        Log.i("쓰레드", "응답수신");
+
                         InputStream is = conn.getInputStream();
                         InputStreamReader isr = new InputStreamReader(is);
                         BufferedReader br = new BufferedReader(isr);
@@ -208,16 +196,13 @@ public class MainSelectFragment extends Fragment {
                         message.setData(bundle);
                         handler.sendMessage(message);
 
-                        Log.d("응답", temp);
                         is.close();
                         isr.close();
                         br.close();
                         conn.disconnect();
                     }
-                    Log.i("쓰레드", "응답처리완료");
                 }
             } catch (Exception ex) {
-                Log.e("접속요류", "" + ex);
                 bundle.putString("account_list", "2:so,7:tired,");
                 message.setData(bundle);
                 handler.sendMessage(message);
@@ -231,8 +216,6 @@ public class MainSelectFragment extends Fragment {
             Bundle message = msg.getData();
             String account = message.getString("account_list");
 
-            Log.d("서버에서 회원정보 받음", " data : " + account);
-
             customProgressDialog.dismiss();
             Bundle bundle = new Bundle();
             bundle.putString("SearchDate",dateResult);
@@ -240,7 +223,6 @@ public class MainSelectFragment extends Fragment {
             bundle.putString("requireServer",account);
             ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
             ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
-
         }
     }
 
