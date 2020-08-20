@@ -65,7 +65,7 @@ public class MainGPSFragment extends Fragment {
     //private GpsTracker gpsTracker;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_gps, container, false);
+        View vieww = inflater.inflate(R.layout.fragment_main_gps, container, false);
         return inflater.inflate(R.layout.fragment_main_gps, container, false);
     }
 
@@ -207,7 +207,7 @@ public class MainGPSFragment extends Fragment {
         public Network_Thread(String[] parameter, int number) {
             this.parameter = parameter;
             this.num = number;
-        }    // 잠시 화장실 좀 갖다오겠습니다
+        }
         @Override
         public void run() {// 위도 경도, 날짜, 시간
             Log.d("네트워크 쓰레드 시작", "개수 : " + num);
