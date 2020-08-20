@@ -222,7 +222,6 @@ public class MainSelectFragment extends Fragment {
             bundle.putString("requireServer",account);
             ((MainActivity)getActivity()).mainChatFragment.setArguments(bundle);
             ((MainActivity)getActivity()).replaceFragment(((MainActivity)getActivity()).mainChatFragment);
-
         }
     }
 
