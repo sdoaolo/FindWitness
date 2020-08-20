@@ -63,6 +63,8 @@ public class MainAccidentFragment  extends Fragment {
             }
         } catch (IOException e) {
             Log.e("IOException error", e.getMessage());
+
         }
+
     }
 }
