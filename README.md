@@ -10,7 +10,28 @@
 - 이용자와 사고 당사자간 개인정보 노출 없이 1대1 채팅 
 - 교통사고 통계 열람
 
+### 사용 스택
+- Java(Android, client)
+- JavaScript (채팅 Server)
+- Figma(client, UI, Prototype 제작)
+- HTTPUrlConnection (Client, 통신)
+- socket (Client, 통신)
+- SQLite (Database)
+- MySQL (Database)
+- NodeJS Express (Server)
+- Github (버전관리)
+
 ### 견본 이미지
+![Android - 16](https://user-images.githubusercontent.com/48430781/112990567-2f0bd980-91a1-11eb-91e7-959a43441904.png)
+![Android - 17](https://user-images.githubusercontent.com/48430781/112990572-303d0680-91a1-11eb-8440-021266265622.png)
+![Android - 18](https://user-images.githubusercontent.com/48430781/112990574-303d0680-91a1-11eb-8eb4-2043bf7107e9.png)
+![Android - 19](https://user-images.githubusercontent.com/48430781/112990576-30d59d00-91a1-11eb-966a-434e3c8fa0fd.png)
+![Android - 22](https://user-images.githubusercontent.com/48430781/112990579-316e3380-91a1-11eb-8be7-209e1c855403.png)
+![Android - 23](https://user-images.githubusercontent.com/48430781/112990581-3206ca00-91a1-11eb-9842-13b48323256a.png)
+![Android - 24](https://user-images.githubusercontent.com/48430781/112990583-3206ca00-91a1-11eb-9eae-3d5dacbd9eb8.png)
+![Android - 26](https://user-images.githubusercontent.com/48430781/112990584-329f6080-91a1-11eb-80e5-ae3598b6ea5e.png)
+![Android - 30](https://user-images.githubusercontent.com/48430781/112990586-3337f700-91a1-11eb-9660-7fb32df81cdd.png)
+![Android - 31](https://user-images.githubusercontent.com/48430781/112990591-33d08d80-91a1-11eb-8fa3-46ceede8504e.png)
 
 
 
@@ -53,6 +74,7 @@
 
 > 안전 채팅 서비스
 별다른 개인정보를 공유하지 않아도 어플리케이션 내에서 목격자와 사고 당사자를 연결해줌으로써 통신이 가능하도록 해준다. 만약 추후 별도의 연락이 필요하면. 어플리케이션 내의 기능을 그대로 이용해도 되며 서로의 합의하에 개인정보를 공유한 뒤 별도로 연락 가능하다
+
 
 
 
