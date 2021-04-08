@@ -3,8 +3,8 @@ var mysql = require('mysql');
 var db_info = {
     host: 'localhost', // 'localhost'
     user: 'root',
-    port: 5385,
-    password: 'witness5385',
+    port: 3306,
+    password: '',
     database: 'CHAT_MESSAGE',
     socketPath: '/var/run/mysqld/mysqld.sock'
 }

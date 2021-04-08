@@ -16,9 +16,9 @@ server.listen(PORT, function () {
 const mysql = require('mysql2');
 const connection = mysql.createConnection({
 host : 'localhost',
-port: 5385,
+port: 3306,
 user: 'root',
-password : 'witness5385',
+password : '',
 database : 'CHAT_MESSAGE'
 })
 
