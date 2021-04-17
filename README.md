@@ -11,7 +11,7 @@
 - 교통사고 통계 열람
 
 ### 사용 스택
-- Java(Android, client)
+- Java(Android, Client, Server)
 - JavaScript (채팅 Server)
 - Figma(client, UI, Prototype 제작)
 - HTTPUrlConnection (Client, 통신)
